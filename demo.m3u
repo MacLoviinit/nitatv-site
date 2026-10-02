@@ -1,6 +1,4 @@
 #EXTM3U
-#EXTINF:-1 tvg-id="nita-demo-akamai" tvg-name="Akamai Live Test" group-title="Live (demo)",Akamai Live Test
-https://cph-p2p-msl.akamaized.net/hls/live/2000341/test/master.m3u8
 #EXTINF:-1 tvg-id="nita-demo-unified" tvg-name="Unified Streaming Live Test" group-title="Live (demo)",Unified Streaming Live Test
 https://demo.unified-streaming.com/k8s/live/stable/live.isml/.m3u8
 #EXTINF:-1 tvg-id="nita-demo-tos" tvg-name="Tears of Steel (Blender Foundation, CC BY)" group-title="Movies (demo)",Tears of Steel (Blender Foundation, CC BY)
