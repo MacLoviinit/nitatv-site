@@ -1,8 +1,6 @@
 #EXTM3U
 #EXTINF:-1 tvg-id="nita-demo-unified" tvg-name="Unified Streaming Live Test" group-title="Live (demo)",Unified Streaming Live Test
 https://demo.unified-streaming.com/k8s/live/stable/live.isml/.m3u8
-#EXTINF:-1 tvg-id="nita-demo-tos" tvg-name="Tears of Steel (Blender Foundation, CC BY)" group-title="Movies (demo)",Tears of Steel (Blender Foundation, CC BY)
-https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8
 #EXTINF:-1 tvg-id="nita-demo-mux" tvg-name="Mux Test Stream" group-title="Movies (demo)",Mux Test Stream
 https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8
 #EXTINF:-1 tvg-id="nita-demo-bipbop" tvg-name="Apple BipBop 16:9" group-title="Movies (demo)",Apple BipBop 16:9
