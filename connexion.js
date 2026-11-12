@@ -8,11 +8,7 @@
 (function () {
   'use strict';
 
-  var CLIENT_WEB = '720100975511-ovrrf97ocsdactpc61b2peg26vgqt6nt.apps.googleusercontent.com';
-  var GIS = 'https://accounts.google.com/gsi/client';
-  // Only a page served from this machine talks to the local test server; www.nita.tv always uses the real API.
-  var LOCAL = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-  var API = LOCAL ? 'http://127.0.0.1:8788' : 'https://api.nita.tv';
+  var API = NitaGoogle.API;
   var ID = /^[A-Za-z0-9_-]{1,200}$/;
   var DUREE_MAX = 20 * 60 * 1000; // the pairing lives 15 min: past 20, stop asking the server for nonces
 
@@ -30,17 +26,13 @@
   if (location.hash) history.replaceState(null, '', location.pathname + location.search);
 
   var debut = Date.now();
-  var nonce = null;
-  var minuteur = null;
-  var perime = false;
   var envoi = false;
   var termine = false;
-  var gis = null; // Promise of the loaded Google library
 
   function fin(titre, texte) {
     termine = true;
-    appairage = jeton = nonce = null;
-    clearTimeout(minuteur);
+    appairage = jeton = null;
+    if (google_) google_.arreter(); // not yet created when the link is incomplete
     $('connexion').hidden = true;
     $('fin-titre').textContent = titre;
     $('fin-texte').textContent = texte;
@@ -64,66 +56,12 @@
   }
   $('connexion').hidden = false;
 
-  function chargerGis() {
-    if (gis) return gis;
-    gis = new Promise(function (ok, ko) {
-      var s = document.createElement('script');
-      s.src = GIS;
-      s.async = true;
-      s.onload = function () {
-        if (window.google && google.accounts && google.accounts.id) ok(); else ko(new Error('gis'));
-      };
-      s.onerror = function () { ko(new Error('gis')); };
-      document.head.appendChild(s);
-    });
-    gis.catch(function () { gis = null; });
-    return gis;
-  }
-
-  function demanderNonce() {
-    return fetch(API + '/v1/nonce', { cache: 'no-store', credentials: 'omit', referrerPolicy: 'no-referrer' })
-      .then(function (r) {
-        if (r.status === 503) throw new Error('pas_branche');
-        if (!r.ok) throw new Error('nonce_http_' + r.status);
-        return r.json();
-      }).then(function (j) {
-        if (!j || typeof j.nonce !== 'string' || !j.nonce) throw new Error('nonce_vide');
-        return j;
-      });
-  }
-
-  // A new nonce: re-initialise Google Identity Services with it (initialize() replaces the configuration)
-  // and render the button again. Renewed 45 s before it expires, at most every 4 min.
-  function armer(j) {
-    nonce = j.nonce;
-    perime = false;
-    clearTimeout(minuteur);
-    var reste = Date.parse(j.expire_a) - Date.now();
-    var delai = isFinite(reste) ? Math.min(Math.max(reste - 45000, 30000), 240000) : 240000;
-    minuteur = setTimeout(renouveler, delai);
-    google.accounts.id.initialize({
-      client_id: CLIENT_WEB,
-      callback: recu,
-      nonce: nonce,
-      ux_mode: 'popup',
-      auto_select: false
-    });
-    var div = $('bouton-google');
-    div.textContent = '';
-    div.hidden = false;
-    google.accounts.id.renderButton(div, {
-      type: 'standard', theme: 'filled_blue', size: 'large', text: 'continue_with', shape: 'pill',
-      logo_alignment: 'left', locale: 'fr', width: Math.max(200, Math.min(320, div.clientWidth || 320))
-    });
-  }
-
   function erreurPreparation(e) {
     if (termine) return;
     if (e && e.message === 'pas_branche') {
       fin('Pas encore ouvert', 'La connexion par téléphone n\'est pas encore ouverte. Connectez-vous directement sur la télé.');
       return;
     }
-    $('bouton-google').hidden = true;
     if (e && e.message === 'gis') {
       etat('Le bouton de Google n\'a pas pu se charger. Vérifiez le réseau de ce téléphone (ou un bloqueur de ' +
         'contenu), puis réessayez.', 'erreur');
@@ -133,28 +71,21 @@
     reessayer(true);
   }
 
-  function preparer() {
-    if (termine) return Promise.resolve();
-    if (Date.now() - debut > DUREE_MAX) {
-      fin('Ce QR code a expiré', 'Il vaut 15 minutes. Affichez un nouveau QR code sur la télé.');
-      return Promise.resolve();
-    }
-    reessayer(false);
-    return Promise.all([chargerGis(), demanderNonce()]).then(function (r) {
-      if (termine || envoi) return;
-      armer(r[1]);
-    }).catch(erreurPreparation);
-  }
-
-  function renouveler() {
-    if (termine || envoi) return;
-    if (document.hidden) { perime = true; return; } // renewed when the page is shown again
-    preparer();
-  }
-
-  document.addEventListener('visibilitychange', function () {
-    if (!document.hidden && perime) preparer();
+  var google_ = NitaGoogle.bouton({
+    div: $('bouton-google'),
+    actif: function () { return !termine && !envoi; },
+    avant: function () {
+      if (Date.now() - debut > DUREE_MAX) {
+        fin('Ce QR code a expiré', 'Il vaut 15 minutes. Affichez un nouveau QR code sur la télé.');
+        return false;
+      }
+      reessayer(false);
+    },
+    recu: recu,
+    erreur: erreurPreparation,
+    apparence: function () { return { text: 'continue_with', locale: 'fr' }; }
   });
+  function preparer() { return google_.preparer(); }
 
   $('reessayer').addEventListener('click', function () {
     etat('');
@@ -172,20 +103,15 @@
     preparer();
   }
 
-  // Google Identity Services callback: response.credential is the ID token (JWT).
-  function recu(reponse) {
-    if (envoi || termine || !reponse || !reponse.credential) return;
+  // A Google answer (google.js): the ID token, and the nonce it was asked with — spent by this attempt.
+  function recu(credential, n) {
     envoi = true;
-    clearTimeout(minuteur);
-    var n = nonce;
-    nonce = null;
-    $('bouton-google').hidden = true;
     etat('Connexion de votre télé…');
 
     fetch(API + '/v1/appairage/' + encodeURIComponent(appairage), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ jeton: jeton, google_id_token: reponse.credential, nonce: n }),
+      body: JSON.stringify({ jeton: jeton, google_id_token: credential, nonce: n }),
       cache: 'no-store',
       credentials: 'omit',
       referrerPolicy: 'no-referrer'
@@ -220,5 +146,5 @@
   }
 
   etat('Préparation…');
-  preparer().then(function () { if (!envoi && !termine && nonce) etat(''); });
+  preparer().then(function () { if (!envoi && !termine && google_.arme()) etat(''); });
 })();
