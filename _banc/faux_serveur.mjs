@@ -1,4 +1,7 @@
-// Banc (non publié) — faux serveur NitaTV fidèle au contrat (§ 1 nonce + appairage, § 5 dépôt) ET le site statique.
+// Banc (non publié) — faux serveur NitaTV fidèle au contrat (§ 1 nonce + appairage, § 3 bis suppression par le web,
+// § 5 dépôt) ET le site statique.
+// Le faux jeton Google est un JWT sans vraie signature : « en-tête.charge.banc », la charge porte sub, email, nonce, aud
+// (la doublure GIS de l'essai le fabrique avec le nonce qu'on lui a donné, comme le vrai Google).
 // Site : http://127.0.0.1:8787   API : http://127.0.0.1:8788 (une autre origine : le CORS est vraiment exercé).
 // Seul : node _banc/faux_serveur.mjs   (puis ouvrir l'adresse affichée)
 import http from 'node:http';
@@ -7,6 +10,12 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 
+const CLIENT_WEB = '720100975511-ovrrf97ocsdactpc61b2peg26vgqt6nt.apps.googleusercontent.com';
+export function lireFauxJeton(jwt) {
+  const parts = String(jwt).split('.');
+  if (parts.length !== 3 || parts[2] !== 'banc') return null; // « signature » du banc : tout autre jeton est refusé
+  try { return JSON.parse(Buffer.from(parts[1], 'base64url').toString('utf8')); } catch { return null; }
+}
 const racineSite = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css', '.m3u': 'audio/x-mpegurl' };
 
@@ -16,11 +25,15 @@ export function demarrer({ portSite = 8787, portApi = 8788 } = {}) {
     corsNonce: true,                          // le vrai serveur n'en met PAS sur GET /v1/nonce (mesuré le 2026-11-12)
     pasBranche: false,                        // 503 pas_branche partout
     tailleMax: 16 * 1024,
-    refuserProchainNonce: false               // le prochain POST appairage répond 401 nonce_invalide
+    refuserProchainNonce: false,              // le prochain POST appairage répond 401 nonce_invalide
+    refuserProchainGoogle: false,             // le prochain POST suppression répond 401 google (nonce consommé)
+    reponseForcee: null                       // { statut, corps } : la prochaine réponse de POST suppression, telle quelle
   };
   const depots = new Map();     // id -> { jeton, expire, chiffre, use }
   const appairages = new Map(); // id -> { jeton, expire, lie, google, use }
   const nonces = new Map();     // nonce -> { expire, servi }
+  const comptes = new Map();    // sub -> { email } : les comptes du faux serveur
+  const suppressions = [];      // { sub, existait } : chaque 204 de POST /v1/compte/suppression
   const journal = [];
 
   const json = (res, statut, corps, cors) => {
@@ -35,7 +48,7 @@ export function demarrer({ portSite = 8787, portApi = 8788 } = {}) {
     const url = new URL(req.url, 'http://x');
     const p = url.pathname;
     journal.push({ methode: req.method, chemin: p, origine: req.headers.origin || null });
-    const routeWeb = /^\/v1\/(depot|appairage)\/[^/]+$/.test(p);
+    const routeWeb = /^\/v1\/(depot|appairage)\/[^/]+$/.test(p) || p === '/v1/compte/suppression';
 
     if (req.method === 'OPTIONS') {
       if (!routeWeb) return json(res, 404, { erreur: 'inconnu', message: 'route inconnue' });
@@ -62,6 +75,7 @@ export function demarrer({ portSite = 8787, portApi = 8788 } = {}) {
     if (req.method === 'GET' && p.startsWith('/_banc/depot/')) return json(res, 200, depots.get(p.split('/')[3]) || null);
     if (req.method === 'GET' && p.startsWith('/_banc/appairage/')) return json(res, 200, appairages.get(p.split('/')[3]) || null);
     if (req.method === 'GET' && p === '/_banc/journal') return json(res, 200, { journal, nonces: [...nonces.entries()] });
+    if (req.method === 'POST' && p === '/_banc/compte') { const c = JSON.parse(await lireCorps(req)); comptes.set(c.sub, { email: c.email }); return json(res, 200, c); }
     if (req.method === 'POST' && p === '/_banc/reglages') { Object.assign(reglages, JSON.parse(await lireCorps(req))); return json(res, 200, reglages); }
 
     // --- contrat ---
@@ -70,6 +84,28 @@ export function demarrer({ portSite = 8787, portApi = 8788 } = {}) {
       const expire = Date.now() + 5 * 60e3;
       nonces.set(nonce, { expire, servi: false });
       return json(res, 200, { nonce, expire_a: new Date(expire).toISOString().replace(/\.\d+Z$/, 'Z') }, reglages.corsNonce);
+    }
+    if (req.method === 'POST' && p === '/v1/compte/suppression') {
+      // L'ordre MESURÉ sur le vrai serveur (2026-11-12 19:14 UTC) : corps (400) → nonce, consommé même si la suite
+      // échoue (401 nonce_invalide) → jeton Google (401 google) → le nonce du jeton = celui envoyé → 204.
+      let corps;
+      try { corps = JSON.parse(await lireCorps(req)); } catch { corps = {}; }
+      if (!corps || typeof corps.google_id_token !== 'string' || !corps.google_id_token || typeof corps.nonce !== 'string' || !corps.nonce) {
+        return json(res, 400, { erreur: 'corps', message: 'il faut « google_id_token » et « nonce »' }, true);
+      }
+      const n = nonces.get(corps.nonce);
+      if (!n || n.servi || n.expire < Date.now()) return json(res, 401, { erreur: 'nonce_invalide', message: 'nonce inconnu, expiré ou déjà servi : en redemander un' }, true);
+      n.servi = true;
+      if (reglages.reponseForcee) { const f = reglages.reponseForcee; reglages.reponseForcee = null; return json(res, f.statut, f.corps, true); }
+      const charge = lireFauxJeton(corps.google_id_token);
+      if (reglages.refuserProchainGoogle || !charge || charge.aud !== CLIENT_WEB || !charge.sub) {
+        reglages.refuserProchainGoogle = false;
+        return json(res, 401, { erreur: 'google', message: 'jeton Google refusé' }, true);
+      }
+      if (charge.nonce !== corps.nonce) return json(res, 401, { erreur: 'nonce_invalide', message: 'nonce inconnu, expiré ou déjà servi : en redemander un' }, true);
+      const existait = comptes.delete(charge.sub); // 204 aussi sans compte, et RIEN n'est créé
+      suppressions.push({ sub: charge.sub, existait });
+      return json(res, 204, undefined, true);
     }
     if (req.method === 'POST' && routeWeb) {
       const brut = await lireCorps(req);
@@ -89,8 +125,9 @@ export function demarrer({ portSite = 8787, portApi = 8788 } = {}) {
       const n = nonces.get(corps.nonce);
       const nonceOk = n && !n.servi && n.expire > Date.now();
       if (n) n.servi = true; // un nonce sert une fois, même un échec le consume
-      // Le faux jeton Google du banc est « faux.<nonce> » : il porte le nonce qu'on lui a donné, comme le vrai.
-      if (reglages.refuserProchainNonce || !nonceOk || corps.google_id_token !== 'faux.' + corps.nonce) {
+      // Le faux jeton Google du banc porte le nonce qu'on lui a donné, comme le vrai.
+      const charge = lireFauxJeton(corps.google_id_token);
+      if (reglages.refuserProchainNonce || !nonceOk || !charge || charge.nonce !== corps.nonce) {
         reglages.refuserProchainNonce = false;
         return json(res, 401, { erreur: 'nonce_invalide', message: 'nonce inconnu, expiré ou déjà servi' }, true);
       }
@@ -112,7 +149,7 @@ export function demarrer({ portSite = 8787, portApi = 8788 } = {}) {
 
   return new Promise((ok) => {
     api.listen(portApi, '127.0.0.1', () => site.listen(portSite, '127.0.0.1', () => ok({
-      reglages, depots, appairages, nonces, journal,
+      reglages, depots, appairages, nonces, journal, comptes, suppressions,
       site: `http://127.0.0.1:${portSite}`, api: `http://127.0.0.1:${portApi}`,
       arreter: () => Promise.all([new Promise((r) => api.close(r)), new Promise((r) => site.close(r))])
     })));

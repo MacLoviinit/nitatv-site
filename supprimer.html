@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>NitaTV — Supprimer votre compte · Delete your account</title>
+<meta name="description" content="Supprimer votre compte NitaTV / Delete your NitaTV account">
+<style>
+  :root { --fond:#ffffff; --carte:#f2f4f8; --texte:#1b1d27; --doux:#5b6070; --accent:#0088b8; --trait:#e3e6ee;
+          --danger:#c62828; --sur-danger:#ffffff; --erreur:#c62828; }
+  @media (prefers-color-scheme: dark) {
+    :root { --fond:#101320; --carte:#171b2c; --texte:#e9ebf2; --doux:#a3a8b8; --accent:#00c1ff; --trait:#262b3d;
+            --danger:#ff6b6b; --sur-danger:#1a0606; --erreur:#ff7a7a; }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--fond); color:var(--texte);
+         font:16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width:640px; margin:0 auto; padding:32px 16px 64px; }
+  h1 { font-size:1.9rem; margin:0 0 4px; }
+  h1 .tv { color:var(--accent); }
+  h2 { font-size:1.2rem; margin:32px 0 8px; padding-top:16px; border-top:1px solid var(--trait); }
+  .langues a { color:var(--accent); margin-right:16px; }
+  a { color:var(--accent); }
+  ul { padding-left:22px; }
+  li { margin-bottom:6px; }
+  .chemin { font-weight:600; }
+  section.langue + section.langue { margin-top:56px; }
+  /* With JavaScript, one language at a time (chosen by #fr / #en, else by the browser's language). */
+  .js section.langue:not(.active) { display:none; }
+  .js section.langue + section.langue { margin-top:0; }
+  .ici { background:var(--carte); border-radius:12px; padding:16px; margin:12px 0; }
+  .ici p { margin:0 0 10px; }
+  .ici .titre { font-size:1.1rem; font-weight:600; }
+  .ici .doux { color:var(--doux); font-size:.95rem; }
+  #bouton-google { display:flex; justify-content:center; min-height:48px; margin:16px 0 8px; }
+  .etat { margin:12px 0 0; padding:12px 14px; border-radius:10px; background:var(--fond); }
+  .etat.erreur { border-left:3px solid var(--erreur); }
+  .boutons { display:flex; flex-wrap:wrap; gap:12px; margin-top:16px; }
+  button { font:inherit; font-weight:600; border-radius:10px; cursor:pointer; padding:12px 20px; }
+  button.secondaire { background:transparent; color:var(--texte); border:1px solid var(--doux); }
+  button.danger { background:var(--danger); color:var(--sur-danger); border:0; }
+  button.principal { background:var(--accent); color:#06121a; border:0; }
+  button:disabled { opacity:.6; cursor:default; }
+  .adresse { font-weight:600; overflow-wrap:anywhere; }
+  [hidden] { display:none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Nita<span class="tv">TV</span></h1>
+  <p class="langues"><a href="#fr" hreflang="fr">Français</a><a href="#en" hreflang="en">English</a></p>
+
+  <section id="fr" lang="fr" class="langue">
+    <h1>Supprimer votre compte NitaTV</h1>
+    <p>Votre compte NitaTV est celui que vous créez en vous connectant avec Google dans l'application NitaTV. Vous
+    pouvez le supprimer à tout moment, de deux façons.</p>
+
+    <h2>Dans l'application</h2>
+    <p class="chemin">Paramètres &gt; Compte &gt; Supprimer mon compte</p>
+
+    <h2>Ou ici, avec votre compte Google</h2>
+    <div class="place-ici"></div>
+    <noscript><p>Cette page a besoin de JavaScript pour supprimer votre compte ici. Sans JavaScript&nbsp;: passez par
+    l'application, ou écrivez-nous (plus bas).</p></noscript>
+
+    <h2>Ce que fait la suppression</h2>
+    <ul>
+      <li><strong>Effacés du serveur de NitaTV&nbsp;:</strong> votre compte, ses appareils, ses connexions et les playlists
+      envoyées depuis un téléphone pas encore reçues.</li>
+      <li><strong>L'essai gratuit ne recommence pas&nbsp;:</strong> ce compte Google n'en aura jamais de second, même
+      recréé.</li>
+      <li><strong>Un abonnement Google Play n'est pas résilié&nbsp;:</strong> il se résilie dans
+      <a href="https://play.google.com/store/account/subscriptions?sku=nitatv_abonnement&amp;package=tv.nita.app">Google
+      Play</a>&nbsp;; un compte recréé le retrouve s'il est encore payé.</li>
+      <li><strong>Restent sur vos appareils&nbsp;:</strong> vos playlists, vos profils et vos réglages.</li>
+    </ul>
+    <p>Ce que le serveur garde après la suppression, et pourquoi&nbsp;: <a href="confidentialite.html#supprimer">politique de
+    confidentialité</a>.</p>
+
+    <h2>Si rien ne marche</h2>
+    <p>Écrivez à <a href="mailto:contact@nita.tv?subject=Supprimer%20mon%20compte%20NitaTV">contact@nita.tv</a> depuis
+    l'adresse de votre compte Google, en demandant la suppression de votre compte NitaTV.</p>
+  </section>
+
+  <section id="en" lang="en" class="langue">
+    <h1>Delete your NitaTV account</h1>
+    <p>Your NitaTV account is the one you create by signing in with Google in the NitaTV app. You can delete it at any
+    time, in two ways.</p>
+
+    <h2>In the app</h2>
+    <p class="chemin">Settings &gt; Account &gt; Delete my account</p>
+
+    <h2>Or here, with your Google account</h2>
+    <div class="place-ici"></div>
+    <noscript><p>This page needs JavaScript to delete your account here. Without JavaScript: use the app, or write to us
+    (below).</p></noscript>
+
+    <h2>What deletion does</h2>
+    <ul>
+      <li><strong>Erased from NitaTV's server:</strong> your account, its devices, its sign-ins and any playlists sent
+      from a phone that have not been received yet.</li>
+      <li><strong>The free trial does not start again:</strong> this Google account will never get a second one, even
+      if it is created again.</li>
+      <li><strong>A Google Play subscription is not cancelled:</strong> you cancel it in
+      <a href="https://play.google.com/store/account/subscriptions?sku=nitatv_abonnement&amp;package=tv.nita.app">Google
+      Play</a>; an account created again gets it back if it is still paid.</li>
+      <li><strong>What stays on your devices:</strong> your playlists, your profiles and your settings.</li>
+    </ul>
+    <p>What the server keeps after deletion, and why: <a href="confidentialite.html#delete">privacy policy</a>.</p>
+
+    <h2>If nothing works</h2>
+    <p>Write to <a href="mailto:contact@nita.tv?subject=Delete%20my%20NitaTV%20account">contact@nita.tv</a> from your
+    Google account's address, asking for your NitaTV account to be deleted.</p>
+  </section>
+
+  <!-- The interactive block: placed by supprimer.js into the section of the language shown. -->
+  <div id="ici" class="ici" hidden>
+    <p id="ici-intro" class="doux"></p>
+    <div id="bouton-google" aria-live="polite" hidden></div>
+
+    <div id="confirmer" hidden>
+      <p class="titre" id="confirmer-titre"></p>
+      <p id="confirmer-texte"></p>
+      <div class="boutons">
+        <button type="button" class="secondaire" id="annuler"></button>
+        <button type="button" class="danger" id="supprimer"></button>
+      </div>
+    </div>
+
+    <p id="etat" class="etat" role="status" aria-live="polite" hidden></p>
+    <button type="button" class="principal" id="reessayer" hidden></button>
+
+    <div id="fin" role="status" aria-live="polite" hidden>
+      <p class="titre" id="fin-titre"></p>
+      <p id="fin-texte"></p>
+    </div>
+  </div>
+</main>
+<script src="google.js"></script>
+<script src="supprimer.js"></script>
+</body>
+</html>
