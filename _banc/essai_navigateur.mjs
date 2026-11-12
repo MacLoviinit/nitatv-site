@@ -226,7 +226,7 @@ try {
     c = neuf(); await choisirCompte(c);
     const nonceN = await nonceBouton();
     await cliquer('faux-google'); await confirmation();
-    S.nonces.get(nonceN).expire = Date.now() - 1; // les 5 minutes du nonce passées pendant la confirmation
+    if (S.nonces.has(nonceN)) S.nonces.get(nonceN).expire = Date.now() - 1; // les 5 minutes du nonce passées pendant la confirmation
     await cliquer('supprimer');
     verifie(await attendre(`${el('etat')}.textContent.replace(/\u00a0/g, " ").startsWith('La confirmation a pris trop de temps') && ${vu('bouton-google')} && window.__gisCfg.nonce !== ${JSON.stringify(nonceN)}`, '401 nonce'),
       'supprimer : 401 nonce_invalide → « trop de temps », le bouton revient avec un NOUVEAU nonce');
@@ -282,8 +282,11 @@ try {
     await bouton();
     await cliquer('faux-google'); await confirmation();
     S.reglages.pasBranche = true;
+    const noncesAvant503 = S.journal.filter((j) => j.chemin === '/v1/nonce').length;
     await cliquer('supprimer');
     verifie(await fini('Le service des comptes n\'est pas encore ouvert'), 'supprimer : 503 au POST (CORS présent) → le même message, pas « réseau »');
+    await pause(300);
+    verifie(S.journal.filter((j) => j.chemin === '/v1/nonce').length === noncesAvant503, 'supprimer : … reconnu AU POST : la page s\'arrête là, sans redemander de nonce');
     S.reglages.pasBranche = false;
 
     // --- 10. Changer de langue en cours de route : le bouton se redessine, SANS nouveau nonce ---
