@@ -64,6 +64,12 @@ try {
     console.log(`  (délai dépassé en attendant : ${quoi})`);
     return false;
   };
+  // Attendre une condition côté banc (le faux serveur), pas dans la page.
+  const attendreNode = async (f, ms = 8000) => {
+    const t0 = Date.now();
+    while (Date.now() - t0 < ms) { if (f()) return true; await pause(100); }
+    return false;
+  };
   const capture = async (nom) => {
     await pause(350); // les transitions de la maquette (.2 s : points, boutons) finies avant l'image
     const { data } = await cdp('Page.captureScreenshot', { format: 'png', captureBeyondViewport: true });
@@ -290,6 +296,42 @@ try {
     verifie(S.journal.filter((j) => j.chemin === '/v1/nonce').length === noncesAvant503, 'supprimer : … reconnu AU POST : la page s\'arrête là, sans redemander de nonce');
     S.reglages.pasBranche = false;
 
+    // --- 9 bis. 503 PASSAGERS : jamais « pas encore ouvert : il n'y a rien à supprimer » (ce serait faux : le compte existe) ---
+    // a) au POST (une action) : occupe, puis google_injoignable → le message « erreur du serveur (503) … la refaire ne
+    //    change rien », NOUVEAU nonce, le bouton ; le compte est toujours là ; l'essai suivant l'efface
+    await ouvrir(`${S.site}/supprimer.html#fr`);
+    await bouton();
+    c = neuf(); await choisirCompte(c);
+    for (const erreur of ['occupe', 'google_injoignable']) {
+      const nAvant = await nonceBouton();
+      await cliquer('faux-google'); await confirmation();
+      S.reglages.passager = { erreur, routes: ['suppression'], fois: 1 };
+      await cliquer('supprimer');
+      verifie(await attendre(`${el('etat')}.textContent.replace(/ /g, " ").startsWith('Le serveur de NitaTV a répondu par une erreur (503).') && ${vu('bouton-google')} && !${vu('fin')} && window.__gisCfg.nonce !== ${JSON.stringify(nAvant)}`, '503 ' + erreur),
+        `supprimer : 503 ${erreur} au POST → « erreur du serveur (503) », NOUVEAU nonce, le bouton — pas « pas encore ouvert »`);
+      verifie(S.reglages.passager.fois === 0 && S.comptes.has(c.sub), 'supprimer : … rendu par le faux serveur, le compte est toujours là');
+    }
+    await capture('supprimer_fr_8_post_occupe');
+    S.reglages.passager = null;
+    await cliquer('faux-google'); await confirmation(); await cliquer('supprimer');
+    verifie(await fini('C\'est fait') && !S.comptes.has(c.sub), 'supprimer : … l\'essai suivant efface le compte');
+    // b) au nonce du chargement (automatique) : redemandé seul, le bouton vient
+    S.reglages.passager = { erreur: 'occupe', routes: ['nonce'], fois: 1 };
+    const nG0 = S.journal.filter((j) => j.methode === 'GET' && j.chemin === '/v1/nonce').length;
+    await ouvrir(`${S.site}/supprimer.html#fr`);
+    verifie(await bouton() && !(await evaluer(vu('reessayer'))) && !(await evaluer(vu('etat'))) && S.reglages.passager.fois === 0
+      && S.journal.filter((j) => j.methode === 'GET' && j.chemin === '/v1/nonce').length - nG0 === 2,
+    'supprimer : 503 occupe au nonce → redemandé seul (2 GET), le bouton, ni message ni « Réessayer »');
+    // c) toujours occupé : « réessayez dans un instant » + Réessayer, jamais la fin « rien à supprimer »
+    S.reglages.passager = { erreur: 'occupe', routes: ['nonce'] };
+    await ouvrir(`${S.site}/supprimer.html#fr`);
+    verifie(await attendre(`${el('etat')}.textContent === 'Le serveur de NitaTV ne peut pas répondre pour le moment. Réessayez dans un instant.' && ${vu('reessayer')} && !${vu('fin')}`, 'nonce occupé', 15000),
+      'supprimer : 503 occupe au nonce, toujours → « ne peut pas répondre pour le moment. Réessayez dans un instant. » + Réessayer');
+    await capture('supprimer_fr_9_nonce_occupe');
+    S.reglages.passager = null;
+    await cliquer('reessayer');
+    verifie(await attendre(`${vu('bouton-google')} && !${vu('reessayer')} && !${vu('etat')}`, 'reprise'), 'supprimer : … « Réessayer » → le bouton');
+
     // --- 10. Changer de langue en cours de route : le bouton se redessine, SANS nouveau nonce ---
     await ouvrir(`${S.site}/supprimer.html#fr`);
     await bouton();
@@ -514,8 +556,18 @@ try {
   serveur.reglages.origine = serveur.site;
   serveur.reglages.pasBranche = true;
   await cliquer('envoyer-m3u');
-  verifie(await attendre(`${el('etat-m3u')}.textContent.startsWith('Le service n\\'est pas encore ouvert')`, '503'), 'ajouter : 503 → « pas encore ouvert »');
+  verifie(await attendre(`${el('etat-m3u')}.textContent.startsWith('Le service n\\'est pas encore ouvert')`, '503'), 'ajouter : 503 pas_branche → « pas encore ouvert »');
   serveur.reglages.pasBranche = false;
+  // 503 occupe à l'envoi (une action de l'utilisateur) : « réessayez », le bouton rendu, le dépôt intact ; le 2e envoi passe
+  serveur.reglages.passager = { erreur: 'occupe', routes: ['depot'], fois: 1 };
+  await cliquer('envoyer-m3u');
+  verifie(await attendre(`${el('etat-m3u')}.textContent === 'Le serveur de NitaTV ne peut pas répondre pour le moment. Réessayez dans un instant.' && !${el('envoyer-m3u')}.disabled && ${vu('etape-m3u')}`, '503 occupe')
+    && serveur.reglages.passager.fois === 0 && !serveur.depots.get(dep.depot).use,
+  'ajouter : 503 occupe à l\'envoi → « Le serveur de NitaTV ne peut pas répondre pour le moment. Réessayez dans un instant. », [Envoyer] rendu, le dépôt n\'a pas servi');
+  await capture('ajouter_fr_13_envoi_occupe');
+  serveur.reglages.passager = null;
+  await cliquer('envoyer-m3u');
+  verifie(await finAvec('Validé !') && clairRecu(dep.depot) === JSON.stringify({ v: 1, type: 'm3u', url: 'https://exemple.tv/liste.m3u' }), 'ajouter : … le 2e envoi passe → « Validé ! »');
 
   // ---------- F. Liens abîmés ----------
   await ouvrir(`${serveur.site}/ajouter.html`);
@@ -542,7 +594,12 @@ try {
   await choisirType('m3u'); await cliquer('suivant'); await etape('m3u');
   verifie((await evaluer(`[...document.querySelectorAll('#etape-m3u label, #etape-m3u small')].map(l => l.textContent).join('/')`)) === 'Playlist URL/Enter the full URL of your M3U or M3U8 file./TV guide (optional)/If your provider gave you a guide address, paste it here.', 'ajouter : EN — les champs M3U et le guide (« TV guide (optional) »)');
   await capture('ajouter_en_3_m3u_vide');
-  await remplir({ url: 'https://exemple.tv/liste.m3u' }); await cliquer('envoyer-m3u');
+  await remplir({ url: 'https://exemple.tv/liste.m3u' });
+  serveur.reglages.passager = { erreur: 'occupe', routes: ['depot'], fois: 1 };
+  await cliquer('envoyer-m3u');
+  verifie(await attendre(`${el('etat-m3u')}.textContent === 'NitaTV\\'s server cannot answer right now. Try again in a moment.' && !${el('envoyer-m3u')}.disabled`, 'en occupe'), 'ajouter : EN — 503 occupe → « NitaTV\'s server cannot answer right now. Try again in a moment. »');
+  serveur.reglages.passager = null;
+  await cliquer('envoyer-m3u');
   verifie(await finAvec('Done!') && (await texteDe('fin-texte')) === 'Your playlist has been sent to your device.', 'ajouter : EN — « Done! Your playlist has been sent to your device. »');
   await capture('ajouter_en_4_valide');
   await aller(`${serveur.site}/ajouter.html#d=${dep.depot}&t=${dep.jeton}&k=${k}`);
@@ -665,8 +722,60 @@ try {
   ap = await appelBanc('/_banc/appairage');
   await ouvrir(qr(ap)); await bouton(); await cliquer('faux-google'); await etape('attente');
   serveur.reglages.pasBranche = true;
-  verifie(await connecteFin('Retournez à votre télé.'), 'connexion : 503 de …/depot (CORS présent) → « Connecté — Retournez à votre télé. »');
+  verifie(await connecteFin('Retournez à votre télé.'), 'connexion : 503 pas_branche de …/depot (CORS présent) → « Connecté — Retournez à votre télé. »');
   serveur.reglages.pasBranche = false;
+
+  // ---------- 7 bis. 503 PASSAGERS pendant l'attente (contrat § 0 : « réessayer, jamais déconnecté ») ----------
+  // a) le faux serveur rend ce que rend le vrai (guichet.py `_occupe`) : 503 { occupe }, CORS, sur …/depot
+  ap = await appelBanc('/_banc/appairage');
+  serveur.reglages.passager = { erreur: 'occupe', routes: ['suite'], fois: 1 };
+  const rOcc = await fetch(`${serveur.api}/v1/appairage/${ap.appairage}/depot`, { method: 'POST', headers: { 'Content-Type': 'application/json', Origin: serveur.site }, body: '{}' });
+  const jOcc = await rOcc.json();
+  verifie(rOcc.status === 503 && jOcc.erreur === 'occupe' && jOcc.message === 'serveur occupé : réessayer dans un instant' && rOcc.headers.get('access-control-allow-origin') === serveur.site,
+    'faux serveur ≡ vrai : base occupée → 503 { erreur: occupe, message du vrai } avec CORS');
+  serveur.reglages.passager = null;
+  // b) deux 503 occupe, puis le service reprend, puis la télé rattache → la page arrive aux étapes de la playlist
+  await ouvrir(qr(ap)); await bouton(); await cliquer('faux-google'); await etape('attente');
+  const s0 = serveur.servis503.length;
+  serveur.reglages.passager = { erreur: 'occupe', routes: ['suite'], fois: 2 };
+  verifie(await attendreNode(() => serveur.servis503.length - s0 === 2, 12000), `connexion : le faux serveur a bien rendu 2 × 503 occupe à …/depot (${serveur.servis503.length - s0})`);
+  verifie(await evaluer(vu('etape-attente')) && (await texteDe('etape-attente')).includes('Votre télé prépare l\'envoi de votre playlist…'), 'connexion : 503 occupe → TOUJOURS en attente, le même texte (pas « Connecté — retournez à votre télé »)');
+  const nAvantRat = polls(ap.appairage).length;
+  await pause(3500);
+  verifie(polls(ap.appairage).length > nAvantRat, 'connexion : … et la page interroge encore après les 503');
+  let rOk = await rattacher(ap.appairage);
+  verifie(await etape('type'), 'connexion : 503 occupe, puis 200 { depot, jeton } → « Type de connexion » (les étapes de la playlist)');
+  await cliquer('suivant'); await etape('xtream');
+  await remplir({ serveur: 'http://exemple.tv:8080', utilisateur: 'antony', mot_de_passe: 'apres503' });
+  await cliquer('envoyer-xtream');
+  verifie(await finAvec('Validé !') && clairRecu(rOk.depot) === JSON.stringify({ v: 1, type: 'xtream', serveur: 'http://exemple.tv:8080', utilisateur: 'antony', mot_de_passe: 'apres503' }),
+    'connexion : … jusqu\'à « Validé ! », la télé déchiffre — ' + clairRecu(rOk.depot));
+  // c) 503 google_injoignable (le vrai ne le rend pas sur …/depot, qui ne vérifie aucun jeton Google ; la page le
+  //    tolère quand même : seul pas_branche arrête) — réponse forcée, puis normale
+  ap = await appelBanc('/_banc/appairage');
+  await ouvrir(qr(ap)); await bouton(); await cliquer('faux-google'); await etape('attente');
+  serveur.reglages.suiteForcee = { statut: 503, corps: { erreur: 'google_injoignable', message: 'Google ne répond pas : réessayer dans un moment' } };
+  const nGi = polls(ap.appairage).length;
+  await pause(6800);
+  verifie(polls(ap.appairage).length - nGi >= 2 && await evaluer(vu('etape-attente')), `connexion : 503 google_injoignable → toujours en attente, la page réinterroge (${polls(ap.appairage).length - nGi} POST en ~6,8 s)`);
+  serveur.reglages.suiteForcee = null;
+  await rattacher(ap.appairage);
+  verifie(await etape('type'), 'connexion : … puis 200 → « Type de connexion »');
+  // d) une suite de 503 occupe jusqu'à l'expiration → la fin propre d'aujourd'hui (« Connecté — Retournez à votre télé. »)
+  ap = await appelBanc('/_banc/appairage');
+  await ouvrir(qr(ap)); await bouton(); await cliquer('faux-google'); await etape('attente');
+  const s1 = serveur.servis503.length;
+  serveur.reglages.passager = { erreur: 'occupe', routes: ['suite'] }; // toujours
+  await pause(6800);
+  verifie(serveur.servis503.length - s1 >= 2 && await evaluer(vu('etape-attente')), `connexion : 503 occupe sans fin → la page attend toujours (${serveur.servis503.length - s1} × 503 rendus)`);
+  await capture('connexion_fr_14_attente_503');
+  // L'horloge de la page avancée de 20 min (sa borne, DUREE_MAX : l'appairage vit 15 min) — le banc n'attend pas 20 min.
+  await evaluer(`(() => { const n = Date.now; Date.now = () => n() + 20 * 60 * 1000 + 1000; return true; })()`);
+  verifie(await connecteFin('Retournez à votre télé.'), 'connexion : 503 occupe jusqu\'à la borne (20 min) → « Connecté — Retournez à votre télé. » (la fin d\'aujourd\'hui)');
+  const nFin = polls(ap.appairage).length;
+  await pause(3500);
+  verifie(polls(ap.appairage).length === nFin, 'connexion : … et la page cesse d\'interroger (jamais une boucle sans fin)');
+  serveur.reglages.passager = null;
 
   // ---------- 8. Réseau coupé pendant l'attente : on réinterroge, puis on repart ----------
   ap = await appelBanc('/_banc/appairage');
@@ -724,6 +833,41 @@ try {
   await ouvrir(qr(ap));
   verifie(await finAvec('Pas encore ouvert'), 'connexion : 503 pas_branche → « Pas encore ouvert »');
   serveur.reglages.pasBranche = false;
+
+  // ---------- 10 bis. 503 passagers HORS de l'attente : le nonce (automatique) et l'appui Google (une action) ----------
+  const OCCUPE_FR = 'Le serveur de NitaTV ne peut pas répondre pour le moment. Réessayez dans un instant.';
+  const noncesDemandes = () => serveur.journal.filter((j) => j.methode === 'GET' && j.chemin === '/v1/nonce').length;
+  // a) un 503 occupe au nonce du chargement : la page redemande d'elle-même, le bouton vient, aucun message
+  ap = await appelBanc('/_banc/appairage');
+  serveur.reglages.passager = { erreur: 'occupe', routes: ['nonce'], fois: 1 };
+  let nN = noncesDemandes();
+  await ouvrir(qr(ap));
+  verifie(await bouton() && !(await evaluer(vu('reessayer'))) && !(await evaluer(vu('etat-compte'))) && noncesDemandes() - nN === 2 && serveur.reglages.passager.fois === 0,
+    `connexion : 503 occupe au nonce → redemandé seul (${noncesDemandes() - nN} GET), le bouton s'affiche, ni message ni « Réessayer »`);
+  // b) occupé à chaque fois : après 3 demandes (≈ 6 s), le message « réessayez » et le bouton Réessayer — jamais « Pas encore ouvert »
+  serveur.reglages.passager = { erreur: 'occupe', routes: ['nonce'] };
+  nN = noncesDemandes();
+  await ouvrir(qr(ap));
+  verifie(await attendre(`${el('etat-compte')}.textContent === ${JSON.stringify(OCCUPE_FR)} && ${vu('reessayer')} && !${vu('etape-fin')}`, 'nonce occupé', 15000) && noncesDemandes() - nN === 3,
+    `connexion : 503 occupe au nonce, toujours → « ${OCCUPE_FR} » + Réessayer (${noncesDemandes() - nN} GET, borné), pas « Pas encore ouvert »`);
+  await capture('connexion_fr_15_nonce_occupe');
+  serveur.reglages.passager = null;
+  await cliquer('reessayer');
+  verifie(await attendre(`!!document.getElementById('faux-google') && ${vu('bouton-google')} && !${vu('reessayer')} && !${vu('etat-compte')}`, 'reprise après occupé'), 'connexion : … « Réessayer » → le bouton revient');
+  // c) 503 occupe puis 503 google_injoignable à l'appui Google : message « réessayez », NOUVEAU nonce, le bouton ; le 3e appui passe
+  for (const erreur of ['occupe', 'google_injoignable']) {
+    const nAvant = await evaluer('window.__gisCfg ? window.__gisCfg.nonce : null');
+    serveur.reglages.passager = { erreur, routes: ['appairage'], fois: 1 };
+    await cliquer('faux-google');
+    verifie(await attendre(`${el('etat-compte')}.textContent === ${JSON.stringify(OCCUPE_FR)} && ${vu('bouton-google')} && !!document.getElementById('faux-google') && window.__gisCfg.nonce !== ${JSON.stringify(nAvant)} && !${vu('etape-fin')}`, '503 ' + erreur),
+      `connexion : 503 ${erreur} au POST /v1/appairage → « réessayez », un NOUVEAU nonce, le bouton (pas « Pas encore ouvert »)`);
+    verifie(serveur.reglages.passager.fois === 0 && !serveur.appairages.get(ap.appairage).lie, `connexion : … le faux serveur l'a bien rendu, l'appairage n'est pas lié`);
+    if (erreur === 'google_injoignable') verifie(serveur.nonces.get(nAvant)?.servi === true, 'faux serveur ≡ vrai : google_injoignable rendu APRÈS la consommation du nonce');
+  }
+  await capture('connexion_fr_16_appairage_occupe');
+  serveur.reglages.passager = null;
+  await cliquer('faux-google');
+  verifie(await etape('attente'), 'connexion : … et l\'appui suivant lie la télé (« Connecté », attente)');
   await ouvrir(`${serveur.site}/connexion.html`);
   verifie(await finAvec('Ce lien est incomplet'), 'connexion : sans « # » → « Ce lien est incomplet »');
   await capture('connexion_fr_13_lien_incomplet');

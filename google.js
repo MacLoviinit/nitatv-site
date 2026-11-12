@@ -15,6 +15,8 @@ var NitaGoogle = (function () {
   var API = LOCAL ? 'http://127.0.0.1:8788' : 'https://api.nita.tv';
 
   var gis = null; // Promise of the loaded Google library
+  var REPRISES = 2;      // a passing 503 at GET /v1/nonce: asked again twice by itself, then « try again »
+  var REPRISE_MS = 3000; // the rhythm of the contract's waits (§ 5 bis)
 
   function chargerGis() {
     if (gis) return gis;
@@ -32,10 +34,16 @@ var NitaGoogle = (function () {
     return gis;
   }
 
+  // Contract § 0: only `503 pas_branche` means « not open »; any other 503 (`occupe`, `google_injoignable`, or a body
+  // that cannot be read) is PASSING — 'occupe' here, asked again (see preparer()).
   function demanderNonce() {
     return fetch(API + '/v1/nonce', { cache: 'no-store', credentials: 'omit', referrerPolicy: 'no-referrer' })
       .then(function (r) {
-        if (r.status === 503) throw new Error('pas_branche');
+        if (r.status === 503) {
+          return r.json().catch(function () { return {}; }).then(function (j) {
+            throw new Error(j && j.erreur === 'pas_branche' ? 'pas_branche' : 'occupe');
+          });
+        }
         if (!r.ok) throw new Error('nonce_http_' + r.status);
         return r.json();
       }).then(function (j) {
@@ -62,7 +70,8 @@ var NitaGoogle = (function () {
    * o.actif()    false once the page no longer wants a Google answer (sending, finished, confirming…)
    * o.avant()    optional; return false to stop before asking the server (e.g. the QR code has expired)
    * o.recu(credential, nonce)   a Google answer: the ID token and the nonce it was asked with (now spent)
-   * o.erreur(e)  preparation failed: e.message is 'pas_branche', 'gis', or a network/HTTP failure
+   * o.erreur(e)  preparation failed: e.message is 'pas_branche', 'occupe' (a passing 503, still there after the page
+   *              asked again), 'gis', or a network/HTTP failure
    * o.apparence() the GsiButtonConfiguration overrides (text, locale), read at every drawing
    */
   function bouton(o) {
@@ -111,13 +120,20 @@ var NitaGoogle = (function () {
       o.recu(reponse.credential, n);
     }
 
-    function preparer() {
+    // essai: how many times a PASSING 503 ('occupe') has already been asked again. Asking for a nonce is automatic (page
+    // load, renewal), so the page asks again by itself — REPRISES times, REPRISE_MS apart — before showing the error.
+    // A renewal keeps its button and its nonce meanwhile (renewed >= 30 s before the nonce expires).
+    function preparer(essai) {
+      essai = typeof essai === 'number' ? essai : 0;
       if (!o.actif()) return Promise.resolve();
       if (o.avant && o.avant() === false) return Promise.resolve();
       return Promise.all([chargerGis(), demanderNonce()]).then(function (r) {
         if (o.actif()) armer(r[1]);
       }).catch(function (e) {
         if (!o.actif()) return;
+        if (e && e.message === 'occupe' && essai < REPRISES) {
+          return new Promise(function (ok) { setTimeout(ok, REPRISE_MS); }).then(function () { return preparer(essai + 1); });
+        }
         o.div.hidden = true;
         o.erreur(e);
       });

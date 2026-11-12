@@ -7,8 +7,9 @@
  *   - 200 { suite } and a valid `k` in the QR code → « Connecté », then the page asks every 3 s
  *     POST /v1/appairage/{a}/depot { suite } → 202 (the TV has not attached its deposit yet) · 200 { depot, jeton }
  *     → the playlist steps (playlist.js), encrypted with the `k` OF THE QR CODE (never a key from the server: it could
- *     substitute its own and read the playlist) and the received `depot` as salt · 410, 401 suite, 503 → « Connecté —
- *     retournez à votre télé » ;
+ *     substitute its own and read the playlist) and the received `depot` as salt · 410, 401 suite, 503 pas_branche →
+ *     « Connecté — retournez à votre télé » · 503 occupe / google_injoignable, 429, 5xx, network → ask again (3 s),
+ *     until DUREE_MAX ;
  *   - 204 (an older server), no `k`, or no `suite` → « Connecté — retournez à votre télé ».
  * « Plus tard » stops at « Connecté » too: the TV takes the onboarding back at « Type de connexion ».
  * Nothing is stored by this page.
@@ -77,7 +78,7 @@
   function erreurPreparation(e) {
     if (termine) return;
     if (e && e.message === 'pas_branche') { fin('info', t('pasOuvertTitre'), t('pasOuvertConnexion')); return; }
-    etat(t(e && e.message === 'gis' ? 'gis' : 'injoignable'), true);
+    etat(t(e && e.message === 'gis' ? 'gis' : e && e.message === 'occupe' ? 'occupe' : 'injoignable'), true);
     reessayer(true);
   }
 
@@ -129,7 +130,10 @@
       if (r.status === 410) { fin('info', t('plusValableTitre'), t('plusValableConnexion')); return; }
       return P.lireErreur(r).then(function (j) {
         var a = { message: j.message, statut: r.status };
-        if (r.status === 503) fin('info', t('pasOuvertTitre'), t('pasOuvertConnexion'));
+        // contract § 0: only `503 pas_branche` is « not open »; occupe, google_injoignable are passing — the nonce may
+        // be spent (the server spends it before asking Google), so a new nonce and a new tap, like a 429
+        if (r.status === 503 && j.erreur === 'pas_branche') fin('info', t('pasOuvertTitre'), t('pasOuvertConnexion'));
+        else if (r.status === 503) nouvelEssai(t('occupe'));
         else if (r.status === 401 && j.erreur === 'nonce_invalide') nouvelEssai(t('nonce'));
         else if (r.status === 429) nouvelEssai(t('tropDEssaisGoogle'));
         else if (r.status === 400 || r.status === 401 || r.status === 403) nouvelEssai(t('nonConfirme', a));
@@ -177,8 +181,17 @@
             NitaPlaylist.demarrer({ api: API, cle: cle, depot: j.depot, jeton: j.jeton, plusTard: plusTard });
           });
         }
-        if (r.status === 429 || r.status >= 500 && r.status !== 503) { encore(); return; } // a hiccup: ask again
-        connecte(); // 410 (expired), 401 suite, 503, anything else: the sign-in itself is done
+        // 503: only `pas_branche` ends the wait (contract § 0); occupe, google_injoignable, an unreadable body are passing:
+        // ask again at the same rhythm (the server already holds a busy request up to 10 s before its 503 occupe, and
+        // the page sends one request at a time), bounded by DUREE_MAX like every other retry here
+        if (r.status === 503) {
+          return P.lireErreur(r).then(function (j) {
+            if (termine) return;
+            if (j.erreur === 'pas_branche') connecte(); else encore();
+          });
+        }
+        if (r.status === 429 || r.status >= 500) { encore(); return; } // a hiccup: ask again
+        connecte(); // 410 (expired), 401 suite, anything else: the sign-in itself is done
       }).catch(function () { encore(); }); // network: ask again (bounded by DUREE_MAX)
     }
 

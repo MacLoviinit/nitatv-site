@@ -30,8 +30,15 @@ export function demarrer({ portSite = 8787, portApi = 8788 } = {}) {
     reponseForcee: null,                      // { statut, corps } : la prochaine réponse de POST suppression, telle quelle
     appairageAncien: false,                   // POST /v1/appairage/{a} répond 204 sans corps (le serveur d'avant le § 5 bis)
     suiteForcee: null,                        // { statut, corps } : TOUTES les réponses de POST …/depot, telles quelles
-    kPiege: null                              // une clé que le faux serveur glisse dans la réponse 200 de …/depot (la page doit l'ignorer)
+    kPiege: null,                             // une clé que le faux serveur glisse dans la réponse 200 de …/depot (la page doit l'ignorer)
+    // Les 503 PASSAGERS (contrat § 0, serveur DEC-014, lus dans son code : guichet.py `_occupe`, api.py `_preuve_google`) :
+    // { erreur: 'occupe' | 'google_injoignable', routes: ['nonce','appairage','suite','depot','suppression'], fois: n }
+    // 'occupe' : n'importe quelle route, AVANT tout effet (la base refuse ; CORS sur les routes de la page et le nonce) ;
+    // 'google_injoignable' : seulement les routes qui vérifient un jeton Google (appairage, suppression), APRÈS la
+    // consommation du nonce, comme le vrai. `fois` : combien de réponses avant de redevenir normal (absent : toujours).
+    passager: null
   };
+  const servis503 = [];         // { route, erreur } : chaque 503 passager rendu (la preuve qu'un essai l'a bien reçu)
   const depots = new Map();     // id -> { jeton, expire, chiffre, use }
   const appairages = new Map(); // id -> { jeton, expire, lie, google, use, suite, depot }
   const nonces = new Map();     // nonce -> { expire, servi }
@@ -62,6 +69,20 @@ export function demarrer({ portSite = 8787, portApi = 8788 } = {}) {
     if (reglages.pasBranche && p.startsWith('/v1/')) {
       return json(res, 503, { erreur: 'pas_branche', message: 'pas encore branché' }, routeWeb || (p === '/v1/nonce' && reglages.corsNonce));
     }
+    const routePage = p === '/v1/nonce' ? 'nonce' : p === '/v1/compte/suppression' ? 'suppression'
+      : /^\/v1\/appairage\/[^/]+\/depot$/.test(p) ? 'suite' : /^\/v1\/appairage\/[^/]+$/.test(p) ? 'appairage'
+        : /^\/v1\/depot\/[^/]+$/.test(p) ? 'depot' : null;
+    // Un 503 passager se rend-il ici ? (et le compter : `fois` épuisé → le service reprend)
+    const passager = (erreur) => {
+      const s = reglages.passager;
+      if (!s || s.erreur !== erreur || !routePage || !(s.routes || []).includes(routePage)) return false;
+      if (s.fois !== undefined && s.fois !== null) { if (s.fois <= 0) return false; s.fois--; }
+      servis503.push({ route: routePage, erreur });
+      return true;
+    };
+    const MESSAGES_503 = { occupe: 'serveur occupé : réessayer dans un instant', google_injoignable: 'Google ne répond pas : réessayer dans un moment' };
+    const rendre503 = (erreur) => json(res, 503, { erreur, message: MESSAGES_503[erreur] }, routeWeb || (p === '/v1/nonce' && reglages.corsNonce));
+    if (req.method !== 'OPTIONS' && passager('occupe')) return rendre503('occupe');
     // --- banc : créer un dépôt / un appairage comme la télé, relire ce qui a été déposé ---
     if (req.method === 'POST' && p === '/_banc/depot') {
       const id = 'd_' + crypto.randomBytes(9).toString('base64url');
@@ -109,6 +130,7 @@ export function demarrer({ portSite = 8787, portApi = 8788 } = {}) {
       const n = nonces.get(corps.nonce);
       if (!n || n.servi || n.expire < Date.now()) return json(res, 401, { erreur: 'nonce_invalide', message: 'nonce inconnu, expiré ou déjà servi : en redemander un' }, true);
       n.servi = true;
+      if (passager('google_injoignable')) return rendre503('google_injoignable'); // le nonce est déjà consommé (api.py)
       if (reglages.reponseForcee) { const f = reglages.reponseForcee; reglages.reponseForcee = null; return json(res, f.statut, f.corps, true); }
       const charge = lireFauxJeton(corps.google_id_token);
       if (reglages.refuserProchainGoogle || !charge || charge.aud !== CLIENT_WEB || !charge.sub) {
@@ -150,6 +172,7 @@ export function demarrer({ portSite = 8787, portApi = 8788 } = {}) {
       const n = nonces.get(corps.nonce);
       const nonceOk = n && !n.servi && n.expire > Date.now();
       if (n) n.servi = true; // un nonce sert une fois, même un échec le consume
+      if (nonceOk && passager('google_injoignable')) return rendre503('google_injoignable'); // après le nonce (api.py)
       // Le faux jeton Google du banc porte le nonce qu'on lui a donné, comme le vrai.
       const charge = lireFauxJeton(corps.google_id_token);
       if (reglages.refuserProchainNonce || !nonceOk || !charge || charge.nonce !== corps.nonce) {
@@ -176,7 +199,7 @@ export function demarrer({ portSite = 8787, portApi = 8788 } = {}) {
 
   return new Promise((ok) => {
     api.listen(portApi, '127.0.0.1', () => site.listen(portSite, '127.0.0.1', () => ok({
-      reglages, depots, appairages, nonces, journal, comptes, suppressions,
+      reglages, depots, appairages, nonces, journal, comptes, suppressions, servis503,
       site: `http://127.0.0.1:${portSite}`, api: `http://127.0.0.1:${portApi}`,
       arreter: () => Promise.all([new Promise((r) => api.close(r)), new Promise((r) => site.close(r))])
     })));

@@ -49,6 +49,7 @@
       reseau: 'La réponse du serveur de NitaTV n\'est pas arrivée. Vérifiez le réseau, reconnectez-vous avec Google, ' +
         'puis réessayez\u00a0: si la suppression avait déjà eu lieu, la refaire ne change rien.',
       injoignable: 'Impossible de joindre le serveur de NitaTV. Vérifiez le réseau, puis réessayez.',
+      occupe: 'Le serveur de NitaTV ne peut pas répondre pour le moment. Réessayez dans un instant.',
       gis: 'Le bouton de Google n\'a pas pu se charger. Vérifiez le réseau (ou un bloqueur de contenu), puis réessayez.',
       ceCompte: 'ce compte Google'
     },
@@ -83,6 +84,7 @@
       reseau: 'NitaTV\'s server\'s answer did not arrive. Check the network, sign in with Google again, then try ' +
         'again: if the deletion had already happened, doing it again changes nothing.',
       injoignable: 'Cannot reach NitaTV\'s server. Check the network, then try again.',
+      occupe: 'NitaTV\'s server cannot answer right now. Try again in a moment.',
       gis: 'Google\'s button could not load. Check the network (or a content blocker), then try again.',
       ceCompte: 'this Google account'
     }
@@ -155,7 +157,7 @@
     if (e && e.message === 'pas_branche') { fin('pasBranche'); return; }
     // After a failed attempt, its message stays (it says whether anything was deleted); only « Try again » is added.
     var apresEssai = vueEtat && ['google', 'nonce', 'refuse', 'serveur', 'reseau'].indexOf(vueEtat[0]) >= 0;
-    if (!apresEssai) etat(e && e.message === 'gis' ? 'gis' : 'injoignable', 'erreur');
+    if (!apresEssai) etat(e && e.message === 'gis' ? 'gis' : e && e.message === 'occupe' ? 'occupe' : 'injoignable', 'erreur');
     reessayer(true);
   }
 
@@ -221,7 +223,9 @@
       corps = null;
       if (r.status === 204 || r.status === 200) { fin('fait'); return; }
       return lireErreur(r).then(function (j) {
-        if (r.status === 503) fin('pasBranche');
+        // contract § 0: only `pas_branche` means « not open » (« nothing to delete » would be FALSE otherwise);
+        // occupe, google_injoignable are passing → the server-error message below (« doing it again changes nothing »)
+        if (r.status === 503 && j.erreur === 'pas_branche') fin('pasBranche');
         else if (r.status === 401 && j.erreur === 'google') nouvelEssai('google');
         else if (r.status === 401 && j.erreur === 'nonce_invalide') nouvelEssai('nonce');
         else if (r.status >= 400 && r.status < 500) nouvelEssai('refuse', r.status);

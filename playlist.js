@@ -131,7 +131,8 @@ var NitaPlaylist = (function () {
         if (r.status === 413) { P.etat(etatId, t('tropLong'), true); return; }
         return (r.local ? Promise.resolve({}) : P.lireErreur(r)).then(function (j) {
           if (r.status === 429) P.etat(etatId, t('tropDEssais'), true);
-          else if (r.status === 503) P.etat(etatId, t('pasOuvertDepot'), true);
+          // contract § 0: only `pas_branche` means « not open »; occupe, google_injoignable… are passing: try again
+          else if (r.status === 503) P.etat(etatId, t(j.erreur === 'pas_branche' ? 'pasOuvertDepot' : 'occupe'), true);
           else P.etat(etatId, t('refuse', { message: j.message, statut: r.status }), true);
         });
       }).catch(function (e) {
