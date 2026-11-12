@@ -1,7 +1,7 @@
 /*
  * NitaTV — shared by connexion.js and ajouter.js: the language (French when the browser is in French, else English),
  * the texts, the steps of the box (one shown at a time, the dots under it) and the final states.
- * The texts of the steps are the app's (lib/l10n/app_fr.arb, app_en.arb: onboarding*, playlistGuideXmltv*, commun*,
+ * The texts of the steps are the app's (lib/l10n/app_fr.arb, app_en.arb: onboarding* (the guide: onboardingM3uGuide*), commun*,
  * motDePasse*); the others are this site's. Nothing is stored by this file.
  */
 var NitaPage = (function () {
@@ -26,8 +26,8 @@ var NitaPage = (function () {
       m3uTitre: 'Playlist M3U',
       url: 'URL de la playlist',
       urlAide: 'Entrez l\'URL complète de votre fichier M3U ou M3U8.',
-      guide: 'Adresse du guide TV (XMLTV)',
-      guideAide: 'Vide : celui de la playlist',
+      guide: 'Guide des programmes (facultatif)',
+      guideAide: 'Si votre fournisseur vous a donné une adresse de guide, collez-la ici.',
       suivant: 'Suivant',
       retour: 'Retour',
       plusTard: 'Plus tard',
@@ -105,8 +105,8 @@ var NitaPage = (function () {
       m3uTitre: 'M3U playlist',
       url: 'Playlist URL',
       urlAide: 'Enter the full URL of your M3U or M3U8 file.',
-      guide: 'TV Guide address (XMLTV)',
-      guideAide: 'Empty: the playlist\'s own',
+      guide: 'TV guide (optional)',
+      guideAide: 'If your provider gave you a guide address, paste it here.',
       suivant: 'Next',
       retour: 'Back',
       plusTard: 'Later',

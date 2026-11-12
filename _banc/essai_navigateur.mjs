@@ -468,8 +468,8 @@ try {
   await capture('ajouter_fr_7_type_m3u');
   await cliquer('suivant');
   verifie(await etape('m3u'), 'ajouter : Suivant → « Playlist M3U »');
-  verifie((await evaluer(`[...document.querySelectorAll('#etape-m3u label, #etape-m3u small')].map(l => l.textContent.replace(/ /g, ' ')).join('/')`)) === 'URL de la playlist/Entrez l\'URL complète de votre fichier M3U ou M3U8./Adresse du guide TV (XMLTV)/Vide : celui de la playlist',
-    'ajouter : M3U — l\'adresse, puis « Adresse du guide TV (XMLTV) » et « Vide : celui de la playlist » (libellés de l\'app)');
+  verifie((await evaluer(`[...document.querySelectorAll('#etape-m3u label, #etape-m3u small')].map(l => l.textContent.replace(/ /g, ' ')).join('/')`)) === 'URL de la playlist/Entrez l\'URL complète de votre fichier M3U ou M3U8./Guide des programmes (facultatif)/Si votre fournisseur vous a donné une adresse de guide, collez-la ici.',
+    'ajouter : M3U — l\'adresse, puis « Guide des programmes (facultatif) » et son aide (l\'onboarding de l\'app : onboardingM3uGuide*)');
   await capture('ajouter_fr_8_m3u_vide');
   await cliquer('envoyer-m3u');
   verifie(await attendre(`${el('etat-m3u')}.textContent === 'Veuillez entrer une URL'`, 'url manquante'), 'ajouter : adresse vide → « Veuillez entrer une URL »');
@@ -540,7 +540,7 @@ try {
   verifie(await attendre(`${el('etat-xtream')}.textContent === 'Please fill in all fields'`, 'en vides'), 'ajouter : EN — « Please fill in all fields »');
   await evaluer(`document.querySelector('#etape-xtream .retour-type').click(); true`);
   await choisirType('m3u'); await cliquer('suivant'); await etape('m3u');
-  verifie((await evaluer(`[...document.querySelectorAll('#etape-m3u label, #etape-m3u small')].map(l => l.textContent).join('/')`)) === 'Playlist URL/Enter the full URL of your M3U or M3U8 file./TV Guide address (XMLTV)/Empty: the playlist\'s own', 'ajouter : EN — les champs M3U et le guide');
+  verifie((await evaluer(`[...document.querySelectorAll('#etape-m3u label, #etape-m3u small')].map(l => l.textContent).join('/')`)) === 'Playlist URL/Enter the full URL of your M3U or M3U8 file./TV guide (optional)/If your provider gave you a guide address, paste it here.', 'ajouter : EN — les champs M3U et le guide (« TV guide (optional) »)');
   await capture('ajouter_en_3_m3u_vide');
   await remplir({ url: 'https://exemple.tv/liste.m3u' }); await cliquer('envoyer-m3u');
   verifie(await finAvec('Done!') && (await texteDe('fin-texte')) === 'Your playlist has been sent to your device.', 'ajouter : EN — « Done! Your playlist has been sent to your device. »');
