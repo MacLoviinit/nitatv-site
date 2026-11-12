@@ -2,7 +2,7 @@
 // Le motif est compté en OCTETS (exactement 1 occurrence, sinon « motif cassé ») ; le fichier est restauré dans un
 // finally ET sur Ctrl+C, puis vérifié par empreinte. Un rouge compte seulement s'il est NOMMÉ (ligne « ECHEC … »),
 // jamais au seul code de sortie (un plantage n'est pas l'échec attendu).
-// Usage : node _banc/mutations_503.mjs <dossier de sortie>
+// Usage : node _banc/mutations_503.mjs <dossier de sortie> [M0,M3,…  (facultatif : seulement celles-là)]
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
@@ -49,8 +49,10 @@ const restaurer = () => {
 };
 process.on('SIGINT', () => { restaurer(); process.exit(130); });
 
+const seules = process.argv[3] ? new Set(process.argv[3].split(',')) : null; // facultatif : rejouer certaines (M0,M3)
 const lignes = [];
 for (const m of MUTATIONS) {
+  if (seules && !seules.has(m.id)) continue;
   let motif = 'sans objet';
   try {
     if (m.fichier) {

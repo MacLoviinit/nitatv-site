@@ -855,6 +855,8 @@ try {
   await cliquer('reessayer');
   verifie(await attendre(`!!document.getElementById('faux-google') && ${vu('bouton-google')} && !${vu('reessayer')} && !${vu('etat-compte')}`, 'reprise après occupé'), 'connexion : … « Réessayer » → le bouton revient');
   // c) 503 occupe puis 503 google_injoignable à l'appui Google : message « réessayez », NOUVEAU nonce, le bouton ; le 3e appui passe
+  //    (une page neuve : ce bloc ne dépend pas de l'issue de a et b — sinon une mutation du nonce fait planter le banc)
+  await ouvrir(qr(ap)); await bouton();
   for (const erreur of ['occupe', 'google_injoignable']) {
     const nAvant = await evaluer('window.__gisCfg ? window.__gisCfg.nonce : null');
     serveur.reglages.passager = { erreur, routes: ['appairage'], fois: 1 };
