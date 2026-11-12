@@ -32,7 +32,7 @@
 
   <section id="fr" lang="fr">
     <h1>Politique de confidentialité</h1>
-    <p class="date">En vigueur le [DATE DE PUBLICATION À FIXER]</p>
+    <p class="date">En vigueur le 16 novembre 2026</p>
 
     <p class="resume"><strong>En bref :</strong> NitaTV est un lecteur. Il ne fournit aucune chaîne ni aucun contenu.
     Pour vous ouvrir l'application (essai gratuit, abonnement), il vous connecte avec votre compte Google : le serveur
@@ -79,10 +79,13 @@
       <li><strong>Vos connexions</strong> : les jetons qui gardent votre appareil connecté. Le serveur n'en garde
       qu'une empreinte ; la connexion se prolonge tant que vous utilisez l'application, et cesse au plus tard après
       90 jours sans usage.</li>
+      <li><strong>Une attestation Google Play Integrity</strong> peut accompagner la connexion : elle dit seulement si
+      la demande vient de l'application installée par Google Play, sans identifier votre compte. Le serveur ne la
+      garde pas.</li>
     </ul>
     <p>Le serveur ne reçoit <strong>pas</strong> vos identifiants de fournisseur, vos playlists en clair, ce que vous
-    regardez ni votre historique. Il ne tient pas de journal des adresses IP. Il est hébergé par
-    [HÉBERGEUR ET PAYS À COMPLÉTER].</p>
+    regardez ni votre historique. Il ne tient aucun journal des connexions et ne garde aucune adresse IP. Il est
+    hébergé par un hébergeur établi à Francfort (Allemagne), dans l'Union européenne.</p>
 
     <h2>Se connecter ou ajouter une playlist avec son téléphone</h2>
     <ul>
@@ -95,6 +98,9 @@
       (adresse de la playlist, ou serveur, identifiant et mot de passe) <strong>sur votre téléphone</strong>, avec une
       clé que seule votre télé possède. Le serveur ne transporte qu'un bloc illisible : il ne peut pas le lire. Ce
       bloc est effacé dès que votre télé l'a reçu, et au plus tard après 24 heures.</li>
+      <li><strong>Suppression du compte</strong> : la page <a href="supprimer.html#fr"><em>www.nita.tv/supprimer</em></a>
+      utilise aussi « Se connecter avec Google », pour prouver que le compte à supprimer est le vôtre ; elle transmet
+      la preuve de Google au serveur après votre confirmation.</li>
       <li>Ces pages ne gardent rien sur votre téléphone : pas de cookie à elles, pas de stockage, et les informations
       du QR code sont retirées de la barre d'adresse dès l'ouverture.</li>
     </ul>
@@ -110,8 +116,10 @@
 
     <h2>Combien de temps</h2>
     <p>Les QR codes et les playlists en transit sont effacés au plus tard après 24 heures ; les connexions, après
-    90 jours sans usage. Votre compte, vos appareils et l'état de votre accès sont gardés tant que vous utilisez
-    NitaTV, puis effacés [DURÉE À FIXER] après votre dernière utilisation, ou plus tôt sur votre demande.</p>
+    90 jours sans usage. Votre compte, vos appareils et l'état de votre accès sont gardés jusqu'à ce que vous
+    supprimiez votre compte. Un compte inutilisé n'est <strong>jamais effacé d'office</strong> : si vous revenez,
+    même des années plus tard, vous le retrouvez avec votre essai ou votre abonnement. Ce qui reste après une
+    suppression est dit ci-dessous.</p>
 
     <h2>Les connexions que fait l'application</h2>
     <ul>
@@ -149,13 +157,31 @@
     <h2 id="supprimer">Vos droits — supprimer votre compte</h2>
     <p>Ce qui reste sur votre appareil, vous en gardez le contrôle complet : l'effacer revient à effacer les données de
     l'application ou à la désinstaller. Pour ce que garde le serveur, vous pouvez à tout moment demander à le
-    consulter, à le corriger ou à <strong>supprimer votre compte NitaTV</strong> et tout ce qui s'y rattache : écrivez
-    depuis l'adresse de votre compte Google à <a href="mailto:contact@nita.tv">contact@nita.tv</a>. La suppression
-    n'arrête pas un abonnement Google Play : résiliez-le d'abord dans Google Play. Pour toute question, y compris au
-    titre de la loi fédérale sur la protection des données (LPD) ou du RGPD, écrivez à la même adresse.</p>
-    <p>Après la suppression, une seule trace est gardée : une empreinte de l'identifiant de votre compte Google et la
-    date de votre essai gratuit, pour qu'un compte ne reçoive qu'un essai. Elle ne permet pas de retrouver votre
-    compte et ne sert à rien d'autre.</p>
+    consulter ou à le corriger : écrivez à <a href="mailto:contact@nita.tv">contact@nita.tv</a>.</p>
+    <p><strong>Supprimer votre compte NitaTV</strong>, à tout moment :</p>
+    <ul>
+      <li>dans l'application : <strong>Paramètres &gt; Compte &gt; Supprimer mon compte</strong> ;</li>
+      <li>ou sur la page <a href="supprimer.html#fr"><strong>www.nita.tv/supprimer</strong></a>, en vous connectant avec
+      le compte Google de votre compte NitaTV, puis en confirmant ;</li>
+      <li>si ni l'un ni l'autre ne marche : écrivez depuis l'adresse de votre compte Google à
+      <a href="mailto:contact@nita.tv">contact@nita.tv</a>.</li>
+    </ul>
+    <p>La suppression efface du serveur votre compte, ses appareils, ses connexions et les playlists envoyées depuis un
+    téléphone pas encore reçues. Elle <strong>ne résilie pas</strong> un abonnement Google Play : il se résilie dans
+    Google Play.</p>
+    <p>Après la suppression, le serveur garde seulement :</p>
+    <ul>
+      <li>une <strong>empreinte</strong> de l'identifiant de votre compte Google et la date de votre essai gratuit, pour
+      qu'un compte ne reçoive jamais un second essai, même recréé ;</li>
+      <li>le <strong>relevé de vos achats Google Play</strong> (ce que Google en dit, décrit plus haut), détaché de
+      votre compte : il ne porte plus ni votre identifiant ni votre adresse e-mail, seulement l'empreinte transmise à
+      Google Play, pour qu'un compte recréé retrouve un abonnement encore payé ;</li>
+      <li>si votre adresse e-mail figure dans la liste des comptes invités par l'éditeur, elle y reste tant que
+      l'éditeur ne l'en retire pas ; demandez-le à <a href="mailto:contact@nita.tv">contact@nita.tv</a>.</li>
+    </ul>
+    <p>Ces empreintes ne permettent pas de retrouver votre compte Google et ne servent à rien d'autre. Pour toute
+    question, y compris au titre de la loi fédérale sur la protection des données (LPD) ou du RGPD, écrivez à
+    <a href="mailto:contact@nita.tv">contact@nita.tv</a>.</p>
 
     <h2>Modifications</h2>
     <p>Toute modification de cette politique sera publiée sur cette page, avec sa date d'entrée en vigueur.</p>
@@ -163,7 +189,7 @@
 
   <section id="en" lang="en">
     <h1>Privacy policy</h1>
-    <p class="date">Effective [PUBLICATION DATE TO BE SET]</p>
+    <p class="date">Effective November 16, 2026</p>
 
     <p class="resume"><strong>In short:</strong> NitaTV is a player. It provides no channels or content. To open the
     app for you (free trial, subscription), it signs you in with your Google account: NitaTV's server then knows
@@ -209,10 +235,13 @@
       <li><strong>Your sign-ins</strong>: the tokens that keep your device signed in. The server keeps only a
       fingerprint of them; a sign-in is extended while you use the app and ends at the latest after 90 days without
       use.</li>
+      <li><strong>A Google Play Integrity attestation</strong> may come with the sign-in: it only says whether the
+      request comes from the app as installed by Google Play, without identifying your account. The server does not
+      keep it.</li>
     </ul>
     <p>The server does <strong>not</strong> receive your provider credentials, your playlists in readable form, what you
-    watch or your history. It keeps no log of IP addresses. It is hosted by
-    [HOSTING PROVIDER AND COUNTRY TO BE COMPLETED].</p>
+    watch or your history. It keeps no log of connections and keeps no IP address. It is hosted by a hosting provider
+    based in Frankfurt (Germany), in the European Union.</p>
 
     <h2>Signing in or adding a playlist with your phone</h2>
     <ul>
@@ -224,6 +253,9 @@
       address, or server, username and password) <strong>on your phone</strong>, with a key only your TV holds. The
       server only carries an unreadable block: it cannot read it. That block is deleted as soon as your TV has received
       it, and at the latest after 24 hours.</li>
+      <li><strong>Account deletion</strong>: the page <a href="supprimer.html#en"><em>www.nita.tv/supprimer</em></a> also
+      uses "Sign in with Google", to prove that the account to delete is yours; it passes Google's proof to the server
+      after you confirm.</li>
       <li>These pages keep nothing on your phone: no cookies of their own, no storage, and the QR code's information is
       removed from the address bar as soon as the page opens.</li>
     </ul>
@@ -239,8 +271,9 @@
 
     <h2>How long</h2>
     <p>QR codes and playlists in transit are deleted after 24 hours at the latest; sign-ins after 90 days without use.
-    Your account, your devices and your access status are kept while you use NitaTV, then deleted [PERIOD TO BE SET]
-    after your last use, or sooner at your request.</p>
+    Your account, your devices and your access status are kept until you delete your account. An unused account is
+    <strong>never deleted automatically</strong>: if you come back, even years later, you find it with your trial or
+    your subscription. What remains after a deletion is described below.</p>
 
     <h2>Connections the app makes</h2>
     <ul>
@@ -275,14 +308,32 @@
 
     <h2 id="delete">Your rights — delete your account</h2>
     <p>What stays on your device remains fully under your control: deleting it means clearing the app's data or
-    uninstalling it. For what the server keeps, you can at any time ask to access it, correct it or <strong>delete your
-    NitaTV account</strong> and everything linked to it: write from your Google account's address to
-    <a href="mailto:contact@nita.tv">contact@nita.tv</a>. Deletion does not stop a Google Play subscription: cancel it in
-    Google Play first. For any question, including under the Swiss Federal Act on Data Protection (FADP) or the GDPR,
-    write to the same address.</p>
-    <p>After deletion, a single trace is kept: a fingerprint of your Google account identifier and the date of your
-    free trial, so that an account gets only one trial. It cannot be used to recover your account and serves no other
-    purpose.</p>
+    uninstalling it. For what the server keeps, you can at any time ask to access it or correct it: write to
+    <a href="mailto:contact@nita.tv">contact@nita.tv</a>.</p>
+    <p><strong>Delete your NitaTV account</strong>, at any time:</p>
+    <ul>
+      <li>in the app: <strong>Settings &gt; Account &gt; Delete my account</strong>;</li>
+      <li>or on the page <a href="supprimer.html#en"><strong>www.nita.tv/supprimer</strong></a>, by signing in with the
+      Google account of your NitaTV account, then confirming;</li>
+      <li>if neither works: write from your Google account's address to
+      <a href="mailto:contact@nita.tv">contact@nita.tv</a>.</li>
+    </ul>
+    <p>Deletion erases from the server your account, its devices, its sign-ins and any playlists sent from a phone that
+    have not been received yet. It <strong>does not cancel</strong> a Google Play subscription: you cancel it in Google
+    Play.</p>
+    <p>After deletion, the server keeps only:</p>
+    <ul>
+      <li>a <strong>fingerprint</strong> of your Google account identifier and the date of your free trial, so that an
+      account never gets a second trial, even if it is created again;</li>
+      <li>the <strong>record of your Google Play purchases</strong> (what Google reports, described above), detached from
+      your account: it no longer carries your identifier or your email address, only the fingerprint given to Google
+      Play, so that an account created again gets back a subscription that is still paid;</li>
+      <li>if your email address is on the publisher's list of invited accounts, it stays there until the publisher
+      removes it; ask for it at <a href="mailto:contact@nita.tv">contact@nita.tv</a>.</li>
+    </ul>
+    <p>These fingerprints cannot be used to recover your Google account and serve no other purpose. For any question,
+    including under the Swiss Federal Act on Data Protection (FADP) or the GDPR, write to
+    <a href="mailto:contact@nita.tv">contact@nita.tv</a>.</p>
 
     <h2>Changes</h2>
     <p>Any change to this policy will be published on this page, with its effective date.</p>
