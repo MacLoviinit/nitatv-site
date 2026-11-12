@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<title>NitaTV — Se connecter sur la télé</title>
+<style>
+  :root { --fond:#101320; --carte:#171b2c; --texte:#e9ebf2; --doux:#a3a8b8; --accent:#00c1ff; --trait:#2a3046;
+          --ok:#3ddc97; --erreur:#ff7a7a; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--fond); color:var(--texte);
+         font:17px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width:460px; margin:0 auto; padding:32px 16px 48px; text-align:center; }
+  h1 { font-size:2rem; margin:0; font-weight:600; letter-spacing:-.02em; }
+  h1 span { color:var(--accent); }
+  .trait { width:96px; height:3px; background:var(--accent); margin:10px auto 24px; border-radius:2px; }
+  h2 { font-size:1.25rem; margin:0 0 6px; }
+  p { margin:0 0 12px; }
+  .doux { color:var(--doux); font-size:.95rem; }
+  #bouton-google { display:flex; justify-content:center; min-height:48px; margin:24px 0 8px; }
+  .etat { margin:16px 0 0; padding:12px 14px; border-radius:10px; background:var(--carte); text-align:left; }
+  .etat.erreur { border-left:3px solid var(--erreur); }
+  button.principal { font:inherit; font-weight:600; border-radius:10px; cursor:pointer; padding:12px 20px;
+                     background:var(--accent); color:#06121a; border:0; margin-top:12px; }
+  .final .grand { font-size:1.35rem; font-weight:600; margin-bottom:8px; }
+  .securite { margin-top:28px; font-size:.88rem; color:var(--doux); text-align:left; }
+  [hidden] { display:none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Nita<span>TV</span></h1>
+  <div class="trait"></div>
+
+  <noscript><p class="etat erreur">Cette page a besoin de JavaScript pour vous connecter avec Google.</p></noscript>
+
+  <section id="connexion" hidden>
+    <h2>Se connecter sur la télé</h2>
+    <p class="doux">Choisissez le compte Google à utiliser sur votre télé NitaTV.</p>
+    <div id="bouton-google" aria-live="polite"></div>
+    <p id="etat" class="etat" role="status" aria-live="polite" hidden></p>
+    <button type="button" class="principal" id="reessayer" hidden>Réessayer</button>
+    <p class="securite">Google confirme votre compte à NitaTV ; NitaTV ne voit jamais votre mot de passe. Votre
+    télé reçoit la connexion, ce téléphone ne garde rien.
+    <a href="confidentialite.html" style="color:var(--accent)">Confidentialité</a></p>
+  </section>
+
+  <section id="fin" class="final" role="status" aria-live="polite" hidden>
+    <p class="grand" id="fin-titre"></p>
+    <p class="doux" id="fin-texte"></p>
+  </section>
+</main>
+<script src="connexion.js"></script>
+</body>
+</html>
