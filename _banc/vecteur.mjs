@@ -79,7 +79,11 @@ for (const c of cas) {
   const chiffre = await D.chiffrer(cleTele, c.depot, c.clair, { ephemere: { privateKey: pagePriv, publicKey: pagePub }, iv: new Uint8Array(c.iv) });
   const encore = await D.chiffrer(cleTele, c.depot, c.clair, { ephemere: { privateKey: pagePriv, publicKey: pagePub }, iv: new Uint8Array(c.iv) });
   verifie(chiffre === encore, `${c.nom} : deux passages donnent le même chiffre (déterminisme à clés fixées)`);
-  const r = dechiffrerNode(chiffre, c.depot);
+  let r;
+  try { r = dechiffrerNode(chiffre, c.depot); } catch (e) {
+    verifie(false, `${c.nom} : node:crypto (indépendant) retrouve le clair exact — refusé : ${e.message}`);
+    continue;
+  }
   verifie(r.texte === c.clair, `${c.nom} : node:crypto (indépendant) retrouve le clair exact`);
   verifie(r.env.v === 1 && Object.keys(r.env).join(',') === 'v,epk,iv,ct', `${c.nom} : enveloppe {v,epk,iv,ct}`);
   verifie(!/=/.test(r.env.epk + r.env.iv + r.env.ct), `${c.nom} : base64url sans « = » dans l'enveloppe`);
