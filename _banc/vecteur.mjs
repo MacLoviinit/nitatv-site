@@ -49,10 +49,28 @@ const cas = [
     depot: 'd_71c3vecteur02',
     iv: Buffer.from('000102030405060708090a0b', 'hex'),
     clair: '{"v":1,"type":"m3u","url":"https://exemple.tv/get.php?username=a&password=b&type=m3u_plus"}'
+  },
+  {
+    // § 5 : « guide » facultatif, M3U seulement (ajouté le 2026-11-12) — l'adresse XMLTV du fournisseur
+    nom: 'm3u_guide',
+    depot: 'd_71c3vecteur03',
+    iv: Buffer.from('f0f1f2f3f4f5f6f7f8f9fafb', 'hex'),
+    clair: '{"v":1,"type":"m3u","url":"https://exemple.tv/liste.m3u","guide":"https://exemple.tv/epg.xml.gz"}'
   }
 ];
 
 const k = b64u(tele.pub);
+// Le clair que la page FABRIQUE (construireClair) : « guide » présent et à sa place, absent quand il est vide ou blanc.
+{
+  const avec = JSON.stringify(D.construireClair({ type: 'm3u', url: ' https://exemple.tv/liste.m3u ', guide: ' https://exemple.tv/epg.xml.gz ' }));
+  const sansVide = JSON.stringify(D.construireClair({ type: 'm3u', url: 'https://exemple.tv/liste.m3u', guide: '' }));
+  const sansBlanc = JSON.stringify(D.construireClair({ type: 'm3u', url: 'https://exemple.tv/liste.m3u', guide: '   ' }));
+  const xtream = JSON.stringify(D.construireClair({ type: 'xtream', serveur: 's', utilisateur: 'u', mot_de_passe: 'p', guide: 'https://x/epg.xml' }));
+  const ok = avec === cas[2].clair && sansVide === '{"v":1,"type":"m3u","url":"https://exemple.tv/liste.m3u"}' && sansBlanc === sansVide
+    && xtream === '{"v":1,"type":"xtream","serveur":"s","utilisateur":"u","mot_de_passe":"p"}';
+  console.log((ok ? 'OK    ' : 'ECHEC ') + 'construireClair : guide rogné et après url ; vide ou blanc → absent ; jamais pour Xtream');
+  if (!ok) { console.log('  ' + [avec, sansVide, sansBlanc, xtream].join(' | ')); process.exitCode = 1; }
+}
 const cleTele = await D.importerCleTele(k);
 const resultats = [];
 let echecs = 0;
@@ -125,4 +143,4 @@ const vecteur = {
 };
 fs.writeFileSync(sortie, JSON.stringify(vecteur, null, 2) + '\n');
 console.log(`\n${resultats.length} cas écrits dans ${sortie} ; ${echecs} échec(s)`);
-process.exit(echecs ? 1 : 0);
+process.exit(echecs || process.exitCode ? 1 : 0);

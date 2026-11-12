@@ -1,5 +1,5 @@
 // Banc (non publié) — faux serveur NitaTV fidèle au contrat (§ 1 nonce + appairage, § 3 bis suppression par le web,
-// § 5 dépôt) ET le site statique.
+// § 5 dépôt, § 5 bis « un seul scan » : 200 { suite }, POST /v1/appairage/{a}/depot) ET le site statique.
 // Le faux jeton Google est un JWT sans vraie signature : « en-tête.charge.banc », la charge porte sub, email, nonce, aud
 // (la doublure GIS de l'essai le fabrique avec le nonce qu'on lui a donné, comme le vrai Google).
 // Site : http://127.0.0.1:8787   API : http://127.0.0.1:8788 (une autre origine : le CORS est vraiment exercé).
@@ -27,10 +27,13 @@ export function demarrer({ portSite = 8787, portApi = 8788 } = {}) {
     tailleMax: 16 * 1024,
     refuserProchainNonce: false,              // le prochain POST appairage répond 401 nonce_invalide
     refuserProchainGoogle: false,             // le prochain POST suppression répond 401 google (nonce consommé)
-    reponseForcee: null                       // { statut, corps } : la prochaine réponse de POST suppression, telle quelle
+    reponseForcee: null,                      // { statut, corps } : la prochaine réponse de POST suppression, telle quelle
+    appairageAncien: false,                   // POST /v1/appairage/{a} répond 204 sans corps (le serveur d'avant le § 5 bis)
+    suiteForcee: null,                        // { statut, corps } : TOUTES les réponses de POST …/depot, telles quelles
+    kPiege: null                              // une clé que le faux serveur glisse dans la réponse 200 de …/depot (la page doit l'ignorer)
   };
   const depots = new Map();     // id -> { jeton, expire, chiffre, use }
-  const appairages = new Map(); // id -> { jeton, expire, lie, google, use }
+  const appairages = new Map(); // id -> { jeton, expire, lie, google, use, suite, depot }
   const nonces = new Map();     // nonce -> { expire, servi }
   const comptes = new Map();    // sub -> { email } : les comptes du faux serveur
   const suppressions = [];      // { sub, existait } : chaque 204 de POST /v1/compte/suppression
@@ -48,7 +51,7 @@ export function demarrer({ portSite = 8787, portApi = 8788 } = {}) {
     const url = new URL(req.url, 'http://x');
     const p = url.pathname;
     journal.push({ methode: req.method, chemin: p, origine: req.headers.origin || null });
-    const routeWeb = /^\/v1\/(depot|appairage)\/[^/]+$/.test(p) || p === '/v1/compte/suppression';
+    const routeWeb = /^\/v1\/(depot|appairage)\/[^/]+$/.test(p) || /^\/v1\/appairage\/[^/]+\/depot$/.test(p) || p === '/v1/compte/suppression';
 
     if (req.method === 'OPTIONS') {
       if (!routeWeb) return json(res, 404, { erreur: 'inconnu', message: 'route inconnue' });
@@ -69,8 +72,18 @@ export function demarrer({ portSite = 8787, portApi = 8788 } = {}) {
     if (req.method === 'POST' && p === '/_banc/appairage') {
       const id = 'a_' + crypto.randomBytes(9).toString('base64url');
       const jeton = 't_' + crypto.randomBytes(12).toString('base64url');
-      appairages.set(id, { jeton, expire: Date.now() + 15 * 60e3, lie: false, google: null, use: false });
+      appairages.set(id, { jeton, expire: Date.now() + 15 * 60e3, lie: false, google: null, use: false, suite: null, depot: null });
       return json(res, 200, { appairage: id, jeton });
+    }
+    // la télé, une fois liée : POST /v1/depot { appairage } (Bearer s_) — le dépôt est RATTACHÉ à l'appairage (§ 5 bis, 5.)
+    if (req.method === 'POST' && /^\/_banc\/appairage\/[^/]+\/rattacher$/.test(p)) {
+      const a = appairages.get(p.split('/')[3]);
+      if (!a || !a.lie) return json(res, 409, { erreur: 'pas_lie' });
+      const id = 'd_' + crypto.randomBytes(9).toString('base64url');
+      const jeton = 't_' + crypto.randomBytes(12).toString('base64url');
+      depots.set(id, { jeton, expire: Date.now() + 15 * 60e3, chiffre: null, use: false, appairage: p.split('/')[3] });
+      a.depot = id;
+      return json(res, 200, { depot: id, jeton });
     }
     if (req.method === 'GET' && p.startsWith('/_banc/depot/')) return json(res, 200, depots.get(p.split('/')[3]) || null);
     if (req.method === 'GET' && p.startsWith('/_banc/appairage/')) return json(res, 200, appairages.get(p.split('/')[3]) || null);
@@ -111,7 +124,19 @@ export function demarrer({ portSite = 8787, portApi = 8788 } = {}) {
       const brut = await lireCorps(req);
       let corps;
       try { corps = JSON.parse(brut); } catch { return json(res, 400, { erreur: 'requete', message: 'JSON illisible' }, true); }
-      const [, genre, id] = p.split('/').slice(1);
+      const [, genre, id, suiteDe] = p.split('/').slice(1);
+      if (genre === 'appairage' && suiteDe === 'depot') {
+        // § 5 bis, 6. : 202 tant que la télé n'a rien rattaché ; 200 { depot, jeton } ; 410 ; 401 suite
+        if (reglages.suiteForcee) return json(res, reglages.suiteForcee.statut, reglages.suiteForcee.corps, true);
+        const a = appairages.get(id);
+        if (!a || a.expire < Date.now()) return json(res, 410, { erreur: 'expire', message: 'appairage expiré' }, true);
+        if (!a.suite || corps.suite !== a.suite) return json(res, 401, { erreur: 'suite', message: 'suite inconnue' }, true);
+        if (!a.depot) return json(res, 202, { etat: 'attente' }, true);
+        const d = depots.get(a.depot);
+        const rep = { depot: a.depot, jeton: d.jeton };
+        if (reglages.kPiege) rep.k = reglages.kPiege;
+        return json(res, 200, rep, true);
+      }
       if (genre === 'depot') {
         const d = depots.get(id);
         if (!d || d.use || d.expire < Date.now() || corps.jeton !== d.jeton) return json(res, 410, { erreur: 'expire', message: 'ce QR code n\'est plus valable' }, true);
@@ -132,7 +157,9 @@ export function demarrer({ portSite = 8787, portApi = 8788 } = {}) {
         return json(res, 401, { erreur: 'nonce_invalide', message: 'nonce inconnu, expiré ou déjà servi' }, true);
       }
       a.use = true; a.lie = true; a.google = corps.google_id_token;
-      return json(res, 204, undefined, true);
+      if (reglages.appairageAncien) return json(res, 204, undefined, true);
+      a.suite = 'u_' + crypto.randomBytes(12).toString('base64url'); // remis au SEUL téléphone qui lie
+      return json(res, 200, { suite: a.suite }, true);
     }
     return json(res, 404, { erreur: 'inconnu', message: 'route inconnue' });
   });

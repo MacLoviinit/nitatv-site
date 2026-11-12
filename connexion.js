@@ -1,18 +1,25 @@
 /*
- * NitaTV — www.nita.tv/connexion#a=<appairage>&t=<jeton> (contrat § 1, parcours « téléphone »).
+ * NitaTV — www.nita.tv/connexion#a=<appairage>&t=<jeton>[&k=<clé publique de la télé>] (contract § 1 and § 5 bis:
+ * « un seul scan »).
  * Reads the fragment and erases it, gets a nonce from the server (GET /v1/nonce, 5 min, single use), shows
- * "Sign in with Google" (Google Identity Services, Web client, that nonce), then
- * POST /v1/appairage/{a} { jeton, google_id_token, nonce } -> 204: the TV picks up its session.
+ * "Continue with Google" (Google Identity Services, Web client, that nonce — google.js), then
+ * POST /v1/appairage/{a} { jeton, google_id_token, nonce }:
+ *   - 200 { suite } and a valid `k` in the QR code → « Connecté », then the page asks every 3 s
+ *     POST /v1/appairage/{a}/depot { suite } → 202 (the TV has not attached its deposit yet) · 200 { depot, jeton }
+ *     → the playlist steps (playlist.js), encrypted with the `k` OF THE QR CODE (never a key from the server: it could
+ *     substitute its own and read the playlist) and the received `depot` as salt · 410, 401 suite, 503 → « Connecté —
+ *     retournez à votre télé » ;
+ *   - 204 (an older server), no `k`, or no `suite` → « Connecté — retournez à votre télé ».
+ * « Plus tard » stops at « Connecté » too: the TV takes the onboarding back at « Type de connexion ».
  * Nothing is stored by this page.
  */
 (function () {
   'use strict';
 
+  var P = NitaPage, t = P.t, $ = P.$;
   var API = NitaGoogle.API;
-  var ID = /^[A-Za-z0-9_-]{1,200}$/;
-  var DUREE_MAX = 20 * 60 * 1000; // the pairing lives 15 min: past 20, stop asking the server for nonces
-
-  var $ = function (id) { return document.getElementById(id); };
+  var DUREE_MAX = 20 * 60 * 1000; // the pairing (and its `suite`) lives 15 min: past 20, stop asking the server
+  var ATTENTE = 3000;             // contract § 5 bis: the page asks every 3 s
 
   // A new QR opened in this same tab only changes the fragment: the browser does not reload the page, so do it.
   // (history.replaceState below does not fire hashchange.)
@@ -22,91 +29,85 @@
   var params = new URLSearchParams(location.hash.slice(1));
   var appairage = params.get('a');
   var jeton = params.get('t');
+  var k = params.get('k');
   params = null;
   if (location.hash) history.replaceState(null, '', location.pathname + location.search);
 
-  var debut = Date.now();
-  var envoi = false;
-  var termine = false;
+  P.traduire();
+  $('oeil').innerHTML = NitaPlaylist.OEIL;
 
-  function fin(titre, texte) {
+  var debut = Date.now();
+  var google_ = null;    // the Google button (google.js), created once the link is known to be complete
+  var envoi = false;
+  var termine = false;   // the page has reached its end (or the playlist steps took over)
+  var email = '';        // the Google account, read from its token for display only (masked like the app)
+
+  // The TV's key, from the QR code only. Optional: without it (an older app) the page stops at « Connecté ».
+  // An unusable k is treated like an absent one: the sign-in still goes through.
+  var cleTele = null;
+  var cleLue = (k && window.crypto && window.crypto.subtle && window.NitaDepot)
+    ? NitaDepot.importerCleTele(k).then(function (c) { cleTele = c; }, function () { cleTele = null; })
+    : Promise.resolve();
+  k = null;
+
+  function arreter() {
     termine = true;
     appairage = jeton = null;
+    cleTele = null;
     if (google_) google_.arreter(); // not yet created when the link is incomplete
-    $('connexion').hidden = true;
-    $('fin-titre').textContent = titre;
-    $('fin-texte').textContent = texte;
-    $('fin').hidden = false;
   }
 
-  function etat(texte, genre) {
-    var e = $('etat');
-    e.textContent = texte;
-    e.className = 'etat' + (genre ? ' ' + genre : '');
-    e.hidden = !texte;
+  function fin(genre, titre, texte) {
+    arreter();
+    P.fin(genre, titre, texte);
   }
 
+  // The end of the sign-in alone: « Connecté — retournez à votre télé ».
+  function connecte(texte) { fin('ok', t('connecte', { email: email }), texte || t('retournez')); }
+
+  function etat(texte, ko) { P.etat('etat-compte', texte, ko); }
   function reessayer(visible) { $('reessayer').hidden = !visible; }
 
-  if (!appairage || !jeton || !ID.test(appairage) || !ID.test(jeton)) {
-    fin('Ce lien est incomplet',
-      'Scannez le QR code affiché par votre télé. Si vous avez rechargé cette page, scannez-le de nouveau : ' +
-      'elle ne garde rien.');
+  if (!appairage || !jeton || !P.ID.test(appairage) || !P.ID.test(jeton)) {
+    fin('info', t('incompletTitre'), t('incompletConnexion'));
     return;
   }
-  $('connexion').hidden = false;
+  P.montrer('compte');
 
   function erreurPreparation(e) {
     if (termine) return;
-    if (e && e.message === 'pas_branche') {
-      fin('Pas encore ouvert', 'La connexion par téléphone n\'est pas encore ouverte. Connectez-vous directement sur la télé.');
-      return;
-    }
-    if (e && e.message === 'gis') {
-      etat('Le bouton de Google n\'a pas pu se charger. Vérifiez le réseau de ce téléphone (ou un bloqueur de ' +
-        'contenu), puis réessayez.', 'erreur');
-    } else {
-      etat('Impossible de joindre le serveur de NitaTV. Vérifiez le réseau de ce téléphone, puis réessayez.', 'erreur');
-    }
+    if (e && e.message === 'pas_branche') { fin('info', t('pasOuvertTitre'), t('pasOuvertConnexion')); return; }
+    etat(t(e && e.message === 'gis' ? 'gis' : 'injoignable'), true);
     reessayer(true);
   }
 
-  var google_ = NitaGoogle.bouton({
+  google_ = NitaGoogle.bouton({
     div: $('bouton-google'),
     actif: function () { return !termine && !envoi; },
     avant: function () {
-      if (Date.now() - debut > DUREE_MAX) {
-        fin('Ce QR code a expiré', 'Il vaut 15 minutes. Affichez un nouveau QR code sur la télé.');
-        return false;
-      }
+      if (Date.now() - debut > DUREE_MAX) { fin('info', t('expireTitre'), t('expireTexte')); return false; }
       reessayer(false);
     },
     recu: recu,
     erreur: erreurPreparation,
-    apparence: function () { return { text: 'continue_with', locale: 'fr' }; }
+    apparence: function () { return { text: 'continue_with', locale: P.langue }; }
   });
   function preparer() { return google_.preparer(); }
 
-  $('reessayer').addEventListener('click', function () {
-    etat('');
-    preparer();
-  });
-
-  function lireErreur(reponse) {
-    return reponse.json().then(function (j) { return j || {}; }, function () { return {}; });
-  }
+  $('reessayer').addEventListener('click', function () { etat(''); preparer(); });
 
   // The nonce is spent by any attempt that reached the server: ask for a new one and a new tap.
   function nouvelEssai(texte) {
     envoi = false;
-    etat(texte, 'erreur');
+    etat(texte, true);
     preparer();
   }
 
   // A Google answer (google.js): the ID token, and the nonce it was asked with — spent by this attempt.
   function recu(credential, n) {
     envoi = true;
-    etat('Connexion de votre télé…');
+    email = P.masquer(NitaGoogle.lireJeton(credential).email);
+    etat(t('connexionEnCours'));
 
     fetch(API + '/v1/appairage/' + encodeURIComponent(appairage), {
       method: 'POST',
@@ -116,35 +117,82 @@
       credentials: 'omit',
       referrerPolicy: 'no-referrer'
     }).then(function (r) {
-      if (r.status === 204 || r.status === 200) {
-        fin('C\'est fait', 'Regardez votre télé : elle se connecte à votre compte Google.');
-        return;
+      if (r.status === 204) { connecte(); return; } // an older server: no `suite`
+      if (r.status === 200) {
+        return r.json().catch(function () { return {}; }).then(function (j) {
+          var suite = j && typeof j.suite === 'string' && P.ID.test(j.suite) ? j.suite : null;
+          return cleLue.then(function () {
+            if (suite && cleTele) attendre(suite); else connecte();
+          });
+        });
       }
-      if (r.status === 410) {
-        fin('Ce QR code n\'est plus valable',
-          'Il sert une seule fois, pendant 15 minutes. Si vous venez de vous connecter, regardez votre télé. ' +
-          'Sinon, affichez un nouveau QR code sur la télé.');
-        return;
-      }
-      return lireErreur(r).then(function (j) {
-        if (r.status === 503) {
-          fin('Pas encore ouvert', 'La connexion par téléphone n\'est pas encore ouverte. Connectez-vous directement sur la télé.');
-        } else if (r.status === 401 && j.erreur === 'nonce_invalide') {
-          nouvelEssai('La connexion a pris trop de temps. Appuyez de nouveau sur le bouton de Google.');
-        } else if (r.status === 429) {
-          nouvelEssai('Trop d\'essais. Patientez une minute, puis appuyez de nouveau sur le bouton.');
-        } else if (r.status === 400 || r.status === 401 || r.status === 403) {
-          nouvelEssai('Ce compte Google n\'a pas pu être confirmé' + (j.message ? ' : ' + j.message : '') +
-            '. Réessayez, ou choisissez un autre compte.');
-        } else {
-          nouvelEssai('La connexion a été refusée' + (j.message ? ' : ' + j.message : '') + ' (' + r.status + '). Réessayez.');
-        }
+      if (r.status === 410) { fin('info', t('plusValableTitre'), t('plusValableConnexion')); return; }
+      return P.lireErreur(r).then(function (j) {
+        var a = { message: j.message, statut: r.status };
+        if (r.status === 503) fin('info', t('pasOuvertTitre'), t('pasOuvertConnexion'));
+        else if (r.status === 401 && j.erreur === 'nonce_invalide') nouvelEssai(t('nonce'));
+        else if (r.status === 429) nouvelEssai(t('tropDEssaisGoogle'));
+        else if (r.status === 400 || r.status === 401 || r.status === 403) nouvelEssai(t('nonConfirme', a));
+        else nouvelEssai(t('connexionRefusee', a));
       });
     }).catch(function () {
-      if (!termine) nouvelEssai('Pas de connexion avec le serveur. Vérifiez le réseau de ce téléphone, puis réessayez.');
+      if (!termine) nouvelEssai(t('reseauConnexion'));
     });
   }
 
-  etat('Préparation…');
+  // 2. Connected: wait until the TV attaches its deposit to this pairing (contract § 5 bis).
+  var minuteur = null;
+  function attendre(suite) {
+    google_.arreter();
+    $('attente-compte').textContent = t('connecte', { email: email });
+    P.montrer('attente');
+
+    function encore() { if (!termine) minuteur = setTimeout(interroger, ATTENTE); }
+
+    function interroger() {
+      minuteur = null;
+      if (termine) return;
+      if (Date.now() - debut > DUREE_MAX) { connecte(); return; }
+      fetch(API + '/v1/appairage/' + encodeURIComponent(appairage) + '/depot', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ suite: suite }),
+        cache: 'no-store',
+        credentials: 'omit',
+        referrerPolicy: 'no-referrer'
+      }).then(function (r) {
+        if (termine) return;
+        if (r.status === 202) { encore(); return; }
+        if (r.status === 200) {
+          return r.json().catch(function () { return {}; }).then(function (j) {
+            if (termine) return;
+            // Only the deposit id and its token come from the server; the key stays the QR code's.
+            if (!j || typeof j.depot !== 'string' || !P.ID.test(j.depot) || typeof j.jeton !== 'string' || !P.ID.test(j.jeton)) {
+              connecte();
+              return;
+            }
+            var cle = cleTele;
+            arreter();
+            termine = false; // the playlist steps take over (they end the page themselves)
+            NitaPlaylist.demarrer({ api: API, cle: cle, depot: j.depot, jeton: j.jeton, plusTard: plusTard });
+          });
+        }
+        if (r.status === 429 || r.status >= 500 && r.status !== 503) { encore(); return; } // a hiccup: ask again
+        connecte(); // 410 (expired), 401 suite, 503, anything else: the sign-in itself is done
+      }).catch(function () { encore(); }); // network: ask again (bounded by DUREE_MAX)
+    }
+
+    interroger();
+  }
+
+  // « Plus tard » (while waiting, or on « Type de connexion »): stop at « Connecté »; the TV resumes the onboarding.
+  function plusTard() {
+    clearTimeout(minuteur);
+    Array.prototype.forEach.call(['url', 'guide', 'serveur', 'utilisateur', 'mot_de_passe'], function (id) { $(id).value = ''; });
+    connecte(t('retournezPlusTard'));
+  }
+  $('plus-tard-attente').addEventListener('click', plusTard);
+
+  etat(t('preparation'));
   preparer().then(function () { if (!envoi && !termine && google_.arme()) etat(''); });
 })();

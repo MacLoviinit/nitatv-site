@@ -4,6 +4,8 @@
  * The TV makes a fresh ECDH P-256 key pair per deposit and puts its public key in the QR (after the '#',
  * never sent to any server). This page makes its own ephemeral pair, derives the ECDH secret (256 bits),
  * HKDF-SHA-256 (salt = deposit id in UTF-8, info = "nitatv-depot-v1") -> AES-256-GCM key, random 12-byte IV.
+ * Plaintext: {"v":1,"type":"m3u","url":…,"guide":…,"nom":…} or {"v":1,"type":"xtream","serveur":…,"utilisateur":…,
+ * "mot_de_passe":…,"nom":…} — "guide" and "nom" optional.
  * Output: base64 (standard, padded) of the UTF-8 JSON {"v":1,"epk":…,"iv":…,"ct":…}, fields in base64url
  * without '='; ct = ciphertext followed by the 16-byte GCM tag (what WebCrypto returns).
  *
@@ -63,12 +65,15 @@
     }
   }
 
-  // The plaintext object, exactly the fields of the contract; "nom" only when given.
+  // The plaintext object, exactly the fields of the contract; "guide" (M3U only) and "nom" only when given — an empty
+  // or blank one is ABSENT from the plaintext (contract § 5: absent or empty → the playlist's own guide).
   function construireClair(source) {
     var nom = (source.nom || '').trim();
     var clair;
     if (source.type === 'm3u') {
       clair = { v: 1, type: 'm3u', url: (source.url || '').trim() };
+      var guide = (source.guide || '').trim();
+      if (guide) clair.guide = guide;
     } else if (source.type === 'xtream') {
       clair = {
         v: 1,
