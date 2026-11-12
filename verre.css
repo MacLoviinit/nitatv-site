@@ -1,0 +1,130 @@
+/*
+ * NitaTV — le verre SOMBRE de la maquette (KaizokuTV design/maquette/verre/nita_verre.html, v97), pour les pages du
+ * site (connexion, ajouter, supprimer). Les valeurs sont CELLES de la maquette, recopiées : variables de :root, fond de
+ * .app, .verre, .bouton, et l'onboarding vu au TÉLÉPHONE (.mobile …). Une seule différence d'échelle, écrite ici :
+ * la maquette dessine le téléphone à .85 px par dp (--dp de .mobile) avec un em de 12,5 px ; une page web, elle, est en
+ * px CSS ≈ dp. L'em de la page vaut donc 12,5 / .85 = 14,706 px — l'em que la maquette donne au téléphone de l'app
+ * (« 48 dp = 3,264 em de la page (÷ 14,706) », l. 794). Tout le reste est en em, comme dans la maquette.
+ * Pas de police téléchargée (aucune requête vers un tiers) : la pile de la maquette telle quelle ; sans Inter installé,
+ * un téléphone Android tombe sur sa police système (Roboto, celle de l'app : lib/core/theme.dart, policeNita).
+ */
+:root {
+  color-scheme: dark;
+  --mur: #05070d;
+  --cyan: #00E5FF;
+  --cyan-2: #7df3ff;
+  --bleu-banniere: #00C1FF;
+  --texte: #F3F7FB;
+  --texte-2: rgba(203, 213, 225, .72);
+  --filet: rgba(255, 255, 255, .085);
+  --vert: #3ee6a0;
+  --rouge: #ff5d6c;
+  --f: "Inter", "Segoe UI", system-ui, sans-serif;
+  --f-chiffre: "JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { background: #0b0e19; color: var(--texte); }
+/* le fond de .app (l. 54-59) */
+body.verre-page { margin: 0; min-height: 100vh; min-height: 100dvh; color: var(--texte); font-family: var(--f); font-size: 14.706px;
+  line-height: normal; -webkit-text-size-adjust: 100%; text-size-adjust: 100%;
+  background:
+    radial-gradient(circle at 84% 12%, rgba(0,229,255,.17) 0%, rgba(0,193,255,.05) 36%, transparent 64%),
+    radial-gradient(circle at 14% 62%, rgba(0,193,255,.13) 0%, rgba(0,120,190,.04) 44%, transparent 70%),
+    radial-gradient(circle at 70% 94%, rgba(0,229,255,.10) 0%, transparent 60%),
+    linear-gradient(180deg, #131729 0%, #101320 55%, #0b0e19 100%);
+  background-repeat: no-repeat; }
+.verre-page svg { display: block; }
+[hidden] { display: none !important; }
+a { color: var(--cyan-2); }
+
+/* l. 60-61 */
+.verre { background: linear-gradient(165deg, rgba(27,40,64,.62), rgba(15,20,36,.6)); border: 1px solid var(--filet);
+  box-shadow: 0 1.2em 2.6em -1em rgba(2,6,23,.75), inset 0 1px 0 rgba(255,255,255,.14); }
+/* l. 64, 68 (le toucher du téléphone) ; le clavier d'un navigateur prend l'anneau de focus de la télé (l. 65) */
+.f { transition: transform .18s cubic-bezier(.16,1,.3,1), box-shadow .18s, background .18s; -webkit-tap-highlight-color: transparent; }
+.f:active { background: rgba(0,229,255,.12); }
+.f:focus { outline: none; }
+.f:focus-visible { box-shadow: 0 0 0 .18em var(--cyan), 0 0 1.6em rgba(0,229,255,.35); }
+
+/* l. 112-114 */
+.icone-carre { width: 2.6em; height: 2.6em; border-radius: .8em; display: grid; place-items: center; flex: none;
+  background: linear-gradient(145deg, rgba(0,229,255,.14), rgba(37,99,235,.06)); border: 1px solid rgba(125,243,255,.16); color: var(--cyan-2); }
+.icone-carre svg { width: 1.3em; height: 1.3em; }
+
+/* .bouton (l. 327-329, 627) ; au téléphone (l. 772) */
+.bouton { padding: .7em 1em; border-radius: 999px; display: flex; align-items: center; justify-content: center; gap: .55em; font-weight: 600;
+  font: inherit; font-weight: 600; color: var(--texte); cursor: pointer; text-align: center; }
+button.bouton:not(.verre) { border: 0; }
+.bouton.plein { background: linear-gradient(135deg, var(--cyan), var(--bleu-banniere)); color: #031018; }
+.bouton.plein.danger { color: #fff; background: linear-gradient(165deg, #ff7a86, #e0384a); border-color: transparent; }
+.bouton svg { width: 1.2em; height: 1.2em; }
+.bouton:disabled { opacity: .55; cursor: default; }
+
+/* ONBOARDING (l. 753-776), le téléphone (.mobile …) */
+.chargement { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .9em;
+  min-height: 100vh; min-height: 100dvh; padding: 24px 16px 32px; }
+.points { display: flex; gap: .5em; order: 2; }
+.points i { width: .55em; height: .55em; border-radius: 50%; background: rgba(255,255,255,.18); transition: background .2s, width .2s; }
+.points i.ici { width: 1.6em; border-radius: 1em; background: var(--cyan); }
+.points i.fait { background: rgba(0,229,255,.5); }
+.boite { border-radius: 1.5em; padding: 1.2em 1em; display: flex; flex-direction: column; align-items: center; gap: .7em; text-align: center;
+  width: 88%; max-width: 34em; font-size: .88em; }
+@media (max-width: 420px) { .boite { width: 100%; } }
+.etape { display: flex; flex-direction: column; align-items: center; gap: .65em; width: 100%; }
+.etape h3 { margin: 0; font-size: 1.3em; font-weight: 600; text-wrap: balance; }
+.etape p { margin: 0; color: var(--texte-2); line-height: 1.5; max-width: 30em; }
+/* le nom, en tête de chaque page (.gros-logo, l. 764, 777-778) */
+.gros-logo { font-weight: 700; font-size: 2em; letter-spacing: .03em; margin: 0; }
+.gros-logo b { color: var(--cyan); font-weight: 700; }
+
+/* les cases (l. 779-782, 770) : de vrais <input>, à la recette de .champ .val */
+.champ { width: 100%; text-align: left; display: flex; flex-direction: column; gap: .3em; }
+.champ label { font-size: .82em; color: var(--texte-2); }
+.champ .val { padding: .6em .8em; border-radius: .9em; background: rgba(5,8,16,.55); border: 1px solid rgba(255,255,255,.12);
+  font-family: var(--f-chiffre); font-size: .92em; color: var(--texte); width: 100%; margin: 0; }
+input.val, .val input { -webkit-appearance: none; appearance: none; }
+.champ .val::placeholder, .champ .val input::placeholder { color: var(--texte-2); opacity: 1; }
+.champ input.val:focus, .champ .val.mdp:focus-within { outline: none; box-shadow: 0 0 0 .18em var(--cyan), 0 0 1.6em rgba(0,229,255,.35); }
+.champ small { color: var(--texte-2); font-size: .8em; }
+/* l'œil du mot de passe au téléphone (l. 798-810) : la cible du doigt, 48 dp = 4,032 em de la case */
+.champ .val { --bord-case: 1px; }
+.champ .val.mdp { display: flex; align-items: center; height: 4.032em; padding-top: 0; padding-bottom: 0; padding-right: 0; gap: .336em; }
+.val.mdp input { flex: 1; min-width: 0; border: 0; background: none; padding: 0; margin: 0; font: inherit; color: inherit; outline: none; height: 100%; }
+.oeil-champ { flex: none; display: grid; place-items: center; border-radius: 50%; color: inherit; cursor: pointer; background: none; border: 0;
+  width: 4.032em; height: 4.032em; justify-items: end; padding: 0 calc(.8em + var(--bord-case)) 0 0;
+  margin: calc(-1 * var(--bord-case)) calc(-1 * var(--bord-case)) calc(-1 * var(--bord-case)) 0; font: inherit; }
+.oeil-champ svg { width: 1.2em; height: 1.2em; display: block; }
+/* iPhone : Safari agrandit la page sur toute case sous 16 px ; là seulement, la case garde 16 px */
+@supports (-webkit-touch-callout: none) { .champ .val { font-size: 16px; } }
+
+/* le choix du type (l. 826-830, 771) */
+.choix { width: 100%; display: flex; flex-direction: column; gap: .6em; }
+.choix .ligne { display: flex; align-items: center; gap: .9em; padding: .6em .7em; border-radius: 1em; border: 1px solid var(--filet);
+  background: rgba(255,255,255,.03); text-align: left; cursor: pointer; color: var(--texte); font: inherit; width: 100%; }
+.choix .ligne.sel { border-color: rgba(0,229,255,.6); background: rgba(0,229,255,.08); }
+.choix .ligne b { display: block; font-weight: 500; }
+.choix .ligne small { color: var(--texte-2); }
+/* les boutons d'une étape (l. 831-833) : au téléphone, le bouton plein en haut, pleine largeur */
+.pas { display: flex; gap: .7em; width: 100%; justify-content: center; margin-top: .3em; flex-direction: column-reverse; }
+.pas .bouton { width: 100%; }
+
+/* connecté (l. 878-881) ; « Validé ! » et les fins prennent la même recette */
+.connecte { display: flex; flex-direction: column; align-items: center; gap: .45em; padding: .4em 0; }
+#fin-icone { display: contents; }
+.connecte svg { width: 3em; height: 3em; color: var(--vert); }
+.connecte svg.info { color: var(--cyan-2); }
+.connecte svg.ko { color: var(--rouge); }
+.connecte b { font-size: 1.1em; font-weight: 600; overflow-wrap: anywhere; }
+.connecte small { color: var(--texte-2); font-size: .88em; line-height: 1.45; }
+/* la roue (l. 963-964) */
+.roue { display: inline-block; width: 1.25em; height: 1.25em; border-radius: 50%; flex: none; border: .17em solid rgba(0,229,255,.2);
+  border-top-color: var(--cyan); animation: tourne .8s linear infinite; }
+@keyframes tourne { to { transform: rotate(360deg); } }
+.attente { display: flex; align-items: center; justify-content: center; gap: .6em; }
+/* une phrase d'erreur : le rouge des erreurs de la maquette (.explication.ko, l. 643, 939) */
+.etat { margin: 0; font-size: .88em; line-height: 1.5; color: var(--texte-2); width: 100%; }
+.etat.ko { color: var(--rouge); }
+/* la note sous la boîte : le texte secondaire */
+.note { order: 3; max-width: 30em; width: 88%; margin: 0; color: var(--texte-2); font-size: .8em; line-height: 1.5; text-align: center; }
+.note a { color: var(--cyan-2); }
+#bouton-google { display: flex; justify-content: center; min-height: 44px; width: 100%; }

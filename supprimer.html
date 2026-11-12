@@ -6,52 +6,44 @@
 <meta name="referrer" content="no-referrer">
 <title>NitaTV — Supprimer votre compte · Delete your account</title>
 <meta name="description" content="Supprimer votre compte NitaTV / Delete your NitaTV account">
+<link rel="stylesheet" href="verre.css">
 <style>
-  :root { --fond:#ffffff; --carte:#f2f4f8; --texte:#1b1d27; --doux:#5b6070; --accent:#0088b8; --trait:#e3e6ee;
-          --danger:#c62828; --sur-danger:#ffffff; --erreur:#c62828; }
-  @media (prefers-color-scheme: dark) {
-    :root { --fond:#101320; --carte:#171b2c; --texte:#e9ebf2; --doux:#a3a8b8; --accent:#00c1ff; --trait:#262b3d;
-            --danger:#ff6b6b; --sur-danger:#1a0606; --erreur:#ff7a7a; }
-  }
-  * { box-sizing:border-box; }
-  body { margin:0; background:var(--fond); color:var(--texte);
-         font:16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
-  main { max-width:640px; margin:0 auto; padding:32px 16px 64px; }
-  h1 { font-size:1.9rem; margin:0 0 4px; }
-  h1 .tv { color:var(--accent); }
-  h2 { font-size:1.2rem; margin:32px 0 8px; padding-top:16px; border-top:1px solid var(--trait); }
-  .langues a { color:var(--accent); margin-right:16px; }
-  a { color:var(--accent); }
-  ul { padding-left:22px; }
-  li { margin-bottom:6px; }
-  .chemin { font-weight:600; }
-  section.langue + section.langue { margin-top:56px; }
+  /* La page de suppression au verre Sombre de la maquette (verre.css) : une carte de verre par langue, le bloc
+     interactif à la recette d'une carte de l'onboarding (.voie, l. 851-852), les boutons de la maquette (.bouton). */
+  main { max-width: 640px; margin: 0 auto; padding: 24px 16px 64px; line-height: 1.6; }
+  .tete { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+  .langues a { color: var(--cyan-2); margin-left: 16px; }
+  section.langue { border-radius: 1.5em; padding: 1.2em 1.1em 1.4em; }
+  section.langue h1 { font-size: 1.5em; font-weight: 600; margin: 0 0 .4em; line-height: 1.3; text-wrap: balance; }
+  section.langue h2 { font-size: 1.1em; font-weight: 600; margin: 1.6em 0 .5em; padding-top: 1em; border-top: 1px solid var(--filet); }
+  section.langue p, section.langue li { color: var(--texte-2); }
+  section.langue strong, .chemin { color: var(--texte); }
+  ul { padding-left: 22px; }
+  li { margin-bottom: 6px; }
+  .chemin { font-weight: 600; }
+  section.langue + section.langue { margin-top: 32px; }
   /* With JavaScript, one language at a time (chosen by #fr / #en, else by the browser's language). */
-  .js section.langue:not(.active) { display:none; }
-  .js section.langue + section.langue { margin-top:0; }
-  .ici { background:var(--carte); border-radius:12px; padding:16px; margin:12px 0; }
-  .ici p { margin:0 0 10px; }
-  .ici .titre { font-size:1.1rem; font-weight:600; }
-  .ici .doux { color:var(--doux); font-size:.95rem; }
-  #bouton-google { display:flex; justify-content:center; min-height:48px; margin:16px 0 8px; }
-  .etat { margin:12px 0 0; padding:12px 14px; border-radius:10px; background:var(--fond); }
-  .etat.erreur { border-left:3px solid var(--erreur); }
-  .boutons { display:flex; flex-wrap:wrap; gap:12px; margin-top:16px; }
-  button { font:inherit; font-weight:600; border-radius:10px; cursor:pointer; padding:12px 20px; }
-  button.secondaire { background:transparent; color:var(--texte); border:1px solid var(--doux); }
-  button.danger { background:var(--danger); color:var(--sur-danger); border:0; }
-  button.principal { background:var(--accent); color:#06121a; border:0; }
-  button:disabled { opacity:.6; cursor:default; }
-  .adresse { font-weight:600; overflow-wrap:anywhere; }
-  [hidden] { display:none !important; }
+  .js section.langue:not(.active) { display: none; }
+  .js section.langue + section.langue { margin-top: 0; }
+  .ici { border: 1px solid var(--filet); background: rgba(255,255,255,.03); border-radius: 1.2em; padding: 1em 1.1em 1.1em; margin: .8em 0; }
+  .ici p { margin: 0 0 10px; }
+  .ici .titre { font-size: 1.1em; font-weight: 600; color: var(--texte); }
+  .ici .doux { color: var(--texte-2); font-size: .95em; }
+  #ici #bouton-google { margin: 16px 0 8px; min-height: 48px; }
+  .ici .etat { margin: 12px 0 0; font-size: .95em; }
+  .ici .etat.erreur { color: var(--rouge); }
+  .boutons { display: flex; flex-direction: column-reverse; gap: .7em; margin-top: 16px; }
+  .boutons .bouton, #reessayer { width: 100%; }
+  #reessayer { margin-top: 12px; }
+  .adresse { font-weight: 600; overflow-wrap: anywhere; }
 </style>
 </head>
-<body>
+<body class="verre-page">
 <main>
-  <h1>Nita<span class="tv">TV</span></h1>
-  <p class="langues"><a href="#fr" hreflang="fr">Français</a><a href="#en" hreflang="en">English</a></p>
+  <div class="tete"><p class="gros-logo">NITA<b>TV</b></p>
+  <p class="langues"><a href="#fr" hreflang="fr">Français</a><a href="#en" hreflang="en">English</a></p></div>
 
-  <section id="fr" lang="fr" class="langue">
+  <section id="fr" lang="fr" class="langue verre">
     <h1>Supprimer votre compte NitaTV</h1>
     <p>Votre compte NitaTV est celui que vous créez en vous connectant avec Google dans l'application NitaTV. Vous
     pouvez le supprimer à tout moment, de deux façons.</p>
@@ -83,7 +75,7 @@
     l'adresse de votre compte Google, en demandant la suppression de votre compte NitaTV.</p>
   </section>
 
-  <section id="en" lang="en" class="langue">
+  <section id="en" lang="en" class="langue verre">
     <h1>Delete your NitaTV account</h1>
     <p>Your NitaTV account is the one you create by signing in with Google in the NitaTV app. You can delete it at any
     time, in two ways.</p>
@@ -123,13 +115,13 @@
       <p class="titre" id="confirmer-titre"></p>
       <p id="confirmer-texte"></p>
       <div class="boutons">
-        <button type="button" class="secondaire" id="annuler"></button>
-        <button type="button" class="danger" id="supprimer"></button>
+        <button type="button" class="bouton verre f" id="annuler"></button>
+        <button type="button" class="bouton plein danger f" id="supprimer"></button>
       </div>
     </div>
 
     <p id="etat" class="etat" role="status" aria-live="polite" hidden></p>
-    <button type="button" class="principal" id="reessayer" hidden></button>
+    <button type="button" class="bouton plein f" id="reessayer" hidden></button>
 
     <div id="fin" role="status" aria-live="polite" hidden>
       <p class="titre" id="fin-titre"></p>
