@@ -399,7 +399,7 @@ try {
   const etape = (id) => attendre(`${vu('etape-' + id)}`, 'étape ' + id);
   const finAvec = (titre) => attendre(`${vu('etape-fin')} && ${el('fin-titre')}.textContent.replace(/ /g, " ") === ${JSON.stringify(titre)}`, 'fin ' + titre);
   const points = () => evaluer(`[...document.querySelectorAll('.points i')].map(i => i.className || '-').join(',')`);
-  const remplir = (v) => evaluer(`(() => { const v = ${JSON.stringify(v)}; for (const c in v) document.getElementById(c).value = v[c]; return true; })()`);
+  const remplir = (v) => evaluer(`(() => { const v = ${JSON.stringify(v)}; for (const c in v) { const e = document.getElementById(c); e.value = v[c]; e.dispatchEvent(new Event('input', { bubbles: true })); } return true; })()`);
   const choisirType = (t) => evaluer(`document.querySelector('#etape-type .ligne[data-type="${t}"]').click(); true`);
   const ua = await evaluer('navigator.userAgent');
   const langue = (l) => cdp('Emulation.setUserAgentOverride', { userAgent: ua, acceptLanguage: l === 'fr' ? 'fr-FR,fr' : 'en-US,en' });
@@ -435,6 +435,7 @@ try {
   verifie(!serveur.journal.some((j) => j.chemin === '/v1/depot/' + dep.depot), 'ajouter : aucune requête tant que le formulaire est incomplet');
   await capture('ajouter_fr_3_champs_vides');
   await remplir({ serveur: '  http://exemple.tv:8080 ', utilisateur: 'antony', mot_de_passe: 'p@ss:w/rd&é ' });
+  verifie(!(await evaluer(vu('etat-xtream'))), 'ajouter : le refus s\'efface dès qu\'on tape de nouveau');
   await cliquer('oeil');
   verifie(await evaluer(`${el('mot_de_passe')}.type === 'text' && ${el('oeil')}.getAttribute('aria-label') === 'Masquer le mot de passe'`), 'ajouter : l\'œil montre le mot de passe (« Masquer le mot de passe »)');
   await capture('ajouter_fr_4_xtream_rempli');
