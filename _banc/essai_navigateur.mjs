@@ -9,7 +9,9 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { demarrer, lireFauxJeton } from './faux_serveur.mjs';
 
-const CHROME = 'C:/Program Files/Google/Chrome/Application/chrome.exe';
+// Chrome : CHROME s'il est donné ; sinon celui du portable Windows, ou `google-chrome` ailleurs (la HP Linux).
+const WINDOWS = process.platform === 'win32';
+const CHROME = process.env.CHROME || (WINDOWS ? 'C:/Program Files/Google/Chrome/Application/chrome.exe' : 'google-chrome');
 const PORT_CDP = 9333;
 const captures = process.argv[2];
 if (!captures) throw new Error('usage : node _banc/essai_navigateur.mjs <dossier des captures> [parties]');
@@ -23,10 +25,17 @@ const pause = (ms) => new Promise((r) => setTimeout(r, ms));
 const serveur = await demarrer();
 const profil = fs.mkdtempSync(path.join(os.tmpdir(), 'nitatv-banc-chrome-'));
 const chrome = spawn(CHROME, ['--headless=new', `--remote-debugging-port=${PORT_CDP}`, `--user-data-dir=${profil}`,
-  '--no-first-run', '--no-default-browser-check', '--disable-extensions', 'about:blank'], { stdio: 'ignore' });
+  '--no-first-run', '--no-default-browser-check', '--disable-extensions', 'about:blank'],
+  // Hors Windows, Chrome mène son propre groupe de processus : le tuer, c'est tuer le groupe (ses sous-processus
+  // survivraient à un kill du seul parent). Sous Windows, `detached` ouvrirait une console : taskkill /T suffit.
+  { stdio: 'ignore', detached: !WINDOWS });
 
 async function finir(code) {
-  try { execFileSync('taskkill', ['/PID', String(chrome.pid), '/T', '/F'], { stdio: 'ignore' }); } catch {}
+  if (WINDOWS) {
+    try { execFileSync('taskkill', ['/PID', String(chrome.pid), '/T', '/F'], { stdio: 'ignore' }); } catch {}
+  } else {
+    try { process.kill(-chrome.pid, 'SIGKILL'); } catch {}
+  }
   await serveur.arreter();
   await pause(500);
   try { fs.rmSync(profil, { recursive: true, force: true }); } catch {}
@@ -93,7 +102,7 @@ try {
         b.style.cssText = 'padding:12px 20px;border-radius:24px;border:0;background:#1a73e8;color:#fff;font:600 16px system-ui';
         var cfg = this._cfg;
         var b64 = function (x) { return btoa(unescape(encodeURIComponent(JSON.stringify(x)))).split('+').join('-').split('/').join('_').split('=').join(''); };
-        b.onclick = function () { var c = window.__compteBanc || { sub: '1001', email: 'antony.banc@gmail.com' };
+        b.onclick = function () { var c = window.__compteBanc || { sub: '1001', email: 'testeur.banc@example.com' };
           cfg.callback({ credential: b64({ alg: 'none', typ: 'JWT' }) + '.' + b64({ aud: cfg.client_id, sub: c.sub, email: c.email, nonce: cfg.nonce }) + '.banc', select_by: 'btn' }); };
         div.appendChild(b); },
       disableAutoSelect: function () {} } } };`;
@@ -133,7 +142,7 @@ try {
     const fini = (mot) => attendre(`${vu('fin')} && ${el('fin-titre')}.textContent.replace(/\u00a0/g, " ") === ${JSON.stringify(mot)}`, 'fin ' + mot);
     const confirmation = () => attendre(`${vu('confirmer')} && !${vu('bouton-google')}`, 'confirmation');
     let compteur = 0;
-    const neuf = (avec = true) => { const c = { sub: 'sub-' + (++compteur), email: `compte${compteur}.banc@gmail.com` }; if (avec) S.comptes.set(c.sub, { email: c.email }); return c; };
+    const neuf = (avec = true) => { const c = { sub: 'sub-' + (++compteur), email: `compte${compteur}.banc@example.com` }; if (avec) S.comptes.set(c.sub, { email: c.email }); return c; };
 
     // --- 0. Le faux serveur rejoue la séquence MESURÉE sur le vrai (serveur_reel.txt, 2026-11-12 19:14 UTC) ---
     const appel = async (corps) => { const r = await fetch(S.api + '/v1/compte/suppression', { method: 'POST', headers: { 'Content-Type': 'application/json', Origin: S.site }, body: JSON.stringify(corps) });
@@ -619,7 +628,7 @@ try {
   const polls = (a) => serveur.journal.filter((j) => j.methode === 'POST' && j.chemin === `/v1/appairage/${a}/depot`);
   const rattacher = (a) => appelBanc(`/_banc/appairage/${a}/rattacher`);
   const qr = (ap, avecK = k) => `${serveur.site}/connexion.html#a=${ap.appairage}&t=${ap.jeton}` + (avecK ? `&k=${avecK}` : '');
-  const connecteFin = (texte) => attendre(`${vu('etape-fin')} && ${el('fin-titre')}.textContent.replace(/ /g, " ") === 'Connecté : a…@gmail.com' && ${el('fin-texte')}.textContent.replace(/ /g, " ") === ${JSON.stringify(texte)}`, 'Connecté — ' + texte);
+  const connecteFin = (texte) => attendre(`${vu('etape-fin')} && ${el('fin-titre')}.textContent.replace(/ /g, " ") === 'Connecté : t…@example.com' && ${el('fin-texte')}.textContent.replace(/ /g, " ") === ${JSON.stringify(texte)}`, 'Connecté — ' + texte);
 
   // ---------- 1. Le parcours entier : Google → Connecté (attente) → Type → M3U avec guide → Validé ----------
   await langue('fr');
@@ -638,7 +647,7 @@ try {
   verifie(await etape('attente'), 'connexion : 200 { suite } → « Connecté », la page attend la télé');
   const lie = serveur.appairages.get(ap.appairage);
   verifie(lie.lie && lireFauxJeton(lie.google)?.nonce === cfg.nonce, 'connexion : le serveur a reçu { jeton, google_id_token, nonce } cohérents');
-  verifie((await texteDe('attente-compte')) === 'Connecté : a…@gmail.com' && (await texteDe('etape-attente')).includes('Votre télé prépare l\'envoi de votre playlist…'), 'connexion : « Connecté : a…@gmail.com » (masquée comme l\'app), « Votre télé prépare l\'envoi… »');
+  verifie((await texteDe('attente-compte')) === 'Connecté : t…@example.com' && (await texteDe('etape-attente')).includes('Votre télé prépare l\'envoi de votre playlist…'), 'connexion : « Connecté : t…@example.com » (masquée comme l\'app), « Votre télé prépare l\'envoi… »');
   verifie(await evaluer(vu('plus-tard-attente')), 'connexion : « Plus tard » offert pendant l\'attente');
   await capture('connexion_fr_2_attente');
   await pause(6500);
@@ -679,7 +688,7 @@ try {
   serveur.reglages.appairageAncien = true;
   ap = await appelBanc('/_banc/appairage');
   await ouvrir(qr(ap)); await bouton(); await cliquer('faux-google');
-  verifie(await connecteFin('Retournez à votre télé.'), 'connexion : 204 (ancien serveur) → « Connecté : a…@gmail.com — Retournez à votre télé. »');
+  verifie(await connecteFin('Retournez à votre télé.'), 'connexion : 204 (ancien serveur) → « Connecté : t…@example.com — Retournez à votre télé. »');
   await pause(3500);
   verifie(polls(ap.appairage).length === 0, 'connexion : … aucune interrogation de …/depot');
   verifie((await points()) === 'fait,fait,fait', 'connexion : fini — tous les points faits');
@@ -881,7 +890,7 @@ try {
   verifie((await texteDe('etape-compte')).startsWith('Connect your Google account') && (await evaluer('window.__gisBouton.locale')) === 'en' && (await evaluer('document.documentElement.lang')) === 'en', 'connexion : EN — « Connect your Google account », bouton Google en anglais');
   await capture('connexion_en_1_compte');
   await cliquer('faux-google'); await etape('attente');
-  verifie((await texteDe('attente-compte')) === 'Signed in: a…@gmail.com' && (await texteDe('plus-tard-attente')) === 'Later', 'connexion : EN — « Signed in: a…@gmail.com », « Later »');
+  verifie((await texteDe('attente-compte')) === 'Signed in: t…@example.com' && (await texteDe('plus-tard-attente')) === 'Later', 'connexion : EN — « Signed in: t…@example.com », « Later »');
   await capture('connexion_en_2_attente');
   r2 = await rattacher(ap.appairage);
   await etape('type');
@@ -895,7 +904,7 @@ try {
   ap = await appelBanc('/_banc/appairage');
   await ouvrir(qr(ap)); await bouton(); await cliquer('faux-google'); await etape('attente');
   await cliquer('plus-tard-attente');
-  verifie(await attendre(`${el('fin-titre')}.textContent === 'Signed in: a…@gmail.com' && ${el('fin-texte')}.textContent === 'Go back to your TV: you will add your playlist there.'`, 'en plus tard'), 'connexion : EN — « Later » → « Signed in — Go back to your TV… »');
+  verifie(await attendre(`${el('fin-titre')}.textContent === 'Signed in: t…@example.com' && ${el('fin-texte')}.textContent === 'Go back to your TV: you will add your playlist there.'`, 'en plus tard'), 'connexion : EN — « Later » → « Signed in — Go back to your TV… »');
   await capture('connexion_en_6_plus_tard');
   serveur.reglages.appairageAncien = true;
   ap = await appelBanc('/_banc/appairage');
