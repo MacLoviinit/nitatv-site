@@ -79,12 +79,10 @@
   .bandeau button { background:none; border:0; color:var(--doux); font-size:1.3rem; line-height:1; cursor:pointer; padding:4px 8px; }
   .bandeau button:hover { color:var(--texte); }
   footer { margin-top:56px; font-size:.9rem; text-align:center; color:var(--doux); }
-  .langues { margin-top:20px; }
-  .langues ul { list-style:none; padding:0; margin:0; display:flex; flex-wrap:wrap; justify-content:center; gap:4px 14px; }
-  .langues [aria-current] { color:var(--texte); font-weight:600; }
   a { color:var(--accent); }
   /* Le menu des langues, en haut au début de la ligne (à gauche ; à droite en arabe). Sans programme, <details>
-     s'ouvre et se ferme seul ; le programme ajoute Échap, le clic dehors et la sortie au clavier. */
+     s'ouvre et se ferme seul ; le programme ajoute Échap, le clic dehors et la sortie au clavier. Ses 20 liens sont de
+     vrais <a href hreflang> dans le HTML : Google les suit sans ouvrir le menu (la liste du bas, en double, est partie). */
   .barre { max-width:960px; margin:0 auto; padding:12px 16px 0; position:relative; z-index:5; }
   .menu-langue { position:relative; display:inline-block; }
   .menu-langue summary { list-style:none; display:inline-flex; align-items:center; gap:8px; padding:6px 12px;
@@ -213,31 +211,6 @@
 
   <footer>
     <a href="../confidentialite.html">Privacidad</a> · <a href="../conditions.html">Condiciones</a> · <a href="../supprimer.html">Eliminar mi cuenta</a> · <a href="https://play.google.com/store/account/subscriptions?sku=nitatv_abonnement&amp;package=tv.nita.app">Gestionar mi suscripción</a> · <a href="mailto:contact@nita.tv">contact@nita.tv</a>
-    <nav class="langues" aria-label="Idioma">
-      <ul>
-        <li><a href="../" hreflang="fr" lang="fr" data-langue="fr">Français</a></li>
-        <li><a href="../en/" hreflang="en" lang="en" data-langue="en">English</a></li>
-        <li><a href="../de/" hreflang="de" lang="de" data-langue="de">Deutsch</a></li>
-        <li><a href="../nl/" hreflang="nl" lang="nl" data-langue="nl">Nederlands</a></li>
-        <li><span lang="es-ES" aria-current="page">Español (España)</span></li>
-        <li><a href="../es-419/" hreflang="es" lang="es-419" data-langue="es-419">Español (Latinoamérica)</a></li>
-        <li><a href="../it/" hreflang="it" lang="it" data-langue="it">Italiano</a></li>
-        <li><a href="../pt/" hreflang="pt" lang="pt-BR" data-langue="pt">Português (Brasil)</a></li>
-        <li><a href="../pt-pt/" hreflang="pt-PT" lang="pt-PT" data-langue="pt-pt">Português (Portugal)</a></li>
-        <li><a href="../pl/" hreflang="pl" lang="pl" data-langue="pl">Polski</a></li>
-        <li><a href="../ru/" hreflang="ru" lang="ru" data-langue="ru">Русский</a></li>
-        <li><a href="../tr/" hreflang="tr" lang="tr" data-langue="tr">Türkçe</a></li>
-        <li><a href="../ar/" hreflang="ar" lang="ar" data-langue="ar">العربية</a></li>
-        <li><a href="../zh-hans/" hreflang="zh-Hans" lang="zh-Hans" data-langue="zh-hans">中文（简体）</a></li>
-        <li><a href="../zh-hant/" hreflang="zh-Hant" lang="zh-Hant" data-langue="zh-hant">中文（繁體）</a></li>
-        <li><a href="../ja/" hreflang="ja" lang="ja" data-langue="ja">日本語</a></li>
-        <li><a href="../ko/" hreflang="ko" lang="ko" data-langue="ko">한국어</a></li>
-        <li><a href="../hi/" hreflang="hi" lang="hi" data-langue="hi">हिन्दी</a></li>
-        <li><a href="../id/" hreflang="id" lang="id" data-langue="id">Bahasa Indonesia</a></li>
-        <li><a href="../vi/" hreflang="vi" lang="vi" data-langue="vi">Tiếng Việt</a></li>
-        <li><a href="../th/" hreflang="th" lang="th" data-langue="th">ไทย</a></li>
-      </ul>
-    </nav>
   </footer>
 </main>
 <dialog class="grand" aria-label="Capturas de pantalla">

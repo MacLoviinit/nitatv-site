@@ -93,11 +93,6 @@ function page(l) {
     const vers = racine + (a.dossier ? a.dossier + '/' : '');
     return `      <li><a href="${vers || './'}" hreflang="${a.hreflang}" lang="${a.lang}" data-langue="${a.code}">${img}${texte(a.nom)}</a></li>`;
   }).join('\n');
-  const selecteur = LANGUES.map((a) => {
-    if (a.code === l.code) return `        <li><span lang="${a.lang}" aria-current="page">${texte(a.nom)}</span></li>`;
-    const vers = racine + (a.dossier ? a.dossier + '/' : '');
-    return `        <li><a href="${vers || './'}" hreflang="${a.hreflang}" lang="${a.lang}" data-langue="${a.code}">${texte(a.nom)}</a></li>`;
-  }).join('\n');
   const valeurs = {
     lang: l.lang, dir: l.dir, code: l.code, url: url(l), racine, hreflang: hreflang(),
     titre: texte(t.titre), description: attr(t.description), og_description: attr(t.og_description),
@@ -105,7 +100,7 @@ function page(l) {
     essai: texte(t.essai), bande_nom: attr(t.bande.nom), bande_precedente: attr(t.bande.precedente),
     bande_suivante: attr(t.bande.suivante), captures, note_demo: texte(t.note_demo), credit: texte(t.credit),
     avertissement: texte(t.avertissement), fonctions_titre: texte(t.fonctions_titre), fonctions,
-    faq_titre: texte(t.faq_titre), faq, langues: attr(t.langues), selecteur, menu, drapeau: l.drapeau,
+    faq_titre: texte(t.faq_titre), faq, langues: attr(t.langues), menu, drapeau: l.drapeau,
     nom_langue: texte(l.nom), fermer: attr(t.fermer), grand_precedente: attr(t.grand.precedente),
     grand_suivante: attr(t.grand.suivante),
     pied_confidentialite: texte(t.pied.confidentialite), pied_conditions: texte(t.pied.conditions),

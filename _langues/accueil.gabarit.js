@@ -2,7 +2,7 @@
 // Deux aides, la page marche sans elles (sans programme : pas de bandeau, la bande défile au doigt ou à la molette) :
 // 1. la langue PROPOSÉE, jamais imposée (consigne de Google : aucune redirection) — si la langue de l'appareil
 //    (navigator.languages) est une autre langue du site, un bandeau dans CETTE langue la propose, avec une croix ;
-//    le choix (lien du bandeau ou du sélecteur) ou le refus (la croix) est retenu dans localStorage, s'il est permis ;
+//    le choix (lien du bandeau ou du menu) ou le refus (la croix) est retenu dans localStorage, s'il est permis ;
 // 2. les flèches de la bande de captures, à l'ordinateur (souris) : elles avancent d'une capture, dans le sens de lecture ;
 // 3. le menu des langues (un <details>, qui s'ouvre et se ferme sans programme) : Échap, le clic dehors et la sortie
 //    au clavier le referment ; Échap rend le focus à son bouton ;
@@ -42,7 +42,7 @@
     return null;
   }
 
-  var liens = document.querySelectorAll('.langues a[data-langue], .menu-langue a[data-langue]');
+  var liens = document.querySelectorAll('.menu-langue a[data-langue]');
   for (var i = 0; i < liens.length; i++) {
     liens[i].addEventListener('click', function () { retenir(this.getAttribute('data-langue')); });
   }

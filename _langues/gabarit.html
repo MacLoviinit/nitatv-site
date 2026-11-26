@@ -58,12 +58,10 @@
   .bandeau button { background:none; border:0; color:var(--doux); font-size:1.3rem; line-height:1; cursor:pointer; padding:4px 8px; }
   .bandeau button:hover { color:var(--texte); }
   footer { margin-top:56px; font-size:.9rem; text-align:center; color:var(--doux); }
-  .langues { margin-top:20px; }
-  .langues ul { list-style:none; padding:0; margin:0; display:flex; flex-wrap:wrap; justify-content:center; gap:4px 14px; }
-  .langues [aria-current] { color:var(--texte); font-weight:600; }
   a { color:var(--accent); }
   /* Le menu des langues, en haut au début de la ligne (à gauche ; à droite en arabe). Sans programme, <details>
-     s'ouvre et se ferme seul ; le programme ajoute Échap, le clic dehors et la sortie au clavier. */
+     s'ouvre et se ferme seul ; le programme ajoute Échap, le clic dehors et la sortie au clavier. Ses 20 liens sont de
+     vrais <a href hreflang> dans le HTML : Google les suit sans ouvrir le menu (la liste du bas, en double, est partie). */
   .barre { max-width:960px; margin:0 auto; padding:12px 16px 0; position:relative; z-index:5; }
   .menu-langue { position:relative; display:inline-block; }
   .menu-langue summary { list-style:none; display:inline-flex; align-items:center; gap:8px; padding:6px 12px;
@@ -147,11 +145,6 @@
 
   <footer>
     <a href="{{racine}}confidentialite.html">{{pied_confidentialite}}</a> · <a href="{{racine}}conditions.html">{{pied_conditions}}</a> · <a href="{{racine}}supprimer.html">{{pied_supprimer}}</a> · <a href="https://play.google.com/store/account/subscriptions?sku=nitatv_abonnement&amp;package=tv.nita.app">{{pied_abonnement}}</a> · <a href="mailto:contact@nita.tv">contact@nita.tv</a>
-    <nav class="langues" aria-label="{{langues}}">
-      <ul>
-{{selecteur}}
-      </ul>
-    </nav>
   </footer>
 </main>
 <dialog class="grand" aria-label="{{bande_nom}}">
