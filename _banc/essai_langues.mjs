@@ -29,7 +29,7 @@ const pause = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // --- le serveur statique ---
 const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.jpg': 'image/jpeg',
-  '.xml': 'application/xml', '.txt': 'text/plain; charset=utf-8', '.css': 'text/css' };
+  '.xml': 'application/xml', '.txt': 'text/plain; charset=utf-8', '.css': 'text/css', '.svg': 'image/svg+xml' };
 const serveur = http.createServer((req, res) => {
   let p = decodeURIComponent(new URL(req.url, 'http://x').pathname);
   let f = path.join(SITE, p);
@@ -84,6 +84,20 @@ try {
   };
   await cdp('Page.enable');
   await cdp('Runtime.enable');
+  // Rien ne sort vers Internet : le compteur Umami (api.nita.tv) est refusé ; on compte les tentatives.
+  let umamiBloque = 0;
+  const ecouteursFetch = [];
+  const ancien = ws.onmessage;
+  ws.onmessage = (m) => {
+    const msg = JSON.parse(m.data);
+    if (msg.method === 'Fetch.requestPaused') {
+      umamiBloque++;
+      cdp('Fetch.failRequest', { requestId: msg.params.requestId, errorReason: 'BlockedByClient' });
+      return;
+    }
+    ancien(m);
+  };
+  await cdp('Fetch.enable', { patterns: [{ urlPattern: 'https://*' }, { urlPattern: 'http://*nita.tv*' }] });
 
   let stockageBloque = null;
   const regler = async ({ largeur, langue, toucher }) => {
@@ -105,6 +119,22 @@ try {
       await pause(100);
     }
     await pause(250);
+  };
+  const touche = async (key, code, vk, mod = 0) => {
+    const text = key === 'Enter' ? '\r' : key === ' ' ? ' ' : undefined;
+    await cdp('Input.dispatchKeyEvent', { type: 'keyDown', key, code, windowsVirtualKeyCode: vk, modifiers: mod, ...(text ? { text } : {}) });
+    await cdp('Input.dispatchKeyEvent', { type: 'keyUp', key, code, windowsVirtualKeyCode: vk, modifiers: mod });
+    await pause(150);
+  };
+  const cliquerEn = async (x, y) => {
+    for (const type of ['mousePressed', 'mouseReleased']) await cdp('Input.dispatchMouseEvent', { type, x, y, button: 'left', clickCount: 1 });
+    await pause(200);
+  };
+  const centre = (sel) => evaluer(`(() => { const r = document.querySelector(${JSON.stringify(sel)}).getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; })()`);
+  const captureEcran = async (nom) => {
+    await pause(300);
+    const { data } = await cdp('Page.captureScreenshot', { format: 'png' });
+    fs.writeFileSync(path.join(captures, nom + '.png'), Buffer.from(data, 'base64'));
   };
   const capture = async (nom) => {
     await pause(300);
@@ -256,13 +286,166 @@ try {
   await aller('');
   const sansJs = await (async () => {
     await cdp('Emulation.setScriptExecutionDisabled', { value: false });
-    const r = await evaluer(`({ bandeau: !!document.querySelector('.bandeau'), fleches: [...document.querySelectorAll('.fleche')].every((f) => f.hidden),
+    const r = await evaluer(`({ bandeau: !!document.querySelector('.bandeau'), fleches: [...document.querySelectorAll('.bande .fleche')].every((f) => f.hidden),
       captures: document.querySelectorAll('.defile img').length, defile: getComputedStyle(document.querySelector('.defile')).overflowX })`);
     return r;
   })();
   verifie(!sansJs.bandeau && sansJs.fleches && sansJs.captures === 7 && sansJs.defile === 'auto',
     `sans programme : pas de bandeau, flèches cachées, 7 captures dans une bande qui défile (${JSON.stringify(sansJs)})`);
 
+
+  // ---------- 7. Le menu des langues (site_langues2) ----------
+  const etatMenu = () => evaluer(`(async () => { const d = document.querySelector('.menu-langue'); const s = d.querySelector('summary');
+    const u = d.querySelector('ul'); const rs = s.getBoundingClientRect(); const ru = u.getBoundingClientRect();
+    const imgs = [...u.querySelectorAll('img')];
+    return { ouvert: d.open, focusBouton: document.activeElement === s, focusDedans: d.contains(document.activeElement),
+      bouton: { g: rs.left, d: rs.right, h: rs.top }, liste: { g: ru.left, d: ru.right, vue: u.checkVisibility() },
+      entrees: u.querySelectorAll('li').length,
+      drapeauxCharges: d.open ? (await Promise.all(imgs.map((i) => i.decode().then(() => 1, () => 0)))).reduce((a, b) => a + b, 0) : 0,
+      largeur: innerWidth }; })()`);
+  for (const [code, largeur, toucher] of [['fr', 1280, false], ['fr', 412, true], ['ar', 1280, false], ['ar', 412, true]]) {
+    const l = LANGUES.find((x) => x.code === code);
+    await regler({ largeur, langue: l.lang, toucher });
+    await viderStockage();
+    await aller(chemin(code));
+    let m = await etatMenu();
+    verifie(!m.ouvert && !m.liste.vue, `${code} à ${largeur} : le menu est fermé à l'arrivée`);
+    verifie(m.bouton.h < 40, `${code} à ${largeur} : le menu est en haut (y=${Math.round(m.bouton.h)})`);
+    const debut = code === 'ar' ? m.largeur - m.bouton.d : m.bouton.g;
+    verifie(debut >= 0 && debut <= (largeur > 960 ? (largeur - 960) / 2 + 20 : 20),
+      `${code} à ${largeur} : le menu est au début de la ligne (${code === 'ar' ? 'à droite' : 'à gauche'}, ${Math.round(debut)} px du bord)`);
+    const c = await centre('.menu-langue summary');
+    await cliquerEn(c.x, c.y);
+    await pause(400);
+    m = await etatMenu();
+    verifie(m.ouvert && m.liste.vue && m.entrees === 21, `${code} à ${largeur} : un appui ouvre le menu, 21 langues`);
+    verifie(m.liste.g >= 0 && m.liste.d <= m.largeur + 0.5, `${code} à ${largeur} : la liste tient dans l'écran (${Math.round(m.liste.g)}…${Math.round(m.liste.d)} / ${m.largeur})`);
+    await pause(600);
+    m = await etatMenu();
+    verifie(m.drapeauxCharges === 21, `${code} à ${largeur} : les 21 drapeaux s'affichent (${m.drapeauxCharges})`);
+    await captureEcran(`menu_${code}_${largeur}`);
+    await cliquerEn(Math.round(m.largeur / 2), 700);
+    m = await etatMenu();
+    verifie(!m.ouvert, `${code} à ${largeur} : un appui dehors ferme le menu`);
+  }
+  // au clavier (fr, 1280)
+  await regler({ largeur: 1280, langue: 'fr', toucher: false });
+  await aller('');
+  await evaluer(`document.querySelector('.menu-langue summary').focus(); true`);
+  await touche('Enter', 'Enter', 13);
+  let m = await etatMenu();
+  verifie(m.ouvert, 'clavier : Entrée sur le bouton ouvre le menu');
+  await touche('Tab', 'Tab', 9);
+  m = await etatMenu();
+  verifie(m.focusDedans && !m.focusBouton, 'clavier : Tab entre dans la liste');
+  await touche('Escape', 'Escape', 27);
+  m = await etatMenu();
+  verifie(!m.ouvert && m.focusBouton, 'clavier : Échap ferme le menu et rend le focus au bouton');
+  await touche(' ', 'Space', 32);
+  m = await etatMenu();
+  verifie(m.ouvert, 'clavier : Espace rouvre le menu');
+  await evaluer(`[...document.querySelectorAll('.menu-langue li a')].pop().focus(); true`);
+  await touche('Tab', 'Tab', 9);
+  m = await etatMenu();
+  verifie(!m.ouvert, 'clavier : sortir de la liste par Tab referme le menu');
+  // un choix dans le menu est retenu
+  await viderStockage();
+  await evaluer(`document.querySelector('.menu-langue summary').click(); document.querySelector('.menu-langue a[data-langue="pt-pt"]').click(); true`);
+  await pause(1200);
+  verifie(await evaluer('location.pathname') === '/pt-pt/' && await memoire() === 'pt-pt', 'menu : choisir « Português (Portugal) » mène à /pt-pt/ et le retient');
+
+  // ---------- 8. La capture agrandie (site_langues2) ----------
+  const etatGrand = () => evaluer(`(() => { const d = document.querySelector('dialog.grand'); const i = d.querySelector('img');
+    return { ouvert: d.open, src: (i.getAttribute('src') || '').split('/images/').pop(), charge: i.complete && i.naturalWidth,
+      legende: d.querySelector('figcaption').textContent, alt: i.alt,
+      focus: document.activeElement && document.activeElement.closest('li') ? [...document.querySelectorAll('.defile li')].indexOf(document.activeElement.closest('li')) : -1,
+      grandesDemandees: performance.getEntriesByType('resource').filter((e) => e.name.includes('/images/grand/')).length }; })()`);
+  await regler({ largeur: 1280, langue: 'fr', toucher: false });
+  await aller('');
+  let g = await etatGrand();
+  verifie(!g.ouvert && g.grandesDemandees === 0, `agrandir : rien de grand chargé avant le clic (${g.grandesDemandees})`);
+  let c2 = await centre('.defile li:nth-child(2) img');
+  await cliquerEn(c2.x, c2.y);
+  await pause(900);
+  g = await etatGrand();
+  verifie(g.ouvert && g.src === 'grand/guide.jpg' && g.charge === 1920 && g.legende === 'Le guide des programmes' && g.alt.length > 10,
+    `agrandir : un clic ouvre la capture en grand, 1920 px, sa légende (${JSON.stringify(g)})`);
+  await captureEcran('grand_fr_1280');
+  await touche('ArrowRight', 'ArrowRight', 39);
+  g = await etatGrand();
+  verifie(g.src === 'grand/films.jpg', `agrandir : → montre la suivante (${g.src})`);
+  await evaluer(`document.querySelector('dialog.grand .suiv').click(); true`);
+  g = await etatGrand();
+  verifie(g.src === 'grand/film.jpg', `agrandir : la flèche « suivante » (${g.src})`);
+  await evaluer(`document.querySelector('dialog.grand .prec').click(); true`);
+  await touche('ArrowLeft', 'ArrowLeft', 37);
+  await touche('ArrowLeft', 'ArrowLeft', 37);
+  await touche('ArrowLeft', 'ArrowLeft', 37);
+  g = await etatGrand();
+  verifie(g.src === 'grand/telephone.jpg', `agrandir : avant la première, la dernière (${g.src})`);
+  await touche('Escape', 'Escape', 27);
+  await pause(300);
+  g = await etatGrand();
+  verifie(!g.ouvert && g.focus === 6, `agrandir : Échap ferme, le focus revient à la capture montrée (la 7ᵉ : ${g.focus})`);
+  verifie((await etatBande()).visibles.includes(6), 'agrandir : la bande s\'est calée sur cette capture');
+  c2 = await centre('.defile li:nth-child(1) img');
+  await evaluer(`document.querySelector('.defile').scrollTo({ left: 0 }); true`);
+  await pause(500);
+  c2 = await centre('.defile li:nth-child(1) img');
+  await cliquerEn(c2.x, c2.y);
+  await pause(500);
+  await evaluer(`document.querySelector('dialog.grand .fermer').click(); true`);
+  await pause(300);
+  g = await etatGrand();
+  verifie(!g.ouvert && g.focus === 0, `agrandir : ✕ ferme, focus rendu à la 1re (${g.focus})`);
+  // au doigt (412) : glisser
+  await regler({ largeur: 412, langue: 'fr', toucher: true });
+  await aller('');
+  c2 = await centre('.defile li:nth-child(1) img');
+  await cdp('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: c2.x, y: c2.y }] });
+  await cdp('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+  await pause(900);
+  g = await etatGrand();
+  verifie(g.ouvert && g.src === 'grand/direct.jpg', `agrandir au doigt : un appui ouvre (${g.src})`);
+  await captureEcran('grand_fr_412');
+  const ci = await centre('dialog.grand img');
+  const glisser = async (dx) => {
+    await cdp('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: ci.x, y: ci.y }] });
+    for (let k = 1; k <= 5; k++) await cdp('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: ci.x + dx * k / 5, y: ci.y }] });
+    await cdp('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+    await pause(400);
+  };
+  await glisser(-150);
+  g = await etatGrand();
+  verifie(g.src === 'grand/guide.jpg', `agrandir au doigt : glisser vers la gauche montre la suivante (${g.src})`);
+  await glisser(150);
+  g = await etatGrand();
+  verifie(g.src === 'grand/direct.jpg', `agrandir au doigt : glisser vers la droite revient (${g.src})`);
+  await evaluer(`document.querySelector('dialog.grand .fermer').click(); true`);
+  // en arabe : → recule, ← avance
+  await regler({ largeur: 1280, langue: 'ar', toucher: false });
+  await aller('ar/');
+  c2 = await centre('.defile li:nth-child(1) img');
+  await cliquerEn(c2.x, c2.y);
+  await pause(600);
+  await touche('ArrowLeft', 'ArrowLeft', 37);
+  g = await etatGrand();
+  verifie(g.src === 'grand/guide.jpg', `agrandir en arabe : ← montre la suivante (${g.src})`);
+  await captureEcran('grand_ar_1280');
+  await touche('Escape', 'Escape', 27);
+
+  // ---------- 9. La politique de confidentialité : la section « Mesure d'audience » ----------
+  await regler({ largeur: 1280, langue: 'fr', toucher: false });
+  for (const [sec, titre] of [['fr', "Mesure d'audience"], ['en', 'Audience measurement']]) {
+    await aller('confidentialite.html');
+    const vu = await evaluer(`(() => { const h = [...document.querySelectorAll('#${sec} h2')].find((x) => x.textContent === ${JSON.stringify(titre)});
+      if (!h) return false; h.scrollIntoView({ block: 'start' }); window.scrollBy(0, -16); return true; })()`);
+    verifie(vu, `confidentialité #${sec} : la section « ${titre} » est dans la page`);
+    await captureEcran(`confidentialite_audience_${sec}`);
+  }
+  verifie(await evaluer(`!document.querySelector('script[src*="api.nita.tv/m/"]')`), 'confidentialité : la page ne charge pas le compteur');
+
+  verifie(umamiBloque > 0, `le compteur Umami est bien appelé par les pages d'accueil, et refusé par le banc (${umamiBloque} requêtes)`);
   verifie(erreurs.length === 0, `aucune exception dans les pages (${erreurs.join(' | ')})`);
   await finir(echecs ? 1 : 0);
 } catch (e) {

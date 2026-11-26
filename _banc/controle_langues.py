@@ -8,11 +8,16 @@ Ce qu'il contrôle, chaque page (attendu ÉCRIT ICI, indépendamment du généra
 - un seul `canonical`, sur elle-même ; `og:url` = canonical ;
 - un `<title>` et une description non vides, avec « IPTV », écrits dans l'écriture de la langue, et distincts d'une
   langue à l'autre (pas une copie de l'anglais) ; aucun « Xtream » ;
-- chaque image : un `alt` non vide, `width`/`height`, son fichier présent ; les 3 premières chargées tout de suite,
-  les suivantes `loading="lazy"` ;
+- chaque capture : un `alt` et une légende non vides, `width`/`height`, son fichier présent, son lien vers la grande
+  image (qui existe) ; les 3 premières chargées tout de suite, les suivantes `loading="lazy"` ;
+- le menu des langues en haut : 21 entrées, le bon drapeau (fichier présent) et le nom dans sa langue, chaque lien vers
+  sa page, la page courante non liée ; les 21 aussi en bas de page ; la fenêtre d'agrandissement et ses 3 boutons ;
+- le prix annuel en dollars, écrit selon la langue, dans la réponse « combien » ; la balise du compteur Umami, une fois ;
 - aucun lien local cassé (`href`/`src` relatifs) ;
 le `sitemap.xml` : un XML valide, les 21 adresses, chacune avec ses 22 `xhtml:link` ; `robots.txt` : tout permis et
-la ligne `Sitemap:` ; et `node _langues/generer.mjs --verifie` : les fichiers écrits sont ceux que les sources donnent.
+la ligne `Sitemap:` ; aucune AUTRE page du site ne porte le compteur ; `confidentialite.html` a sa section « Mesure
+d'audience » / « Audience measurement » (24 mois) ; et `node _langues/generer.mjs --verifie` : les fichiers écrits sont
+ceux que les sources donnent.
 Avec `--fiches` : le mot pour mot de la fiche Play (avertissement, 11 fonctions, abonnement, données, crédit) se
 retrouve tel quel dans le texte de chaque page.
 Rend 0 si tout est conforme, 1 sinon ; affiche le nombre de contrôles.
@@ -38,6 +43,24 @@ ATTENDU = [
     ('th', 'th', 'th', r'[฀-๿]'),
 ]
 X_DEFAULT = DOMAINE + 'en/'
+# site_langues2 (Antony, 2026-11-26) : le menu des langues (drapeau, nom dans sa langue), le prix en dollars.
+DRAPEAU = {'': 'fr', 'en': 'gb', 'de': 'de', 'nl': 'nl', 'es': 'es', 'es-419': 'mx', 'it': 'it', 'pt': 'br',
+           'pt-pt': 'pt', 'pl': 'pl', 'ru': 'ru', 'tr': 'tr', 'ar': 'sa', 'zh-hans': 'cn', 'zh-hant': 'tw', 'ja': 'jp',
+           'ko': 'kr', 'hi': 'in', 'id': 'id', 'vi': 'vn', 'th': 'th'}
+NOM = {'': 'Français', 'en': 'English', 'de': 'Deutsch', 'nl': 'Nederlands', 'es': 'Español (España)',
+       'es-419': 'Español (Latinoamérica)', 'it': 'Italiano', 'pt': 'Português (Brasil)', 'pt-pt': 'Português (Portugal)',
+       'pl': 'Polski', 'ru': 'Русский', 'tr': 'Türkçe', 'ar': 'العربية', 'zh-hans': '中文（简体）', 'zh-hant': '中文（繁體）',
+       'ja': '日本語', 'ko': '한국어', 'hi': 'हिन्दी', 'id': 'Bahasa Indonesia', 'vi': 'Tiếng Việt', 'th': 'ไทย'}
+# Le prix annuel, écrit selon la langue (espaces insécables ramenés à des espaces avant de comparer).
+PRIX = {'': '9,99 USD', 'en': 'US$9.99', 'de': '9,99 US$', 'nl': 'US$ 9,99', 'es': '9,99 US$', 'es-419': 'USD 9.99',
+        'it': '9,99 USD', 'pt': 'US$ 9,99', 'pt-pt': '9,99 US$', 'pl': '9,99 USD', 'ru': '9,99 долл. США',
+        'tr': '9,99 ABD doları', 'ar': '9.99 دولار أمريكي', 'zh-hans': '9.99 美元', 'zh-hant': '9.99 美元',
+        'ja': '9.99 米ドル', 'ko': 'US$9.99', 'hi': '9.99 अमेरिकी डॉलर', 'id': 'US$9,99', 'vi': '9,99 USD',
+        'th': '9.99 ดอลลาร์สหรัฐ'}
+# Le compteur de visites (Umami, serveur de NitaTV) : sur les 21 pages d'accueil, et sur AUCUNE autre page du site.
+UMAMI = ('<script defer src="https://api.nita.tv/m/n.js" data-website-id="792f18f9-4760-4e12-877c-be87ae0428ea" '
+         'data-host-url="https://api.nita.tv/m" data-domains="www.nita.tv,nita.tv" data-exclude-search="true" '
+         'data-exclude-hash="true"></script>')
 # Pour --fiches : le code de chaque page dans la fiche Play (« ## Nom (code) »).
 FICHE = {'': 'fr-FR', 'en': 'en-US', 'de': 'de-DE', 'nl': 'nl-NL', 'es': 'es-ES', 'es-419': 'es-419', 'it': 'it-IT',
          'pt': 'pt-BR', 'pt-pt': 'pt-PT', 'pl': 'pl-PL', 'ru': 'ru-RU', 'tr': 'tr-TR', 'ar': 'ar', 'zh-hans': 'zh-CN',
@@ -177,13 +200,52 @@ def main():
             verifie(bool(desc) and re.search(ecriture, desc[0]) is not None, f'{nom} : description dans l\'écriture de la langue')
         tout = (racine / d / 'index.html').read_text(encoding='utf-8')
         verifie('xtream' not in tout.lower(), f'{nom} : aucun « Xtream »')
-        verifie(len(p.images) == 7, f'{nom} : 7 captures (lues : {len(p.images)})')
-        for i, img in enumerate(p.images):
+        bande = re.search(r'<ul class="defile"[^>]*>(.*?)</ul>', tout, re.S)
+        bande = bande.group(1) if bande else ''
+        caps = re.findall(r'<li><figure><a href="([^"]*)"><img ([^>]*)></a><figcaption>([^<]*)</figcaption>', bande)
+        verifie(len(caps) == 7 and bande.count('<img ') == 7, f'{nom} : 7 captures, chacune dans son lien (lues : {len(caps)})')
+        for i, (grand, attrs, legende) in enumerate(caps):
+            img = dict(re.findall(r'([\w-]+)="([^"]*)"', attrs))
             src = img.get('src', '')
             verifie(img.get('alt', '').strip() != '', f'{nom} : alt non vide pour {src}')
+            verifie(legende.strip() != '', f'{nom} : légende non vide pour {src}')
             verifie(img.get('width') and img.get('height'), f'{nom} : width/height pour {src}')
             verifie(ref_locale_existe(racine, d, src), f'{nom} : fichier présent pour {src}')
             verifie((img.get('loading') == 'lazy') == (i >= 3), f'{nom} : {src} {"différée" if i >= 3 else "chargée tout de suite"}')
+            verifie(grand == src.replace('images/', 'images/grand/') and ref_locale_existe(racine, d, grand),
+                    f'{nom} : {src} s\'agrandit vers sa grande image ({grand})')
+        for img in p.images:
+            verifie('alt' in img, f'{nom} : attribut alt présent pour {img.get("src", "(sans src)")}')
+        # Le menu des langues, en haut : 21 entrées, drapeau et nom dans sa langue ; la page courante non liée.
+        m = re.search(r'<details class="menu-langue">\s*<summary>(.*?)</summary>\s*<ul>(.*?)</ul>\s*</details>', tout, re.S)
+        verifie(m is not None, f'{nom} : le menu des langues (details/summary) est là')
+        if m:
+            verifie(f'images/drapeaux/{DRAPEAU[d]}.svg' in m.group(1) and f'<span>{NOM[d]}</span>' in m.group(1),
+                    f'{nom} : le bouton du menu montre son drapeau et son nom')
+            entrees = re.findall(r'<li>(.*?)</li>', m.group(2), re.S)
+            verifie(len(entrees) == 21, f'{nom} : 21 entrées dans le menu (lues : {len(entrees)})')
+            for (de, he, le, ee), entree in zip(ATTENDU, entrees):
+                drap = re.search(r'src="([^"]*images/drapeaux/([a-z]+)\.svg)"', entree)
+                verifie(drap is not None and drap.group(2) == DRAPEAU[de] and ref_locale_existe(racine, d, drap.group(1)),
+                        f'{nom} : menu, drapeau « {DRAPEAU[de]} » de {de or "(racine)"} présent')
+                verifie(entree.endswith(NOM[de] + '</a>') or entree.endswith(NOM[de] + '</span>'),
+                        f'{nom} : menu, nom « {NOM[de]} »')
+                lien = re.search(r'<a href="([^"]*)"', entree)
+                if de == d:
+                    verifie(lien is None and 'aria-current="page"' in entree, f'{nom} : menu, la page courante n\'est pas un lien')
+                else:
+                    cible = (Path(racine / d / lien.group(1)).resolve() if lien else None)
+                    verifie(lien is not None and cible == (racine / de).resolve(), f'{nom} : menu, lien vers {de or "(racine)"}')
+        pied = re.search(r'<nav class="langues"[^>]*>\s*<ul>(.*?)</ul>', tout, re.S)
+        verifie(pied is not None and len(re.findall(r'<li>', pied.group(1))) == 21 and pied.group(1).count('<a href=') == 20,
+                f'{nom} : les 21 langues aussi en bas de page (liens que Google suit)')
+        verifie(tout.count(UMAMI) == 1, f'{nom} : la balise du compteur Umami, une fois')
+        faq4 = re.findall(r'<h3>.*?</h3>\s*<p>(.*?)</p>', tout, re.S)
+        prix_lu = faq4[3].replace('\u00a0', ' ').replace('\u202f', ' ') if len(faq4) == 5 else ''
+        verifie(PRIX[d] in prix_lu and 'Google Play' in prix_lu, f'{nom} : le prix « {PRIX[d]} » dans la réponse « combien »')
+        dlg = re.search(r'<dialog class="grand" aria-label="([^"]+)">(.*?)</dialog>', tout, re.S)
+        verifie(dlg is not None and len(re.findall(r'<button type="button" class="fleche (?:prec|suiv|fermer)" aria-label="[^"]+">', dlg.group(2))) == 3,
+                f'{nom} : la fenêtre d\'agrandissement et ses 3 boutons nommés')
         for ref in p.refs:
             verifie(ref_locale_existe(racine, d, ref), f'{nom} : lien local « {ref} »')
         if fiches is not None:
@@ -245,6 +307,23 @@ def main():
     robots = (racine / 'robots.txt').read_text(encoding='utf-8') if (racine / 'robots.txt').is_file() else ''
     verifie(f'Sitemap: {DOMAINE}sitemap.xml' in robots.splitlines(), 'robots.txt : la ligne Sitemap')
     verifie(not re.search(r'^Disallow:\s*/\s*$', robots, re.M), 'robots.txt : rien d\'interdit')
+
+    accueils = {(racine / d / 'index.html').resolve() for d, *_ in ATTENDU}
+    for f in sorted(racine.rglob('*.html')):
+        if f.resolve() in accueils or '_banc' in f.parts or '_langues' in f.parts or '.git' in f.parts:
+            continue
+        verifie('api.nita.tv/m/' not in f.read_text(encoding='utf-8'), f'{f.relative_to(racine)} : PAS de compteur Umami')
+    verifie((racine / 'images' / 'drapeaux' / 'LICENCE-flag-icons.txt').is_file(), 'drapeaux : la licence MIT de flag-icons')
+    conf = (racine / 'confidentialite.html').read_text(encoding='utf-8') if (racine / 'confidentialite.html').is_file() else ''
+    for sec, titre, duree, mots in (('fr', "Mesure d'audience", '24 mois', ('aucun cookie', 'www.nita.tv', 'renouvelé chaque mois')),
+                                    ('en', 'Audience measurement', '24 months', ('no cookies', 'www.nita.tv', 'renewed every month'))):
+        bloc = re.search(rf'<section id="{sec}"[^>]*>(.*?)</section>', conf, re.S)
+        bloc = bloc.group(1) if bloc else ''
+        partie = re.search(rf'<h2[^>]*>{re.escape(titre)}</h2>(.*?)<h2', bloc, re.S)
+        partie = re.sub(r'<[^>]+>', '', partie.group(1)) if partie else ''
+        partie = re.sub(r'\s+', ' ', partie)
+        verifie(partie != '' and duree in partie and all(x in partie for x in mots) and '13' not in partie,
+                f'confidentialite.html #{sec} : section « {titre} » ({duree}, {", ".join(mots)})')
 
     # Les fichiers écrits sont ceux que les sources donnent.
     r = subprocess.run(['node', str(racine / '_langues' / 'generer.mjs'), '--verifie'], capture_output=True, text=True)
