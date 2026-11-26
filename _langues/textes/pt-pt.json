@@ -76,6 +76,7 @@
       "r": "As suas credenciais ficam no seu dispositivo, num cofre encriptado. Enviadas do telemóvel por código QR, são encriptadas de ponta a ponta: o nosso servidor não as consegue ler. O NitaTV não contém anúncios nem rastreadores."
     }
   ],
+  "prix": "Custa 9,99 US$ por ano; o preço exato na moeda do seu país é apresentado no Google Play.",
   "pied": {
     "confidentialite": "Privacidade",
     "conditions": "Termos",
@@ -86,6 +87,10 @@
     "nom": "Capturas de ecrã",
     "precedente": "Capturas anteriores",
     "suivante": "Capturas seguintes"
+  },
+  "grand": {
+    "precedente": "Captura anterior",
+    "suivante": "Captura seguinte"
   },
   "bandeau": "Ver esta página em português (Portugal) →",
   "fermer": "Fechar",

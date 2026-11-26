@@ -76,6 +76,7 @@
       "r": "Kredensial Anda tetap tersimpan di perangkat, dalam brankas terenkripsi. Jika dikirim dari ponsel lewat kode QR, kredensial itu dienkripsi end-to-end: server kami tidak dapat membacanya. NitaTV tidak berisi iklan maupun pelacak."
     }
   ],
+  "prix": "Harganya US$9,99 per tahun; harga pastinya dalam mata uang negara Anda ditampilkan di Google Play.",
   "pied": {
     "confidentialite": "Privasi",
     "conditions": "Ketentuan",
@@ -84,6 +85,10 @@
   },
   "bande": {
     "nom": "Screenshot",
+    "precedente": "Screenshot sebelumnya",
+    "suivante": "Screenshot berikutnya"
+  },
+  "grand": {
     "precedente": "Screenshot sebelumnya",
     "suivante": "Screenshot berikutnya"
   },

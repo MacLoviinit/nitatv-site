@@ -76,6 +76,7 @@
       "r": "Thông tin đăng nhập của bạn được lưu trên thiết bị, trong một kho được mã hóa. Khi gửi từ điện thoại bằng mã QR, thông tin được mã hóa đầu cuối: máy chủ của chúng tôi không thể đọc được. NitaTV không có quảng cáo và không có trình theo dõi."
     }
   ],
+  "prix": "Gói này có giá 9,99 USD mỗi năm; giá chính xác theo đơn vị tiền tệ của quốc gia bạn được hiển thị trên Google Play.",
   "pied": {
     "confidentialite": "Quyền riêng tư",
     "conditions": "Điều khoản",
@@ -84,6 +85,10 @@
   },
   "bande": {
     "nom": "Ảnh chụp màn hình",
+    "precedente": "Ảnh trước",
+    "suivante": "Ảnh tiếp theo"
+  },
+  "grand": {
     "precedente": "Ảnh trước",
     "suivante": "Ảnh tiếp theo"
   },

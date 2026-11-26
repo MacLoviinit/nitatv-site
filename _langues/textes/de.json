@@ -76,6 +76,7 @@
       "r": "Ihre Zugangsdaten bleiben auf Ihrem Gerät, in einem verschlüsselten Tresor. Wenn Sie sie per QR-Code von Ihrem Smartphone senden, sind sie Ende-zu-Ende-verschlüsselt: Unser Server kann sie nicht lesen. NitaTV enthält keine Werbung und keine Tracker."
     }
   ],
+  "prix": "Es kostet 9,99 US$ pro Jahr; den genauen Preis in der Währung Ihres Landes zeigt Google Play an.",
   "pied": {
     "confidentialite": "Datenschutz",
     "conditions": "Nutzungsbedingungen",
@@ -86,6 +87,10 @@
     "nom": "Screenshots",
     "precedente": "Vorherige Screenshots",
     "suivante": "Nächste Screenshots"
+  },
+  "grand": {
+    "precedente": "Vorheriger Screenshot",
+    "suivante": "Nächster Screenshot"
   },
   "bandeau": "Diese Seite auf Deutsch ansehen →",
   "fermer": "Schließen",

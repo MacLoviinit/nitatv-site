@@ -76,6 +76,7 @@
       "r": "Twoje dane logowania pozostają na Twoim urządzeniu, w zaszyfrowanym sejfie. Wysłane z telefonu kodem QR, są szyfrowane end-to-end: nasz serwer nie może ich odczytać. NitaTV nie zawiera reklam ani modułów śledzących."
     }
   ],
+  "prix": "Kosztuje 9,99 USD rocznie; dokładną cenę w walucie Twojego kraju pokazuje Google Play.",
   "pied": {
     "confidentialite": "Prywatność",
     "conditions": "Warunki",
@@ -86,6 +87,10 @@
     "nom": "Zrzuty ekranu",
     "precedente": "Poprzednie zrzuty ekranu",
     "suivante": "Następne zrzuty ekranu"
+  },
+  "grand": {
+    "precedente": "Poprzedni zrzut ekranu",
+    "suivante": "Następny zrzut ekranu"
   },
   "bandeau": "Zobacz tę stronę po polsku →",
   "fermer": "Zamknij",

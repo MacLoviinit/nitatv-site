@@ -76,6 +76,7 @@
       "r": "Je inloggegevens blijven op je apparaat, in een versleutelde kluis. Als je ze vanaf je telefoon met een QR-code verstuurt, zijn ze end-to-end versleuteld: onze server kan ze niet lezen. NitaTV bevat geen advertenties en geen trackers."
     }
   ],
+  "prix": "Het kost US$ 9,99 per jaar; de exacte prijs in de valuta van je land zie je in Google Play.",
   "pied": {
     "confidentialite": "Privacy",
     "conditions": "Voorwaarden",
@@ -86,6 +87,10 @@
     "nom": "Screenshots",
     "precedente": "Vorige screenshots",
     "suivante": "Volgende screenshots"
+  },
+  "grand": {
+    "precedente": "Vorige screenshot",
+    "suivante": "Volgende screenshot"
   },
   "bandeau": "Deze pagina in het Nederlands bekijken →",
   "fermer": "Sluiten",

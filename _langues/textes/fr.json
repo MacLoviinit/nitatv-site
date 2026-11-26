@@ -76,6 +76,7 @@
       "r": "Ils restent sur votre appareil, dans un coffre chiffré. Envoyés depuis votre téléphone par QR code, ils sont chiffrés de bout en bout : notre serveur ne peut pas les lire. NitaTV ne contient ni publicité ni traqueur."
     }
   ],
+  "prix": "Il coûte 9,99 USD par an ; le prix exact dans la monnaie de votre pays s'affiche sur Google Play.",
   "pied": {
     "confidentialite": "Confidentialité",
     "conditions": "Conditions",
@@ -86,6 +87,10 @@
     "nom": "Captures d'écran",
     "precedente": "Captures précédentes",
     "suivante": "Captures suivantes"
+  },
+  "grand": {
+    "precedente": "Capture précédente",
+    "suivante": "Capture suivante"
   },
   "bandeau": "Voir cette page en français →",
   "fermer": "Fermer",

@@ -76,6 +76,7 @@
       "r": "Tus credenciales se quedan en tu dispositivo, en una bóveda cifrada. Si las envías desde el celular con un código QR, van cifradas de extremo a extremo: nuestro servidor no puede leerlas. NitaTV no contiene anuncios ni rastreadores."
     }
   ],
+  "prix": "Cuesta USD 9.99 al año; el precio exacto en la moneda de tu país aparece en Google Play.",
   "pied": {
     "confidentialite": "Privacidad",
     "conditions": "Condiciones",
@@ -86,6 +87,10 @@
     "nom": "Capturas de pantalla",
     "precedente": "Capturas anteriores",
     "suivante": "Capturas siguientes"
+  },
+  "grand": {
+    "precedente": "Captura anterior",
+    "suivante": "Captura siguiente"
   },
   "bandeau": "Ver esta página en español (Latinoamérica) →",
   "fermer": "Cerrar",

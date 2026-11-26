@@ -76,6 +76,7 @@
       "r": "Kimlik bilgileriniz cihazınızda, şifreli bir kasada kalır. Telefonunuzdan QR kodla gönderildiğinde uçtan uca şifrelenir: sunucumuz bunları okuyamaz. NitaTV reklam ve izleyici içermez."
     }
   ],
+  "prix": "Yıllık abonelik ücreti 9,99 ABD dolarıdır; ülkenizin para birimindeki kesin fiyat Google Play'de gösterilir.",
   "pied": {
     "confidentialite": "Gizlilik",
     "conditions": "Koşullar",
@@ -86,6 +87,10 @@
     "nom": "Ekran görüntüleri",
     "precedente": "Önceki ekran görüntüleri",
     "suivante": "Sonraki ekran görüntüleri"
+  },
+  "grand": {
+    "precedente": "Önceki ekran görüntüsü",
+    "suivante": "Sonraki ekran görüntüsü"
   },
   "bandeau": "Bu sayfayı Türkçe görüntüle →",
   "fermer": "Kapat",

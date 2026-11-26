@@ -3,7 +3,11 @@
 // 1. la langue PROPOSÉE, jamais imposée (consigne de Google : aucune redirection) — si la langue de l'appareil
 //    (navigator.languages) est une autre langue du site, un bandeau dans CETTE langue la propose, avec une croix ;
 //    le choix (lien du bandeau ou du sélecteur) ou le refus (la croix) est retenu dans localStorage, s'il est permis ;
-// 2. les flèches de la bande de captures, à l'ordinateur (souris) : elles avancent d'une capture, dans le sens de lecture.
+// 2. les flèches de la bande de captures, à l'ordinateur (souris) : elles avancent d'une capture, dans le sens de lecture ;
+// 3. le menu des langues (un <details>, qui s'ouvre et se ferme sans programme) : Échap, le clic dehors et la sortie
+//    au clavier le referment ; Échap rend le focus à son bouton ;
+// 4. la capture agrandie au clic (un <dialog>) : flèches, touches ← →, glissé au doigt, ✕, Échap ; le focus revient à
+//    la capture montrée en dernier. Sans programme, le lien ouvre la grande image.
 (function () {
   'use strict';
   var LANGUES = {
@@ -186,7 +190,7 @@
     return null;
   }
 
-  var liens = document.querySelectorAll('.langues a[data-langue]');
+  var liens = document.querySelectorAll('.langues a[data-langue], .menu-langue a[data-langue]');
   for (var i = 0; i < liens.length; i++) {
     liens[i].addEventListener('click', function () { retenir(this.getAttribute('data-langue')); });
   }
@@ -213,6 +217,20 @@
     bandeau.appendChild(croix);
     document.body.insertBefore(bandeau, document.body.firstChild);
   }
+
+  var menu = document.querySelector('.menu-langue');
+  if (menu) {
+    var bouton = menu.querySelector('summary');
+    menu.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && menu.open) { e.preventDefault(); menu.open = false; bouton.focus(); }
+    });
+    document.addEventListener('click', function (e) { if (menu.open && !menu.contains(e.target)) menu.open = false; });
+    menu.addEventListener('focusout', function (e) {
+      if (menu.open && e.relatedTarget && !menu.contains(e.relatedTarget)) menu.open = false;
+    });
+  }
+
+  agrandir();
 
   var bande = document.querySelector('.bande');
   if (!bande) return;
@@ -243,4 +261,58 @@
   prec.hidden = false;
   suiv.hidden = false;
   bornes();
+
+  function agrandir() {
+    var fenetre = document.querySelector('dialog.grand');
+    var captures = document.querySelectorAll('.defile a');
+    if (!fenetre || typeof fenetre.showModal !== 'function' || !captures.length) return;
+    var droiteAGauche = document.documentElement.dir === 'rtl';
+    var image = fenetre.querySelector('img');
+    var legende = fenetre.querySelector('figcaption');
+    var courante = 0;
+    function montrer(i) {
+      courante = (i + captures.length) % captures.length;
+      var a = captures[courante];
+      image.src = a.href;
+      image.alt = a.querySelector('img').alt;
+      legende.textContent = a.parentNode.querySelector('figcaption').textContent;
+    }
+    for (var k = 0; k < captures.length; k++) {
+      (function (i) {
+        captures[i].addEventListener('click', function (e) {
+          if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return; // nouvel onglet : laissé au navigateur
+          e.preventDefault();
+          montrer(i);
+          fenetre.showModal();
+        });
+      })(k);
+    }
+    fenetre.querySelector('.prec').addEventListener('click', function () { montrer(courante - 1); });
+    fenetre.querySelector('.suiv').addEventListener('click', function () { montrer(courante + 1); });
+    fenetre.querySelector('.fermer').addEventListener('click', function () { fenetre.close(); });
+    // Échap ferme le <dialog> de lui-même ; à la fermeture, le focus revient à la capture montrée (la bande s'y cale).
+    fenetre.addEventListener('close', function () { captures[courante].focus(); });
+    fenetre.addEventListener('keydown', function (e) {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      e.preventDefault();
+      var avant = (e.key === 'ArrowRight') !== droiteAGauche;
+      montrer(courante + (avant ? 1 : -1));
+    });
+    // Un clic sur le fond (hors de l'image et des boutons) ferme.
+    fenetre.addEventListener('click', function (e) { if (e.target === fenetre || e.target.tagName === 'FIGURE') fenetre.close(); });
+    // Glisser : vers la gauche = la suivante (vers la droite en arabe).
+    var depart = null;
+    image.addEventListener('pointerdown', function (e) {
+      depart = { x: e.clientX, y: e.clientY };
+      try { image.setPointerCapture(e.pointerId); } catch (err) { /* sans capture : le glissé doit finir sur l'image */ }
+    });
+    image.addEventListener('pointerup', function (e) {
+      if (!depart) return;
+      var dx = e.clientX - depart.x, dy = e.clientY - depart.y;
+      depart = null;
+      if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
+      montrer(courante + ((dx < 0) !== droiteAGauche ? 1 : -1));
+    });
+    image.addEventListener('pointercancel', function () { depart = null; });
+  }
 })();
