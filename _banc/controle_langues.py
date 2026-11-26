@@ -11,7 +11,8 @@ Ce qu'il contrôle, chaque page (attendu ÉCRIT ICI, indépendamment du généra
 - chaque capture : un `alt` et une légende non vides, `width`/`height`, son fichier présent, son lien vers la grande
   image (qui existe) ; les 3 premières chargées tout de suite, les suivantes `loading="lazy"` ;
 - le menu des langues en haut : 21 entrées, le bon drapeau (fichier présent) et le nom dans sa langue, chaque lien vers
-  sa page, la page courante non liée ; les 21 aussi en bas de page ; la fenêtre d'agrandissement et ses 3 boutons ;
+  sa page avec son hreflang (un vrai lien dans le HTML : ce que Google suit), la page courante non liée ; chaque langue
+  liée une seule fois (plus de liste répétée en bas) ; la fenêtre d'agrandissement et ses 3 boutons ;
 - le prix annuel en dollars, écrit selon la langue, dans la réponse « combien » ; la balise du compteur Umami, une fois ;
 - aucun lien local cassé (`href`/`src` relatifs) ;
 le `sitemap.xml` : un XML valide, les 21 adresses, chacune avec ses 22 `xhtml:link` ; `robots.txt` : tout permis et
@@ -236,9 +237,13 @@ def main():
                 else:
                     cible = (Path(racine / d / lien.group(1)).resolve() if lien else None)
                     verifie(lien is not None and cible == (racine / de).resolve(), f'{nom} : menu, lien vers {de or "(racine)"}')
-        pied = re.search(r'<nav class="langues"[^>]*>\s*<ul>(.*?)</ul>', tout, re.S)
-        verifie(pied is not None and len(re.findall(r'<li>', pied.group(1))) == 21 and pied.group(1).count('<a href=') == 20,
-                f'{nom} : les 21 langues aussi en bas de page (liens que Google suit)')
+                    # Un vrai lien dans le HTML (lu sans programme : c'est ce que Google suit), avec son hreflang.
+                    verifie(f'hreflang="{he}"' in entree, f'{nom} : menu, le lien vers {de or "(racine)"} porte hreflang="{he}"')
+        # site_langues3 (Antony : « les langues qui se répètent en bas ») : chaque langue liée UNE fois, par le menu.
+        for de, he, le, ee in ATTENDU:
+            if de != d:
+                n = len(re.findall(rf'<a [^>]*data-langue="{re.escape(de or "fr")}"', tout))
+                verifie(n == 1, f'{nom} : la langue {de or "(racine)"} liée une seule fois, par le menu ({n} liens)')
         verifie(tout.count(UMAMI) == 1, f'{nom} : la balise du compteur Umami, une fois')
         faq4 = re.findall(r'<h3>.*?</h3>\s*<p>(.*?)</p>', tout, re.S)
         prix_lu = faq4[3].replace('\u00a0', ' ').replace('\u202f', ' ') if len(faq4) == 5 else ''

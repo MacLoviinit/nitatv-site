@@ -237,11 +237,11 @@ try {
   verifie(await evaluer('location.pathname') === '/de/', 'le lien du bandeau mène à /de/');
   verifie(await memoire() === 'de', `le choix est retenu (${await memoire()})`);
   verifie(!(await bandeau()), 'sur /de/ avec un navigateur allemand : pas de bandeau');
-  // le sélecteur en bas de page retient aussi le choix ; revenir au français ne repropose pas l'allemand
-  await evaluer(`document.querySelector('.langues a[data-langue="fr"]').click(); true`);
+  // le menu retient aussi le choix ; revenir au français ne repropose pas l'allemand
+  await evaluer(`document.querySelector('.menu-langue summary').click(); document.querySelector('.menu-langue a[data-langue="fr"]').click(); true`);
   await pause(1200);
-  verifie(await evaluer('location.pathname') === '/', 'le sélecteur mène au français');
-  verifie(await memoire() === 'fr' && !(await bandeau()), 'choisi au sélecteur : retenu, et le navigateur allemand ne le contredit pas');
+  verifie(await evaluer('location.pathname') === '/', 'le menu mène au français');
+  verifie(await memoire() === 'fr' && !(await bandeau()), 'choisi au menu : retenu, et le navigateur allemand ne le contredit pas');
   // la correspondance des variantes
   for (const [acc, attendu] of [['zh-TW', 'zh-hant'], ['zh-HK', 'zh-hant'], ['zh-CN', 'zh-hans'], ['zh', 'zh-hans'],
     ['es-MX', 'es-419'], ['es-US', 'es-419'], ['es-ES', 'es'], ['es', 'es'], ['pt-PT', 'pt-pt'], ['pt-BR', 'pt'],
@@ -286,13 +286,28 @@ try {
   await aller('');
   const sansJs = await (async () => {
     await cdp('Emulation.setScriptExecutionDisabled', { value: false });
-    const r = await evaluer(`({ bandeau: !!document.querySelector('.bandeau'), fleches: [...document.querySelectorAll('.bande .fleche')].every((f) => f.hidden),
+    const r = await evaluer(`({ liensMenu: document.querySelectorAll('.menu-langue a[href][hreflang]').length,
+      listeDuBas: !!document.querySelector('footer nav, footer [data-langue]'), bandeau: !!document.querySelector('.bandeau'), fleches: [...document.querySelectorAll('.bande .fleche')].every((f) => f.hidden),
       captures: document.querySelectorAll('.defile img').length, defile: getComputedStyle(document.querySelector('.defile')).overflowX })`);
     return r;
   })();
+  verifie(sansJs.liensMenu === 20 && !sansJs.listeDuBas,
+    `sans programme : le menu fermé porte ses 20 vrais liens (avec hreflang), le pied n'en a plus (${sansJs.liensMenu}, ${sansJs.listeDuBas})`);
   verifie(!sansJs.bandeau && sansJs.fleches && sansJs.captures === 7 && sansJs.defile === 'auto',
     `sans programme : pas de bandeau, flèches cachées, 7 captures dans une bande qui défile (${JSON.stringify(sansJs)})`);
 
+
+  // ---------- 6 bis. Le bas de page (site_langues3) : les liens du pied, plus la liste des langues ----------
+  for (const [largeur, toucher] of [[1280, false], [412, true]]) {
+    await regler({ largeur, langue: 'fr', toucher });
+    await aller('');
+    const pied = await evaluer(`(() => { const f = document.querySelector('footer');
+      return { liens: [...f.querySelectorAll('a')].map((a) => a.textContent), langues: f.querySelectorAll('[data-langue], nav').length }; })()`);
+    verifie(pied.liens.join('|') === 'Confidentialité|Conditions|Supprimer mon compte|Gérer mon abonnement|contact@nita.tv' && pied.langues === 0,
+      `fr à ${largeur} : le pied garde ses 5 liens et n'a plus la liste des langues (${pied.liens.join(' · ')})`);
+    await evaluer(`window.scrollTo(0, document.documentElement.scrollHeight); true`);
+    await captureEcran(`bas_fr_${largeur}`);
+  }
 
   // ---------- 7. Le menu des langues (site_langues2) ----------
   const etatMenu = () => evaluer(`(async () => { const d = document.querySelector('.menu-langue'); const s = d.querySelector('summary');
