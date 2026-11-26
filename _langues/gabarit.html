@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="{{lang}}" dir="{{dir}}" data-langue="{{code}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{titre}}</title>
+<meta name="description" content="{{description}}">
+<link rel="canonical" href="{{url}}">
+{{hreflang}}
+<meta property="og:title" content="{{titre}}">
+<meta property="og:description" content="{{og_description}}">
+<meta property="og:image" content="https://www.nita.tv/images/direct.jpg">
+<meta property="og:url" content="{{url}}">
+<meta property="og:type" content="website">
+<style>
+  :root { --fond:#101320; --carte:#171b2c; --texte:#e9ebf2; --doux:#a3a8b8; --accent:#00c1ff; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--fond); color:var(--texte); font:17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width:960px; margin:0 auto; padding:48px 16px 32px; }
+  header { text-align:center; }
+  h1 { font-size:clamp(2.2rem, 7vw, 3.4rem); margin:0; font-weight:600; letter-spacing:-.02em; line-height:1.15; }
+  h1 .marque span { color:var(--accent); }
+  h1 small { display:block; font-size:.45em; font-weight:500; color:var(--doux); letter-spacing:0; margin-top:8px; }
+  .trait { width:120px; height:3px; background:var(--accent); margin:16px auto 24px; border-radius:2px; }
+  .bouton { display:inline-block; background:var(--accent); color:#06121c; font-weight:600; text-decoration:none;
+            padding:12px 24px; border-radius:999px; margin:8px 0; }
+  .essai { color:var(--doux); margin:4px 0 0; }
+  h2 { font-size:1.5rem; margin:48px 0 12px; font-weight:600; }
+  h3 { font-size:1.05rem; margin:20px 0 4px; }
+  p, li { color:var(--doux); }
+  ul { padding-inline-start:1.2em; }
+  .avertissement { background:var(--carte); border-inline-start:3px solid var(--accent); padding:12px 16px; border-radius:8px; }
+  /* La bande de captures : défile au doigt (scroll-snap, sans programme) ; trois visibles à l'ordinateur. */
+  .bande { position:relative; margin:32px 0 0; }
+  .defile { display:flex; gap:12px; overflow-x:auto; scroll-snap-type:x mandatory; list-style:none; margin:0; padding:0 0 8px;
+            overscroll-behavior-x:contain; scrollbar-width:thin; scrollbar-color:var(--carte) transparent; }
+  .defile li { flex:0 0 calc((100% - 24px) / 3); scroll-snap-align:start; }
+  .defile figure { margin:0; }
+  .defile img { width:100%; height:auto; border-radius:10px; display:block; background:var(--carte); }
+  .defile figcaption { font-size:.85rem; color:var(--doux); margin-top:4px; text-align:center; }
+  .fleche { position:absolute; top:calc(50% - 30px); transform:translateY(-50%); width:40px; height:40px; border-radius:50%;
+            border:1px solid rgba(255,255,255,.18); background:rgba(16,19,32,.85); color:var(--texte); cursor:pointer;
+            display:flex; align-items:center; justify-content:center; padding:0; }
+  .fleche[hidden] { display:none; }
+  .fleche:disabled { opacity:.3; cursor:default; }
+  .fleche:not(:disabled):hover { border-color:var(--accent); color:var(--accent); }
+  .fleche svg { width:20px; height:20px; }
+  [dir="rtl"] .fleche svg { transform:scaleX(-1); }
+  .prec { inset-inline-start:-14px; }
+  .suiv { inset-inline-end:-14px; }
+  .note { font-size:.85rem; text-align:center; margin:8px 0 0; }
+  .note + .note { margin-top:0; }
+  /* Le bandeau qui PROPOSE la langue de l'appareil (jamais une redirection). */
+  .bandeau { display:flex; align-items:center; justify-content:center; gap:12px; background:var(--carte);
+             border-bottom:1px solid rgba(255,255,255,.08); padding:8px 16px; font-size:.95rem; }
+  .bandeau a { text-decoration:none; font-weight:500; }
+  .bandeau button { background:none; border:0; color:var(--doux); font-size:1.3rem; line-height:1; cursor:pointer; padding:4px 8px; }
+  .bandeau button:hover { color:var(--texte); }
+  footer { margin-top:56px; font-size:.9rem; text-align:center; color:var(--doux); }
+  .langues { margin-top:20px; }
+  .langues ul { list-style:none; padding:0; margin:0; display:flex; flex-wrap:wrap; justify-content:center; gap:4px 14px; }
+  .langues [aria-current] { color:var(--texte); font-weight:600; }
+  a { color:var(--accent); }
+  @media (max-width:700px) {
+    .defile li { flex-basis:85%; }
+  }
+  /* Au doigt (téléphone, tablette : pointeur « grossier ») la bande se glisse ; les flèches sont pour la souris. */
+  @media (pointer:coarse) {
+    .fleche { display:none; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1><span class="marque">Nita<span>TV</span></span><small>{{sous_titre}}</small></h1>
+    <div class="trait"></div>
+    <p>{{intro}}</p>
+    <p><a class="bouton" href="https://play.google.com/store/apps/details?id=tv.nita.app">{{bouton}}</a></p>
+    <p class="essai">{{essai}}</p>
+  </header>
+
+  <section class="bande" aria-label="{{bande_nom}}">
+    <button type="button" class="fleche prec" aria-label="{{bande_precedente}}" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <ul class="defile" tabindex="0">
+{{captures}}
+    </ul>
+    <button type="button" class="fleche suiv" aria-label="{{bande_suivante}}" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  </section>
+  <p class="note">{{note_demo}}</p>
+  <p class="note">{{credit}}</p>
+
+  <p class="avertissement">{{avertissement}}</p>
+
+  <h2>{{fonctions_titre}}</h2>
+  <ul>
+{{fonctions}}
+  </ul>
+
+  <h2>{{faq_titre}}</h2>
+{{faq}}
+
+  <footer>
+    <a href="{{racine}}confidentialite.html">{{pied_confidentialite}}</a> · <a href="{{racine}}conditions.html">{{pied_conditions}}</a> · <a href="{{racine}}supprimer.html">{{pied_supprimer}}</a> · <a href="https://play.google.com/store/account/subscriptions?sku=nitatv_abonnement&amp;package=tv.nita.app">{{pied_abonnement}}</a> · <a href="mailto:contact@nita.tv">contact@nita.tv</a>
+    <nav class="langues" aria-label="{{langues}}">
+      <ul>
+{{selecteur}}
+      </ul>
+    </nav>
+  </footer>
+</main>
+<script src="{{racine}}accueil.js" defer></script>
+</body>
+</html>

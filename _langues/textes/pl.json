@@ -1,0 +1,93 @@
+{
+  "titre": "NitaTV – Odtwarzacz IPTV na Android TV, tablet i telefon",
+  "description": "NitaTV to odtwarzacz IPTV dla Twojej playlisty M3U lub dostawcy: telewizja na żywo, program TV, nagrywanie, filmy i seriale. Miesiąc okresu próbnego za darmo, bez karty płatniczej.",
+  "og_description": "Telewizja na żywo, program TV, nagrywanie, filmy i seriale. Miesiąc okresu próbnego za darmo, bez karty płatniczej.",
+  "sous_titre": "Odtwarzacz IPTV na Android TV, tablet i telefon",
+  "intro": "NitaTV odtwarza strumienie dostawcy, u którego <strong>Ty</strong> masz subskrypcję, lub Twoją playlistę M3U: telewizję na żywo z programem TV, nagrywanie, filmy i seriale.",
+  "bouton": "Pobierz z Google Play",
+  "essai": "Miesiąc okresu próbnego za darmo, bez karty płatniczej.",
+  "captures": {
+    "direct": {
+      "legende": "Telewizja na żywo",
+      "alt": "NitaTV na telewizorze: kanały na żywo, każdy z bieżącą audycją"
+    },
+    "guide": {
+      "legende": "Program TV",
+      "alt": "Program TV w NitaTV na telewizorze"
+    },
+    "films": {
+      "legende": "Filmy i seriale",
+      "alt": "Filmy w NitaTV na telewizorze, z plakatami"
+    },
+    "film": {
+      "legende": "Strona filmu",
+      "alt": "Strona filmu w NitaTV na telewizorze: opis, języki ścieżek dźwiękowych i napisów, przyciski Odtwórz i Pobierz"
+    },
+    "pistes": {
+      "legende": "Dźwięk i napisy",
+      "alt": "Odtwarzacz NitaTV na telewizorze z otwartym wyborem ścieżki dźwiękowej i napisów"
+    },
+    "enregistrement": {
+      "legende": "Planowanie nagrania",
+      "alt": "Program TV w NitaTV na telewizorze: nadchodząca audycja z przyciskiem do zaplanowania nagrania"
+    },
+    "telephone": {
+      "legende": "Na telefonie",
+      "alt": "NitaTV na telefonie: kanały na żywo, strona filmu i odcinki serialu"
+    }
+  },
+  "note_demo": "Zrzuty ekranu pokazują źródło demonstracyjne: wszystkie nazwy, obrazy i program TV są fikcyjne.",
+  "credit": "Film demonstracyjny: „Sintel” © Blender Foundation, CC BY 3.0 (durian.blender.org).",
+  "avertissement": "⚠ NitaTV nie dostarcza żadnych kanałów, filmów ani innych treści oraz nie sprzedaje ani nie poleca żadnego dostawcy. Potrzebujesz własnej subskrypcji u dostawcy lub playlisty.",
+  "fonctions_titre": "Co robi NitaTV",
+  "fonctions": [
+    "Logowanie linkiem do playlisty M3U lub danymi logowania od dostawcy",
+    "Dodaj swoją playlistę z telefonu, skanując kod QR",
+    "Telewizja na żywo z programem TV",
+    "Filmy i seriale z wznawianiem od miejsca, w którym przerwano oglądanie",
+    "Nagrywanie audycji od razu lub z zaplanowaniem w programie TV",
+    "Pobieranie filmów i odcinków do oglądania offline",
+    "Przesyłanie na urządzenie Chromecast",
+    "Wybór ścieżki dźwiękowej i napisów",
+    "Kilka profili, ulubione i wyszukiwanie",
+    "Obraz w obrazie",
+    "Dostępna w 21 językach"
+  ],
+  "faq_titre": "Najczęstsze pytania",
+  "faq": [
+    {
+      "q": "Czy NitaTV dostarcza kanały?",
+      "r": "Nie. NitaTV to odtwarzacz: odtwarza to, co dostarcza Ci Twój dostawca. Nie zawiera żadnych kanałów i nie poleca żadnego dostawcy."
+    },
+    {
+      "q": "Czego potrzebuję?",
+      "r": "Linku do playlisty M3U lub danych logowania otrzymanych od dostawcy. Możesz wpisać je na telewizorze albo wysłać z telefonu, skanując kod QR."
+    },
+    {
+      "q": "Na jakich urządzeniach?",
+      "r": "Android TV i Google TV, tablety i telefony z Androidem. Z telefonu lub tabletu możesz też przesyłać obraz na Chromecasta."
+    },
+    {
+      "q": "Ile to kosztuje?",
+      "r": "Miesiąc okresu próbnego za darmo, bez karty płatniczej, jeden na konto Google. Potem subskrypcja roczna, którą możesz anulować w dowolnej chwili w Google Play."
+    },
+    {
+      "q": "Co dzieje się z moimi danymi logowania?",
+      "r": "Twoje dane logowania pozostają na Twoim urządzeniu, w zaszyfrowanym sejfie. Wysłane z telefonu kodem QR, są szyfrowane end-to-end: nasz serwer nie może ich odczytać. NitaTV nie zawiera reklam ani modułów śledzących."
+    }
+  ],
+  "pied": {
+    "confidentialite": "Prywatność",
+    "conditions": "Warunki",
+    "supprimer": "Usuń moje konto",
+    "abonnement": "Zarządzaj subskrypcją"
+  },
+  "bande": {
+    "nom": "Zrzuty ekranu",
+    "precedente": "Poprzednie zrzuty ekranu",
+    "suivante": "Następne zrzuty ekranu"
+  },
+  "bandeau": "Zobacz tę stronę po polsku →",
+  "fermer": "Zamknij",
+  "langues": "Język"
+}

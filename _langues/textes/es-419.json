@@ -1,0 +1,93 @@
+{
+  "titre": "NitaTV – Reproductor IPTV para Android TV, tablet y celular",
+  "description": "NitaTV es un reproductor IPTV para tu lista M3U o tu proveedor: TV en vivo, guía de programación, grabación, películas y series. Un mes de prueba gratis, sin tarjeta de crédito.",
+  "og_description": "TV en vivo, guía de programación, grabación, películas y series. Un mes de prueba gratis, sin tarjeta de crédito.",
+  "sous_titre": "Reproductor IPTV para Android TV, tablet y celular",
+  "intro": "NitaTV reproduce las transmisiones del proveedor que <strong>tú</strong> contratas, o tu lista M3U: TV en vivo con su guía de programación, grabación, películas y series.",
+  "bouton": "Disponible en Google Play",
+  "essai": "Un mes de prueba gratis, sin tarjeta de crédito.",
+  "captures": {
+    "direct": {
+      "legende": "TV en vivo",
+      "alt": "NitaTV en una TV: los canales en vivo, cada uno con su programa actual"
+    },
+    "guide": {
+      "legende": "La guía de programación",
+      "alt": "La guía de programación de NitaTV en una TV"
+    },
+    "films": {
+      "legende": "Películas y series",
+      "alt": "Las películas en NitaTV en una TV, con sus pósteres"
+    },
+    "film": {
+      "legende": "La ficha de una película",
+      "alt": "La ficha de una película en NitaTV en una TV: su sinopsis, sus idiomas de audio y subtítulos, los botones Reproducir y Descargar"
+    },
+    "pistes": {
+      "legende": "Audio y subtítulos",
+      "alt": "El reproductor de NitaTV en una TV, abierto en la elección de la pista de audio y los subtítulos"
+    },
+    "enregistrement": {
+      "legende": "Programar una grabación",
+      "alt": "La guía de programación de NitaTV en una TV: un programa que aún no empieza, con el botón para programar su grabación"
+    },
+    "telephone": {
+      "legende": "En el celular",
+      "alt": "NitaTV en un celular: los canales en vivo, la ficha de una película y los episodios de una serie"
+    }
+  },
+  "note_demo": "Las capturas de pantalla muestran una fuente de demostración: todos los nombres, imágenes y guías son ficticios.",
+  "credit": "Video de demostración: “Sintel” © Blender Foundation, CC BY 3.0 (durian.blender.org).",
+  "avertissement": "⚠ NitaTV no ofrece canales, películas ni contenido de ningún tipo, y no vende ni recomienda ningún proveedor. Necesitas tu propia suscripción con un proveedor, o una lista de reproducción.",
+  "fonctions_titre": "Qué hace NitaTV",
+  "fonctions": [
+    "Inicia sesión con un enlace de lista M3U o con las credenciales de tu proveedor",
+    "Agrega tu lista desde el celular escaneando un código QR",
+    "TV en vivo con guía de programación",
+    "Películas y series, retomando donde las dejaste",
+    "Graba un programa, al instante o programado desde la guía",
+    "Descarga películas y episodios para verlos sin conexión",
+    "Transmite a un dispositivo Chromecast",
+    "Elige la pista de audio y los subtítulos",
+    "Varios perfiles, favoritos y búsqueda",
+    "Imagen en imagen",
+    "Disponible en 21 idiomas"
+  ],
+  "faq_titre": "Preguntas frecuentes",
+  "faq": [
+    {
+      "q": "¿NitaTV ofrece canales?",
+      "r": "No. NitaTV es un reproductor: reproduce lo que te da tu proveedor. No contiene canales ni recomienda ningún proveedor."
+    },
+    {
+      "q": "¿Qué necesito?",
+      "r": "Un enlace de lista M3U, o las credenciales que te dio tu proveedor. Puedes escribirlas en la TV o enviarlas desde el celular escaneando un código QR."
+    },
+    {
+      "q": "¿En qué dispositivos?",
+      "r": "Android TV y Google TV, tablets y celulares Android. Desde un celular o una tablet, también puedes transmitir a un Chromecast."
+    },
+    {
+      "q": "¿Cuánto cuesta?",
+      "r": "Un mes de prueba gratis, sin tarjeta de crédito, uno por cuenta de Google. Después, una suscripción anual, que puedes cancelar cuando quieras desde Google Play."
+    },
+    {
+      "q": "¿Qué pasa con mis credenciales?",
+      "r": "Tus credenciales se quedan en tu dispositivo, en una bóveda cifrada. Si las envías desde el celular con un código QR, van cifradas de extremo a extremo: nuestro servidor no puede leerlas. NitaTV no contiene anuncios ni rastreadores."
+    }
+  ],
+  "pied": {
+    "confidentialite": "Privacidad",
+    "conditions": "Condiciones",
+    "supprimer": "Eliminar mi cuenta",
+    "abonnement": "Administrar mi suscripción"
+  },
+  "bande": {
+    "nom": "Capturas de pantalla",
+    "precedente": "Capturas anteriores",
+    "suivante": "Capturas siguientes"
+  },
+  "bandeau": "Ver esta página en español (Latinoamérica) →",
+  "fermer": "Cerrar",
+  "langues": "Idioma"
+}

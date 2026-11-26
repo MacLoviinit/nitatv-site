@@ -1,0 +1,93 @@
+{
+  "titre": "NitaTV – Trình phát IPTV cho Android TV, máy tính bảng và điện thoại",
+  "description": "NitaTV là trình phát IPTV cho danh sách phát M3U hoặc nhà cung cấp của bạn: truyền hình trực tiếp, lịch phát sóng, ghi hình, phim lẻ và phim bộ. Một tháng dùng thử miễn phí, không cần thẻ tín dụng.",
+  "og_description": "Truyền hình trực tiếp, lịch phát sóng, ghi hình, phim lẻ và phim bộ. Một tháng dùng thử miễn phí, không cần thẻ tín dụng.",
+  "sous_titre": "Trình phát IPTV cho Android TV, máy tính bảng và điện thoại",
+  "intro": "NitaTV phát các luồng của nhà cung cấp mà <strong>chính bạn</strong> đăng ký, hoặc danh sách phát M3U của bạn: truyền hình trực tiếp kèm lịch phát sóng, ghi hình, phim lẻ và phim bộ.",
+  "bouton": "Tải xuống trên Google Play",
+  "essai": "Một tháng dùng thử miễn phí, không cần thẻ tín dụng.",
+  "captures": {
+    "direct": {
+      "legende": "Truyền hình trực tiếp",
+      "alt": "NitaTV trên TV: các kênh trực tiếp, mỗi kênh kèm chương trình đang phát"
+    },
+    "guide": {
+      "legende": "Lịch phát sóng",
+      "alt": "Lịch phát sóng của NitaTV trên TV"
+    },
+    "films": {
+      "legende": "Phim lẻ và phim bộ",
+      "alt": "Các phim trong NitaTV trên TV, kèm áp phích"
+    },
+    "film": {
+      "legende": "Trang của một bộ phim",
+      "alt": "Trang của một bộ phim trong NitaTV trên TV: tóm tắt, ngôn ngữ âm thanh và phụ đề, các nút Phát và Tải xuống"
+    },
+    "pistes": {
+      "legende": "Âm thanh và phụ đề",
+      "alt": "Trình phát của NitaTV trên TV, đang mở phần chọn bản âm thanh và phụ đề"
+    },
+    "enregistrement": {
+      "legende": "Hẹn giờ ghi hình",
+      "alt": "Lịch phát sóng của NitaTV trên TV: một chương trình sắp phát, kèm nút hẹn giờ ghi hình"
+    },
+    "telephone": {
+      "legende": "Trên điện thoại",
+      "alt": "NitaTV trên điện thoại: các kênh trực tiếp, trang của một bộ phim và các tập của một phim bộ"
+    }
+  },
+  "note_demo": "Ảnh chụp màn hình hiển thị một nguồn minh họa: mọi tên, hình ảnh và lịch phát sóng đều là hư cấu.",
+  "credit": "Video minh họa: “Sintel” © Blender Foundation, CC BY 3.0 (durian.blender.org).",
+  "avertissement": "⚠ NitaTV không cung cấp kênh, phim hay bất kỳ nội dung nào, và không bán hay giới thiệu bất kỳ nhà cung cấp nào. Bạn cần có gói đăng ký riêng với một nhà cung cấp, hoặc một danh sách phát.",
+  "fonctions_titre": "NitaTV làm được gì",
+  "fonctions": [
+    "Đăng nhập bằng đường liên kết danh sách phát M3U hoặc thông tin đăng nhập của nhà cung cấp",
+    "Thêm danh sách phát của bạn từ điện thoại bằng cách quét mã QR",
+    "Truyền hình trực tiếp kèm lịch phát sóng",
+    "Phim lẻ và phim bộ, xem tiếp từ chỗ bạn đã dừng",
+    "Ghi hình chương trình, ngay lập tức hoặc hẹn giờ từ lịch phát sóng",
+    "Tải phim và tập phim xuống để xem ngoại tuyến",
+    "Truyền tới thiết bị Chromecast",
+    "Chọn bản âm thanh và phụ đề",
+    "Nhiều hồ sơ, mục yêu thích và tìm kiếm",
+    "Hình trong hình",
+    "Có sẵn bằng 21 ngôn ngữ"
+  ],
+  "faq_titre": "Câu hỏi thường gặp",
+  "faq": [
+    {
+      "q": "NitaTV có cung cấp kênh không?",
+      "r": "Không. NitaTV là trình phát: ứng dụng phát những gì nhà cung cấp của bạn cung cấp. Ứng dụng không chứa kênh nào và không giới thiệu nhà cung cấp nào."
+    },
+    {
+      "q": "Tôi cần những gì?",
+      "r": "Một đường liên kết danh sách phát M3U, hoặc thông tin đăng nhập mà nhà cung cấp đã gửi cho bạn. Bạn có thể nhập trên TV, hoặc gửi từ điện thoại bằng cách quét mã QR."
+    },
+    {
+      "q": "Trên những thiết bị nào?",
+      "r": "Android TV và Google TV, máy tính bảng và điện thoại Android. Từ điện thoại hoặc máy tính bảng, bạn cũng có thể truyền tới Chromecast."
+    },
+    {
+      "q": "Giá bao nhiêu?",
+      "r": "Một tháng dùng thử miễn phí, không cần thẻ tín dụng, mỗi tài khoản Google một lần. Sau đó là gói đăng ký theo năm, hủy bất cứ lúc nào trên Google Play."
+    },
+    {
+      "q": "Thông tin đăng nhập của tôi được xử lý thế nào?",
+      "r": "Thông tin đăng nhập của bạn được lưu trên thiết bị, trong một kho được mã hóa. Khi gửi từ điện thoại bằng mã QR, thông tin được mã hóa đầu cuối: máy chủ của chúng tôi không thể đọc được. NitaTV không có quảng cáo và không có trình theo dõi."
+    }
+  ],
+  "pied": {
+    "confidentialite": "Quyền riêng tư",
+    "conditions": "Điều khoản",
+    "supprimer": "Xóa tài khoản của tôi",
+    "abonnement": "Quản lý gói đăng ký"
+  },
+  "bande": {
+    "nom": "Ảnh chụp màn hình",
+    "precedente": "Ảnh trước",
+    "suivante": "Ảnh tiếp theo"
+  },
+  "bandeau": "Xem trang này bằng tiếng Việt →",
+  "fermer": "Đóng",
+  "langues": "Ngôn ngữ"
+}

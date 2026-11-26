@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="de" dir="ltr" data-langue="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NitaTV – IPTV-Player für Android TV, Tablet und Smartphone</title>
+<meta name="description" content="NitaTV ist ein IPTV-Player für Ihre M3U-Playlist oder Ihren Anbieter: Live-TV, Programmführer, Aufnahme, Filme und Serien. Ein Probemonat gratis, ohne Kreditkarte.">
+<link rel="canonical" href="https://www.nita.tv/de/">
+<link rel="alternate" hreflang="fr" href="https://www.nita.tv/">
+<link rel="alternate" hreflang="en" href="https://www.nita.tv/en/">
+<link rel="alternate" hreflang="de" href="https://www.nita.tv/de/">
+<link rel="alternate" hreflang="nl" href="https://www.nita.tv/nl/">
+<link rel="alternate" hreflang="es-ES" href="https://www.nita.tv/es/">
+<link rel="alternate" hreflang="es" href="https://www.nita.tv/es-419/">
+<link rel="alternate" hreflang="it" href="https://www.nita.tv/it/">
+<link rel="alternate" hreflang="pt" href="https://www.nita.tv/pt/">
+<link rel="alternate" hreflang="pt-PT" href="https://www.nita.tv/pt-pt/">
+<link rel="alternate" hreflang="pl" href="https://www.nita.tv/pl/">
+<link rel="alternate" hreflang="ru" href="https://www.nita.tv/ru/">
+<link rel="alternate" hreflang="tr" href="https://www.nita.tv/tr/">
+<link rel="alternate" hreflang="ar" href="https://www.nita.tv/ar/">
+<link rel="alternate" hreflang="zh-Hans" href="https://www.nita.tv/zh-hans/">
+<link rel="alternate" hreflang="zh-Hant" href="https://www.nita.tv/zh-hant/">
+<link rel="alternate" hreflang="ja" href="https://www.nita.tv/ja/">
+<link rel="alternate" hreflang="ko" href="https://www.nita.tv/ko/">
+<link rel="alternate" hreflang="hi" href="https://www.nita.tv/hi/">
+<link rel="alternate" hreflang="id" href="https://www.nita.tv/id/">
+<link rel="alternate" hreflang="vi" href="https://www.nita.tv/vi/">
+<link rel="alternate" hreflang="th" href="https://www.nita.tv/th/">
+<link rel="alternate" hreflang="x-default" href="https://www.nita.tv/en/">
+<meta property="og:title" content="NitaTV – IPTV-Player für Android TV, Tablet und Smartphone">
+<meta property="og:description" content="Live-TV, Programmführer, Aufnahme, Filme und Serien. Ein Probemonat gratis, ohne Kreditkarte.">
+<meta property="og:image" content="https://www.nita.tv/images/direct.jpg">
+<meta property="og:url" content="https://www.nita.tv/de/">
+<meta property="og:type" content="website">
+<style>
+  :root { --fond:#101320; --carte:#171b2c; --texte:#e9ebf2; --doux:#a3a8b8; --accent:#00c1ff; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--fond); color:var(--texte); font:17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width:960px; margin:0 auto; padding:48px 16px 32px; }
+  header { text-align:center; }
+  h1 { font-size:clamp(2.2rem, 7vw, 3.4rem); margin:0; font-weight:600; letter-spacing:-.02em; line-height:1.15; }
+  h1 .marque span { color:var(--accent); }
+  h1 small { display:block; font-size:.45em; font-weight:500; color:var(--doux); letter-spacing:0; margin-top:8px; }
+  .trait { width:120px; height:3px; background:var(--accent); margin:16px auto 24px; border-radius:2px; }
+  .bouton { display:inline-block; background:var(--accent); color:#06121c; font-weight:600; text-decoration:none;
+            padding:12px 24px; border-radius:999px; margin:8px 0; }
+  .essai { color:var(--doux); margin:4px 0 0; }
+  h2 { font-size:1.5rem; margin:48px 0 12px; font-weight:600; }
+  h3 { font-size:1.05rem; margin:20px 0 4px; }
+  p, li { color:var(--doux); }
+  ul { padding-inline-start:1.2em; }
+  .avertissement { background:var(--carte); border-inline-start:3px solid var(--accent); padding:12px 16px; border-radius:8px; }
+  /* La bande de captures : défile au doigt (scroll-snap, sans programme) ; trois visibles à l'ordinateur. */
+  .bande { position:relative; margin:32px 0 0; }
+  .defile { display:flex; gap:12px; overflow-x:auto; scroll-snap-type:x mandatory; list-style:none; margin:0; padding:0 0 8px;
+            overscroll-behavior-x:contain; scrollbar-width:thin; scrollbar-color:var(--carte) transparent; }
+  .defile li { flex:0 0 calc((100% - 24px) / 3); scroll-snap-align:start; }
+  .defile figure { margin:0; }
+  .defile img { width:100%; height:auto; border-radius:10px; display:block; background:var(--carte); }
+  .defile figcaption { font-size:.85rem; color:var(--doux); margin-top:4px; text-align:center; }
+  .fleche { position:absolute; top:calc(50% - 30px); transform:translateY(-50%); width:40px; height:40px; border-radius:50%;
+            border:1px solid rgba(255,255,255,.18); background:rgba(16,19,32,.85); color:var(--texte); cursor:pointer;
+            display:flex; align-items:center; justify-content:center; padding:0; }
+  .fleche[hidden] { display:none; }
+  .fleche:disabled { opacity:.3; cursor:default; }
+  .fleche:not(:disabled):hover { border-color:var(--accent); color:var(--accent); }
+  .fleche svg { width:20px; height:20px; }
+  [dir="rtl"] .fleche svg { transform:scaleX(-1); }
+  .prec { inset-inline-start:-14px; }
+  .suiv { inset-inline-end:-14px; }
+  .note { font-size:.85rem; text-align:center; margin:8px 0 0; }
+  .note + .note { margin-top:0; }
+  /* Le bandeau qui PROPOSE la langue de l'appareil (jamais une redirection). */
+  .bandeau { display:flex; align-items:center; justify-content:center; gap:12px; background:var(--carte);
+             border-bottom:1px solid rgba(255,255,255,.08); padding:8px 16px; font-size:.95rem; }
+  .bandeau a { text-decoration:none; font-weight:500; }
+  .bandeau button { background:none; border:0; color:var(--doux); font-size:1.3rem; line-height:1; cursor:pointer; padding:4px 8px; }
+  .bandeau button:hover { color:var(--texte); }
+  footer { margin-top:56px; font-size:.9rem; text-align:center; color:var(--doux); }
+  .langues { margin-top:20px; }
+  .langues ul { list-style:none; padding:0; margin:0; display:flex; flex-wrap:wrap; justify-content:center; gap:4px 14px; }
+  .langues [aria-current] { color:var(--texte); font-weight:600; }
+  a { color:var(--accent); }
+  @media (max-width:700px) {
+    .defile li { flex-basis:85%; }
+  }
+  /* Au doigt (téléphone, tablette : pointeur « grossier ») la bande se glisse ; les flèches sont pour la souris. */
+  @media (pointer:coarse) {
+    .fleche { display:none; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1><span class="marque">Nita<span>TV</span></span><small>IPTV-Player für Android TV, Tablet und Smartphone</small></h1>
+    <div class="trait"></div>
+    <p>NitaTV spielt die Streams des Anbieters ab, bei dem <strong>Sie</strong> ein Abo haben, oder Ihre M3U-Playlist: Live-TV mit Programmführer, Aufnahme, Filme und Serien.</p>
+    <p><a class="bouton" href="https://play.google.com/store/apps/details?id=tv.nita.app">Jetzt bei Google Play</a></p>
+    <p class="essai">Ein Probemonat gratis, ohne Kreditkarte.</p>
+  </header>
+
+  <section class="bande" aria-label="Screenshots">
+    <button type="button" class="fleche prec" aria-label="Vorherige Screenshots" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <ul class="defile" tabindex="0">
+      <li><figure><img src="../images/direct.jpg" width="960" height="540" alt="NitaTV auf einem Fernseher: die Live-Sender, jeweils mit der laufenden Sendung" decoding="async"><figcaption>Live-TV</figcaption></figure></li>
+      <li><figure><img src="../images/guide.jpg" width="960" height="540" alt="Der Programmführer von NitaTV auf einem Fernseher" decoding="async"><figcaption>Der Programmführer</figcaption></figure></li>
+      <li><figure><img src="../images/films.jpg" width="960" height="540" alt="Filme in NitaTV auf einem Fernseher, mit ihren Postern" decoding="async"><figcaption>Filme und Serien</figcaption></figure></li>
+      <li><figure><img src="../images/film.jpg" width="960" height="540" alt="Die Seite eines Films in NitaTV auf einem Fernseher: Inhalt, Audio- und Untertitelsprachen, die Schaltflächen „Abspielen“ und „Herunterladen“" loading="lazy" decoding="async"><figcaption>Die Seite eines Films</figcaption></figure></li>
+      <li><figure><img src="../images/pistes.jpg" width="960" height="540" alt="Der Player von NitaTV auf einem Fernseher, mit der Auswahl von Audiospur und Untertiteln" loading="lazy" decoding="async"><figcaption>Audio und Untertitel</figcaption></figure></li>
+      <li><figure><img src="../images/enregistrement.jpg" width="960" height="540" alt="Der Programmführer von NitaTV auf einem Fernseher: eine kommende Sendung mit der Schaltfläche, um ihre Aufnahme zu planen" loading="lazy" decoding="async"><figcaption>Aufnahme planen</figcaption></figure></li>
+      <li><figure><img src="../images/telephone.jpg" width="960" height="540" alt="NitaTV auf einem Smartphone: die Live-Sender, die Seite eines Films und die Folgen einer Serie" loading="lazy" decoding="async"><figcaption>Auf dem Smartphone</figcaption></figure></li>
+    </ul>
+    <button type="button" class="fleche suiv" aria-label="Nächste Screenshots" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  </section>
+  <p class="note">Die Screenshots zeigen eine Demo-Quelle: Alle Namen, Bilder und Programmdaten sind frei erfunden.</p>
+  <p class="note">Demo-Video: „Sintel“ © Blender Foundation, CC BY 3.0 (durian.blender.org).</p>
+
+  <p class="avertissement">⚠ NitaTV stellt keine Sender, Filme oder sonstigen Inhalte bereit und verkauft oder empfiehlt keinen Anbieter. Sie benötigen ein eigenes Abo bei einem Anbieter oder eine Playlist.</p>
+
+  <h2>Was NitaTV kann</h2>
+  <ul>
+    <li>Anmelden per M3U-Playlist-Link oder mit den Zugangsdaten Ihres Anbieters</li>
+    <li>Ihre Playlist per QR-Code vom Smartphone hinzufügen</li>
+    <li>Live-TV mit Programmführer</li>
+    <li>Filme und Serien, fortsetzen, wo Sie aufgehört haben</li>
+    <li>Eine Sendung aufnehmen, sofort oder über den Programmführer geplant</li>
+    <li>Filme und Folgen herunterladen und offline ansehen</li>
+    <li>Auf ein Chromecast-Gerät streamen</li>
+    <li>Audiospur und Untertitel wählen</li>
+    <li>Mehrere Profile, Favoriten und Suche</li>
+    <li>Bild im Bild</li>
+    <li>In 21 Sprachen verfügbar</li>
+  </ul>
+
+  <h2>Häufige Fragen</h2>
+  <h3>Stellt NitaTV Sender bereit?</h3>
+  <p>Nein. NitaTV ist ein Player: Er spielt ab, was Ihr Anbieter Ihnen liefert. Er enthält keine Sender und empfiehlt keinen Anbieter.</p>
+  <h3>Was brauche ich?</h3>
+  <p>Einen M3U-Playlist-Link oder die Zugangsdaten, die Sie von Ihrem Anbieter erhalten haben. Sie können sie auf dem Fernseher eingeben oder per QR-Code von Ihrem Smartphone senden.</p>
+  <h3>Auf welchen Geräten?</h3>
+  <p>Android TV und Google TV, Android-Tablets und -Smartphones. Vom Smartphone oder Tablet aus können Sie auch auf ein Chromecast-Gerät streamen.</p>
+  <h3>Was kostet es?</h3>
+  <p>Ein Probemonat gratis, ohne Kreditkarte, einmal pro Google-Konto. Danach ein Jahresabo, jederzeit in Google Play kündbar.</p>
+  <h3>Was passiert mit meinen Zugangsdaten?</h3>
+  <p>Ihre Zugangsdaten bleiben auf Ihrem Gerät, in einem verschlüsselten Tresor. Wenn Sie sie per QR-Code von Ihrem Smartphone senden, sind sie Ende-zu-Ende-verschlüsselt: Unser Server kann sie nicht lesen. NitaTV enthält keine Werbung und keine Tracker.</p>
+
+  <footer>
+    <a href="../confidentialite.html">Datenschutz</a> · <a href="../conditions.html">Nutzungsbedingungen</a> · <a href="../supprimer.html">Mein Konto löschen</a> · <a href="https://play.google.com/store/account/subscriptions?sku=nitatv_abonnement&amp;package=tv.nita.app">Mein Abo verwalten</a> · <a href="mailto:contact@nita.tv">contact@nita.tv</a>
+    <nav class="langues" aria-label="Sprache">
+      <ul>
+        <li><a href="../" hreflang="fr" lang="fr" data-langue="fr">Français</a></li>
+        <li><a href="../en/" hreflang="en" lang="en" data-langue="en">English</a></li>
+        <li><span lang="de" aria-current="page">Deutsch</span></li>
+        <li><a href="../nl/" hreflang="nl" lang="nl" data-langue="nl">Nederlands</a></li>
+        <li><a href="../es/" hreflang="es-ES" lang="es-ES" data-langue="es">Español (España)</a></li>
+        <li><a href="../es-419/" hreflang="es" lang="es-419" data-langue="es-419">Español (Latinoamérica)</a></li>
+        <li><a href="../it/" hreflang="it" lang="it" data-langue="it">Italiano</a></li>
+        <li><a href="../pt/" hreflang="pt" lang="pt-BR" data-langue="pt">Português (Brasil)</a></li>
+        <li><a href="../pt-pt/" hreflang="pt-PT" lang="pt-PT" data-langue="pt-pt">Português (Portugal)</a></li>
+        <li><a href="../pl/" hreflang="pl" lang="pl" data-langue="pl">Polski</a></li>
+        <li><a href="../ru/" hreflang="ru" lang="ru" data-langue="ru">Русский</a></li>
+        <li><a href="../tr/" hreflang="tr" lang="tr" data-langue="tr">Türkçe</a></li>
+        <li><a href="../ar/" hreflang="ar" lang="ar" data-langue="ar">العربية</a></li>
+        <li><a href="../zh-hans/" hreflang="zh-Hans" lang="zh-Hans" data-langue="zh-hans">中文（简体）</a></li>
+        <li><a href="../zh-hant/" hreflang="zh-Hant" lang="zh-Hant" data-langue="zh-hant">中文（繁體）</a></li>
+        <li><a href="../ja/" hreflang="ja" lang="ja" data-langue="ja">日本語</a></li>
+        <li><a href="../ko/" hreflang="ko" lang="ko" data-langue="ko">한국어</a></li>
+        <li><a href="../hi/" hreflang="hi" lang="hi" data-langue="hi">हिन्दी</a></li>
+        <li><a href="../id/" hreflang="id" lang="id" data-langue="id">Bahasa Indonesia</a></li>
+        <li><a href="../vi/" hreflang="vi" lang="vi" data-langue="vi">Tiếng Việt</a></li>
+        <li><a href="../th/" hreflang="th" lang="th" data-langue="th">ไทย</a></li>
+      </ul>
+    </nav>
+  </footer>
+</main>
+<script src="../accueil.js" defer></script>
+</body>
+</html>

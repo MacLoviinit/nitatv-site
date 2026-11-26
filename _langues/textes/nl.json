@@ -1,0 +1,93 @@
+{
+  "titre": "NitaTV – IPTV-speler voor Android TV, tablet en telefoon",
+  "description": "NitaTV is een IPTV-speler voor je M3U-playlist of provider: live-tv, tv-gids, opnemen, films en series. Een gratis proefmaand, zonder creditcard.",
+  "og_description": "Live-tv, tv-gids, opnemen, films en series. Een gratis proefmaand, zonder creditcard.",
+  "sous_titre": "IPTV-speler voor Android TV, tablet en telefoon",
+  "intro": "NitaTV speelt de streams af van de provider waarop <strong>jij</strong> geabonneerd bent, of je M3U-playlist: live-tv met programmagids, opnemen, films en series.",
+  "bouton": "Ontdek het op Google Play",
+  "essai": "Een gratis proefmaand, zonder creditcard.",
+  "captures": {
+    "direct": {
+      "legende": "Live-tv",
+      "alt": "NitaTV op een tv: de live zenders, elk met het programma van dat moment"
+    },
+    "guide": {
+      "legende": "De programmagids",
+      "alt": "De programmagids van NitaTV op een tv"
+    },
+    "films": {
+      "legende": "Films en series",
+      "alt": "Films in NitaTV op een tv, met hun posters"
+    },
+    "film": {
+      "legende": "De pagina van een film",
+      "alt": "De pagina van een film in NitaTV op een tv: de samenvatting, de audio- en ondertitelingstalen, de knoppen Afspelen en Downloaden"
+    },
+    "pistes": {
+      "legende": "Audio en ondertiteling",
+      "alt": "De speler van NitaTV op een tv, met de keuze van audiospoor en ondertiteling"
+    },
+    "enregistrement": {
+      "legende": "Een opname plannen",
+      "alt": "De programmagids van NitaTV op een tv: een programma dat nog komt, met de knop om de opname te plannen"
+    },
+    "telephone": {
+      "legende": "Op de telefoon",
+      "alt": "NitaTV op een telefoon: de live zenders, de pagina van een film en de afleveringen van een serie"
+    }
+  },
+  "note_demo": "De screenshots tonen een demobron: alle namen, afbeeldingen en gidsgegevens zijn fictief.",
+  "credit": "Demovideo: ‘Sintel’ © Blender Foundation, CC BY 3.0 (durian.blender.org).",
+  "avertissement": "⚠ NitaTV levert geen zenders, films of andere content, en verkoopt of adviseert geen enkele provider. Je hebt een eigen abonnement bij een provider nodig, of een playlist.",
+  "fonctions_titre": "Wat NitaTV doet",
+  "fonctions": [
+    "Inloggen met een link naar een M3U-playlist of met de inloggegevens van je provider",
+    "Je playlist vanaf je telefoon toevoegen door een QR-code te scannen",
+    "Live-tv met programmagids",
+    "Films en series, verder kijken waar je gebleven was",
+    "Een programma opnemen, meteen of gepland vanuit de gids",
+    "Films en afleveringen downloaden om offline te kijken",
+    "Casten naar een Chromecast-apparaat",
+    "Audiospoor en ondertiteling kiezen",
+    "Meerdere profielen, favorieten en zoeken",
+    "Beeld-in-beeld",
+    "Beschikbaar in 21 talen"
+  ],
+  "faq_titre": "Veelgestelde vragen",
+  "faq": [
+    {
+      "q": "Levert NitaTV zenders?",
+      "r": "Nee. NitaTV is een speler: het speelt af wat je provider je levert. Het bevat geen zenders en adviseert geen enkele provider."
+    },
+    {
+      "q": "Wat heb ik nodig?",
+      "r": "Een link naar een M3U-playlist, of de inloggegevens die je van je provider hebt gekregen. Je kunt ze op de tv invoeren, of vanaf je telefoon versturen door een QR-code te scannen."
+    },
+    {
+      "q": "Op welke apparaten?",
+      "r": "Android TV en Google TV, Android-tablets en -telefoons. Vanaf een telefoon of tablet kun je ook casten naar een Chromecast."
+    },
+    {
+      "q": "Wat kost het?",
+      "r": "Een gratis proefmaand, zonder creditcard, één per Google-account. Daarna een jaarabonnement, altijd opzegbaar via Google Play."
+    },
+    {
+      "q": "Wat gebeurt er met mijn inloggegevens?",
+      "r": "Je inloggegevens blijven op je apparaat, in een versleutelde kluis. Als je ze vanaf je telefoon met een QR-code verstuurt, zijn ze end-to-end versleuteld: onze server kan ze niet lezen. NitaTV bevat geen advertenties en geen trackers."
+    }
+  ],
+  "pied": {
+    "confidentialite": "Privacy",
+    "conditions": "Voorwaarden",
+    "supprimer": "Mijn account verwijderen",
+    "abonnement": "Mijn abonnement beheren"
+  },
+  "bande": {
+    "nom": "Screenshots",
+    "precedente": "Vorige screenshots",
+    "suivante": "Volgende screenshots"
+  },
+  "bandeau": "Deze pagina in het Nederlands bekijken →",
+  "fermer": "Sluiten",
+  "langues": "Taal"
+}

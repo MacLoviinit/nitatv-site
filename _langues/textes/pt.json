@@ -1,0 +1,93 @@
+{
+  "titre": "NitaTV – Player IPTV para Android TV, tablet e celular",
+  "description": "O NitaTV é um player IPTV para sua playlist M3U ou seu provedor: TV ao vivo, guia de programação, gravação, filmes e séries. Um mês de teste gratuito, sem cartão de crédito.",
+  "og_description": "TV ao vivo, guia de programação, gravação, filmes e séries. Um mês de teste gratuito, sem cartão de crédito.",
+  "sous_titre": "Player IPTV para Android TV, tablet e celular",
+  "intro": "O NitaTV reproduz os fluxos do provedor que <strong>você</strong> assina, ou sua playlist M3U: TV ao vivo com guia de programação, gravação, filmes e séries.",
+  "bouton": "Disponível no Google Play",
+  "essai": "Um mês de teste gratuito, sem cartão de crédito.",
+  "captures": {
+    "direct": {
+      "legende": "TV ao vivo",
+      "alt": "NitaTV em uma TV: os canais ao vivo, cada um com o programa atual"
+    },
+    "guide": {
+      "legende": "O guia de programação",
+      "alt": "O guia de programação do NitaTV em uma TV"
+    },
+    "films": {
+      "legende": "Filmes e séries",
+      "alt": "Os filmes no NitaTV em uma TV, com seus pôsteres"
+    },
+    "film": {
+      "legende": "A página de um filme",
+      "alt": "A página de um filme no NitaTV em uma TV: a sinopse, os idiomas de áudio e legendas, os botões Reproduzir e Baixar"
+    },
+    "pistes": {
+      "legende": "Áudio e legendas",
+      "alt": "O player do NitaTV em uma TV, aberto na escolha da faixa de áudio e das legendas"
+    },
+    "enregistrement": {
+      "legende": "Agendar uma gravação",
+      "alt": "O guia de programação do NitaTV em uma TV: um programa que ainda vai começar, com o botão para agendar a gravação"
+    },
+    "telephone": {
+      "legende": "No celular",
+      "alt": "NitaTV em um celular: os canais ao vivo, a página de um filme e os episódios de uma série"
+    }
+  },
+  "note_demo": "As capturas de tela mostram uma fonte de demonstração: todos os nomes, imagens e o guia são fictícios.",
+  "credit": "Vídeo de demonstração: “Sintel” © Blender Foundation, CC BY 3.0 (durian.blender.org).",
+  "avertissement": "⚠ O NitaTV não fornece canais, filmes nem conteúdo de nenhum tipo, e não vende nem recomenda nenhum provedor. Você precisa ter sua própria assinatura com um provedor, ou uma playlist.",
+  "fonctions_titre": "O que o NitaTV faz",
+  "fonctions": [
+    "Entre com o link de uma playlist M3U ou com as credenciais do seu provedor",
+    "Adicione sua playlist pelo celular, escaneando um QR code",
+    "TV ao vivo com guia de programação",
+    "Filmes e séries, continuando de onde você parou",
+    "Grave um programa, na hora ou agendado pelo guia",
+    "Baixe filmes e episódios para assistir offline",
+    "Transmita para um dispositivo Chromecast",
+    "Escolha a faixa de áudio e as legendas",
+    "Vários perfis, favoritos e pesquisa",
+    "Picture-in-picture",
+    "Disponível em 21 idiomas"
+  ],
+  "faq_titre": "Perguntas frequentes",
+  "faq": [
+    {
+      "q": "O NitaTV fornece canais?",
+      "r": "Não. O NitaTV é um player: ele reproduz o que o seu provedor oferece. Ele não contém canais e não recomenda nenhum provedor."
+    },
+    {
+      "q": "Do que eu preciso?",
+      "r": "De um link de playlist M3U, ou das credenciais que o seu provedor forneceu. Você pode digitá-las na TV ou enviá-las pelo celular, escaneando um QR code."
+    },
+    {
+      "q": "Em quais dispositivos?",
+      "r": "Android TV e Google TV, tablets e celulares Android. Do celular ou do tablet, você também pode transmitir para um Chromecast."
+    },
+    {
+      "q": "Quanto custa?",
+      "r": "Um mês de teste gratuito, sem cartão de crédito, um por conta Google. Depois, uma assinatura anual, que você cancela quando quiser no Google Play."
+    },
+    {
+      "q": "O que acontece com as minhas credenciais?",
+      "r": "Suas credenciais ficam no seu dispositivo, em um cofre criptografado. Enviadas do celular por QR code, elas são criptografadas de ponta a ponta: nosso servidor não consegue lê-las. O NitaTV não contém anúncios nem rastreadores."
+    }
+  ],
+  "pied": {
+    "confidentialite": "Privacidade",
+    "conditions": "Termos",
+    "supprimer": "Excluir minha conta",
+    "abonnement": "Gerenciar minha assinatura"
+  },
+  "bande": {
+    "nom": "Capturas de tela",
+    "precedente": "Capturas anteriores",
+    "suivante": "Próximas capturas"
+  },
+  "bandeau": "Ver esta página em português (Brasil) →",
+  "fermer": "Fechar",
+  "langues": "Idioma"
+}

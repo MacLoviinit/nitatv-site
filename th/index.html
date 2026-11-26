@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="th" dir="ltr" data-langue="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NitaTV – เครื่องเล่น IPTV สำหรับ Android TV แท็บเล็ต และโทรศัพท์</title>
+<meta name="description" content="NitaTV เป็นเครื่องเล่น IPTV สำหรับเพลย์ลิสต์ M3U หรือผู้ให้บริการของคุณ: ทีวีสด ผังรายการ การบันทึก ภาพยนตร์และซีรีส์ ทดลองใช้ฟรี 1 เดือน ไม่ต้องใช้บัตรเครดิต">
+<link rel="canonical" href="https://www.nita.tv/th/">
+<link rel="alternate" hreflang="fr" href="https://www.nita.tv/">
+<link rel="alternate" hreflang="en" href="https://www.nita.tv/en/">
+<link rel="alternate" hreflang="de" href="https://www.nita.tv/de/">
+<link rel="alternate" hreflang="nl" href="https://www.nita.tv/nl/">
+<link rel="alternate" hreflang="es-ES" href="https://www.nita.tv/es/">
+<link rel="alternate" hreflang="es" href="https://www.nita.tv/es-419/">
+<link rel="alternate" hreflang="it" href="https://www.nita.tv/it/">
+<link rel="alternate" hreflang="pt" href="https://www.nita.tv/pt/">
+<link rel="alternate" hreflang="pt-PT" href="https://www.nita.tv/pt-pt/">
+<link rel="alternate" hreflang="pl" href="https://www.nita.tv/pl/">
+<link rel="alternate" hreflang="ru" href="https://www.nita.tv/ru/">
+<link rel="alternate" hreflang="tr" href="https://www.nita.tv/tr/">
+<link rel="alternate" hreflang="ar" href="https://www.nita.tv/ar/">
+<link rel="alternate" hreflang="zh-Hans" href="https://www.nita.tv/zh-hans/">
+<link rel="alternate" hreflang="zh-Hant" href="https://www.nita.tv/zh-hant/">
+<link rel="alternate" hreflang="ja" href="https://www.nita.tv/ja/">
+<link rel="alternate" hreflang="ko" href="https://www.nita.tv/ko/">
+<link rel="alternate" hreflang="hi" href="https://www.nita.tv/hi/">
+<link rel="alternate" hreflang="id" href="https://www.nita.tv/id/">
+<link rel="alternate" hreflang="vi" href="https://www.nita.tv/vi/">
+<link rel="alternate" hreflang="th" href="https://www.nita.tv/th/">
+<link rel="alternate" hreflang="x-default" href="https://www.nita.tv/en/">
+<meta property="og:title" content="NitaTV – เครื่องเล่น IPTV สำหรับ Android TV แท็บเล็ต และโทรศัพท์">
+<meta property="og:description" content="ทีวีสด ผังรายการ การบันทึก ภาพยนตร์และซีรีส์ ทดลองใช้ฟรี 1 เดือน ไม่ต้องใช้บัตรเครดิต">
+<meta property="og:image" content="https://www.nita.tv/images/direct.jpg">
+<meta property="og:url" content="https://www.nita.tv/th/">
+<meta property="og:type" content="website">
+<style>
+  :root { --fond:#101320; --carte:#171b2c; --texte:#e9ebf2; --doux:#a3a8b8; --accent:#00c1ff; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--fond); color:var(--texte); font:17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width:960px; margin:0 auto; padding:48px 16px 32px; }
+  header { text-align:center; }
+  h1 { font-size:clamp(2.2rem, 7vw, 3.4rem); margin:0; font-weight:600; letter-spacing:-.02em; line-height:1.15; }
+  h1 .marque span { color:var(--accent); }
+  h1 small { display:block; font-size:.45em; font-weight:500; color:var(--doux); letter-spacing:0; margin-top:8px; }
+  .trait { width:120px; height:3px; background:var(--accent); margin:16px auto 24px; border-radius:2px; }
+  .bouton { display:inline-block; background:var(--accent); color:#06121c; font-weight:600; text-decoration:none;
+            padding:12px 24px; border-radius:999px; margin:8px 0; }
+  .essai { color:var(--doux); margin:4px 0 0; }
+  h2 { font-size:1.5rem; margin:48px 0 12px; font-weight:600; }
+  h3 { font-size:1.05rem; margin:20px 0 4px; }
+  p, li { color:var(--doux); }
+  ul { padding-inline-start:1.2em; }
+  .avertissement { background:var(--carte); border-inline-start:3px solid var(--accent); padding:12px 16px; border-radius:8px; }
+  /* La bande de captures : défile au doigt (scroll-snap, sans programme) ; trois visibles à l'ordinateur. */
+  .bande { position:relative; margin:32px 0 0; }
+  .defile { display:flex; gap:12px; overflow-x:auto; scroll-snap-type:x mandatory; list-style:none; margin:0; padding:0 0 8px;
+            overscroll-behavior-x:contain; scrollbar-width:thin; scrollbar-color:var(--carte) transparent; }
+  .defile li { flex:0 0 calc((100% - 24px) / 3); scroll-snap-align:start; }
+  .defile figure { margin:0; }
+  .defile img { width:100%; height:auto; border-radius:10px; display:block; background:var(--carte); }
+  .defile figcaption { font-size:.85rem; color:var(--doux); margin-top:4px; text-align:center; }
+  .fleche { position:absolute; top:calc(50% - 30px); transform:translateY(-50%); width:40px; height:40px; border-radius:50%;
+            border:1px solid rgba(255,255,255,.18); background:rgba(16,19,32,.85); color:var(--texte); cursor:pointer;
+            display:flex; align-items:center; justify-content:center; padding:0; }
+  .fleche[hidden] { display:none; }
+  .fleche:disabled { opacity:.3; cursor:default; }
+  .fleche:not(:disabled):hover { border-color:var(--accent); color:var(--accent); }
+  .fleche svg { width:20px; height:20px; }
+  [dir="rtl"] .fleche svg { transform:scaleX(-1); }
+  .prec { inset-inline-start:-14px; }
+  .suiv { inset-inline-end:-14px; }
+  .note { font-size:.85rem; text-align:center; margin:8px 0 0; }
+  .note + .note { margin-top:0; }
+  /* Le bandeau qui PROPOSE la langue de l'appareil (jamais une redirection). */
+  .bandeau { display:flex; align-items:center; justify-content:center; gap:12px; background:var(--carte);
+             border-bottom:1px solid rgba(255,255,255,.08); padding:8px 16px; font-size:.95rem; }
+  .bandeau a { text-decoration:none; font-weight:500; }
+  .bandeau button { background:none; border:0; color:var(--doux); font-size:1.3rem; line-height:1; cursor:pointer; padding:4px 8px; }
+  .bandeau button:hover { color:var(--texte); }
+  footer { margin-top:56px; font-size:.9rem; text-align:center; color:var(--doux); }
+  .langues { margin-top:20px; }
+  .langues ul { list-style:none; padding:0; margin:0; display:flex; flex-wrap:wrap; justify-content:center; gap:4px 14px; }
+  .langues [aria-current] { color:var(--texte); font-weight:600; }
+  a { color:var(--accent); }
+  @media (max-width:700px) {
+    .defile li { flex-basis:85%; }
+  }
+  /* Au doigt (téléphone, tablette : pointeur « grossier ») la bande se glisse ; les flèches sont pour la souris. */
+  @media (pointer:coarse) {
+    .fleche { display:none; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1><span class="marque">Nita<span>TV</span></span><small>เครื่องเล่น IPTV สำหรับ Android TV แท็บเล็ต และโทรศัพท์</small></h1>
+    <div class="trait"></div>
+    <p>NitaTV เล่นสตรีมจากผู้ให้บริการซึ่ง<strong>คุณ</strong>เป็นผู้สมัครใช้บริการเอง หรือเพลย์ลิสต์ M3U ของคุณ: ทีวีสดพร้อมผังรายการ การบันทึก ภาพยนตร์และซีรีส์</p>
+    <p><a class="bouton" href="https://play.google.com/store/apps/details?id=tv.nita.app">ดาวน์โหลดได้ที่ Google Play</a></p>
+    <p class="essai">ทดลองใช้ฟรี 1 เดือน ไม่ต้องใช้บัตรเครดิต</p>
+  </header>
+
+  <section class="bande" aria-label="ภาพหน้าจอ">
+    <button type="button" class="fleche prec" aria-label="ภาพก่อนหน้า" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <ul class="defile" tabindex="0">
+      <li><figure><img src="../images/direct.jpg" width="960" height="540" alt="NitaTV บนทีวี: ช่องรายการสด แต่ละช่องแสดงรายการที่กำลังออกอากาศ" decoding="async"><figcaption>ทีวีสด</figcaption></figure></li>
+      <li><figure><img src="../images/guide.jpg" width="960" height="540" alt="ผังรายการของ NitaTV บนทีวี" decoding="async"><figcaption>ผังรายการ</figcaption></figure></li>
+      <li><figure><img src="../images/films.jpg" width="960" height="540" alt="ภาพยนตร์ใน NitaTV บนทีวี พร้อมโปสเตอร์" decoding="async"><figcaption>ภาพยนตร์และซีรีส์</figcaption></figure></li>
+      <li><figure><img src="../images/film.jpg" width="960" height="540" alt="หน้าภาพยนตร์ใน NitaTV บนทีวี: เรื่องย่อ ภาษาเสียงและคำบรรยาย ปุ่มเล่นและดาวน์โหลด" loading="lazy" decoding="async"><figcaption>หน้าภาพยนตร์</figcaption></figure></li>
+      <li><figure><img src="../images/pistes.jpg" width="960" height="540" alt="เครื่องเล่นของ NitaTV บนทีวี ขณะเปิดเมนูเลือกแทร็กเสียงและคำบรรยาย" loading="lazy" decoding="async"><figcaption>เสียงและคำบรรยาย</figcaption></figure></li>
+      <li><figure><img src="../images/enregistrement.jpg" width="960" height="540" alt="ผังรายการของ NitaTV บนทีวี: รายการที่กำลังจะออกอากาศ พร้อมปุ่มตั้งเวลาบันทึก" loading="lazy" decoding="async"><figcaption>ตั้งเวลาบันทึก</figcaption></figure></li>
+      <li><figure><img src="../images/telephone.jpg" width="960" height="540" alt="NitaTV บนโทรศัพท์: ช่องรายการสด หน้าภาพยนตร์ และตอนต่างๆ ของซีรีส์" loading="lazy" decoding="async"><figcaption>บนโทรศัพท์</figcaption></figure></li>
+    </ul>
+    <button type="button" class="fleche suiv" aria-label="ภาพถัดไป" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  </section>
+  <p class="note">ภาพหน้าจอแสดงแหล่งข้อมูลสาธิต ชื่อ รูปภาพ และผังรายการทั้งหมดเป็นเรื่องสมมติ</p>
+  <p class="note">วิดีโอสาธิต: “Sintel” © Blender Foundation, CC BY 3.0 (durian.blender.org)</p>
+
+  <p class="avertissement">⚠ NitaTV ไม่มีช่อง ภาพยนตร์ หรือเนื้อหาใดๆ ให้บริการ และไม่ขายหรือแนะนำผู้ให้บริการรายใดทั้งสิ้น คุณต้องมีการสมัครใช้บริการของคุณเองกับผู้ให้บริการ หรือมีเพลย์ลิสต์</p>
+
+  <h2>สิ่งที่ NitaTV ทำได้</h2>
+  <ul>
+    <li>ลงชื่อเข้าใช้ด้วยลิงก์เพลย์ลิสต์ M3U หรือด้วยข้อมูลเข้าสู่ระบบจากผู้ให้บริการของคุณ</li>
+    <li>เพิ่มเพลย์ลิสต์ของคุณจากโทรศัพท์ด้วยการสแกน QR code</li>
+    <li>ทีวีสดพร้อมผังรายการ</li>
+    <li>ภาพยนตร์และซีรีส์ ดูต่อจากจุดที่ค้างไว้</li>
+    <li>บันทึกรายการได้ทันที หรือตั้งเวลาจากผังรายการ</li>
+    <li>ดาวน์โหลดภาพยนตร์และตอนต่างๆ ไว้ดูแบบออฟไลน์</li>
+    <li>แคสต์ไปยังอุปกรณ์ Chromecast</li>
+    <li>เลือกแทร็กเสียงและคำบรรยาย</li>
+    <li>หลายโปรไฟล์ รายการโปรด และการค้นหา</li>
+    <li>การแสดงภาพซ้อนภาพ</li>
+    <li>พร้อมให้ใช้งานใน 21 ภาษา</li>
+  </ul>
+
+  <h2>คำถามที่พบบ่อย</h2>
+  <h3>NitaTV มีช่องให้ดูไหม</h3>
+  <p>ไม่มี NitaTV เป็นเครื่องเล่นที่เล่นสิ่งที่ผู้ให้บริการของคุณมอบให้ ไม่มีช่องใดๆ ในแอป และไม่แนะนำผู้ให้บริการรายใด</p>
+  <h3>ต้องมีอะไรบ้าง</h3>
+  <p>ลิงก์เพลย์ลิสต์ M3U หรือข้อมูลเข้าสู่ระบบที่ผู้ให้บริการให้ไว้กับคุณ คุณพิมพ์บนทีวีได้ หรือส่งจากโทรศัพท์ด้วยการสแกน QR code</p>
+  <h3>ใช้กับอุปกรณ์ใดได้บ้าง</h3>
+  <p>Android TV และ Google TV แท็บเล็ตและโทรศัพท์ Android และจากโทรศัพท์หรือแท็บเล็ต คุณยังแคสต์ไปยัง Chromecast ได้ด้วย</p>
+  <h3>ราคาเท่าไร</h3>
+  <p>ทดลองใช้ฟรี 1 เดือน ไม่ต้องใช้บัตรเครดิต จำกัดหนึ่งครั้งต่อบัญชี Google จากนั้นเป็นการสมัครใช้บริการรายปี ยกเลิกได้ทุกเมื่อจาก Google Play</p>
+  <h3>ข้อมูลเข้าสู่ระบบของฉันจะเป็นอย่างไร</h3>
+  <p>ข้อมูลเข้าสู่ระบบของคุณจะอยู่ในอุปกรณ์ของคุณ ภายในพื้นที่เก็บข้อมูลที่เข้ารหัส เมื่อส่งจากโทรศัพท์ด้วย QR code ข้อมูลจะถูกเข้ารหัสแบบ end-to-end เซิร์ฟเวอร์ของเราไม่สามารถอ่านได้ NitaTV ไม่มีโฆษณาและไม่มีตัวติดตาม</p>
+
+  <footer>
+    <a href="../confidentialite.html">ความเป็นส่วนตัว</a> · <a href="../conditions.html">ข้อกำหนด</a> · <a href="../supprimer.html">ลบบัญชีของฉัน</a> · <a href="https://play.google.com/store/account/subscriptions?sku=nitatv_abonnement&amp;package=tv.nita.app">จัดการการสมัครใช้บริการ</a> · <a href="mailto:contact@nita.tv">contact@nita.tv</a>
+    <nav class="langues" aria-label="ภาษา">
+      <ul>
+        <li><a href="../" hreflang="fr" lang="fr" data-langue="fr">Français</a></li>
+        <li><a href="../en/" hreflang="en" lang="en" data-langue="en">English</a></li>
+        <li><a href="../de/" hreflang="de" lang="de" data-langue="de">Deutsch</a></li>
+        <li><a href="../nl/" hreflang="nl" lang="nl" data-langue="nl">Nederlands</a></li>
+        <li><a href="../es/" hreflang="es-ES" lang="es-ES" data-langue="es">Español (España)</a></li>
+        <li><a href="../es-419/" hreflang="es" lang="es-419" data-langue="es-419">Español (Latinoamérica)</a></li>
+        <li><a href="../it/" hreflang="it" lang="it" data-langue="it">Italiano</a></li>
+        <li><a href="../pt/" hreflang="pt" lang="pt-BR" data-langue="pt">Português (Brasil)</a></li>
+        <li><a href="../pt-pt/" hreflang="pt-PT" lang="pt-PT" data-langue="pt-pt">Português (Portugal)</a></li>
+        <li><a href="../pl/" hreflang="pl" lang="pl" data-langue="pl">Polski</a></li>
+        <li><a href="../ru/" hreflang="ru" lang="ru" data-langue="ru">Русский</a></li>
+        <li><a href="../tr/" hreflang="tr" lang="tr" data-langue="tr">Türkçe</a></li>
+        <li><a href="../ar/" hreflang="ar" lang="ar" data-langue="ar">العربية</a></li>
+        <li><a href="../zh-hans/" hreflang="zh-Hans" lang="zh-Hans" data-langue="zh-hans">中文（简体）</a></li>
+        <li><a href="../zh-hant/" hreflang="zh-Hant" lang="zh-Hant" data-langue="zh-hant">中文（繁體）</a></li>
+        <li><a href="../ja/" hreflang="ja" lang="ja" data-langue="ja">日本語</a></li>
+        <li><a href="../ko/" hreflang="ko" lang="ko" data-langue="ko">한국어</a></li>
+        <li><a href="../hi/" hreflang="hi" lang="hi" data-langue="hi">हिन्दी</a></li>
+        <li><a href="../id/" hreflang="id" lang="id" data-langue="id">Bahasa Indonesia</a></li>
+        <li><a href="../vi/" hreflang="vi" lang="vi" data-langue="vi">Tiếng Việt</a></li>
+        <li><span lang="th" aria-current="page">ไทย</span></li>
+      </ul>
+    </nav>
+  </footer>
+</main>
+<script src="../accueil.js" defer></script>
+</body>
+</html>

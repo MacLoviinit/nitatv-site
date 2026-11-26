@@ -1,0 +1,93 @@
+{
+  "titre": "NitaTV – Android TV, tablet ve telefon için IPTV oynatıcı",
+  "description": "NitaTV, M3U oynatma listeniz veya sağlayıcınız için bir IPTV oynatıcıdır: canlı TV, TV rehberi, kayıt, filmler ve diziler. Bir ay ücretsiz deneme, kredi kartı gerekmez.",
+  "og_description": "Canlı TV, TV rehberi, kayıt, filmler ve diziler. Bir ay ücretsiz deneme, kredi kartı gerekmez.",
+  "sous_titre": "Android TV, tablet ve telefon için IPTV oynatıcı",
+  "intro": "NitaTV, <strong>sizin</strong> abone olduğunuz sağlayıcının yayınlarını veya M3U oynatma listenizi oynatır: TV rehberiyle canlı TV, kayıt, filmler ve diziler.",
+  "bouton": "Google Play'den indirin",
+  "essai": "Bir ay ücretsiz deneme, kredi kartı gerekmez.",
+  "captures": {
+    "direct": {
+      "legende": "Canlı TV",
+      "alt": "Bir televizyonda NitaTV: canlı kanallar, her biri şu anki programıyla"
+    },
+    "guide": {
+      "legende": "TV rehberi",
+      "alt": "Bir televizyonda NitaTV TV rehberi"
+    },
+    "films": {
+      "legende": "Filmler ve diziler",
+      "alt": "Bir televizyonda NitaTV'deki filmler, afişleriyle"
+    },
+    "film": {
+      "legende": "Bir filmin sayfası",
+      "alt": "Bir televizyonda NitaTV'de bir filmin sayfası: özeti, ses ve altyazı dilleri, Oynat ve İndir düğmeleri"
+    },
+    "pistes": {
+      "legende": "Ses ve altyazı",
+      "alt": "Bir televizyonda NitaTV oynatıcısı, ses parçası ve altyazı seçimi açık"
+    },
+    "enregistrement": {
+      "legende": "Kayıt planlama",
+      "alt": "Bir televizyonda NitaTV TV rehberi: yaklaşan bir program ve kaydını planlama düğmesi"
+    },
+    "telephone": {
+      "legende": "Telefonda",
+      "alt": "Bir telefonda NitaTV: canlı kanallar, bir filmin sayfası ve bir dizinin bölümleri"
+    }
+  },
+  "note_demo": "Ekran görüntüleri bir demo kaynağını gösterir: tüm adlar, görseller ve rehber kurgusaldır.",
+  "credit": "Demo video: “Sintel” © Blender Foundation, CC BY 3.0 (durian.blender.org).",
+  "avertissement": "⚠ NitaTV hiçbir kanal, film veya başka türde içerik sağlamaz; hiçbir sağlayıcıyı satmaz ya da önermez. Bir sağlayıcıdan kendi aboneliğinize veya bir oynatma listesine ihtiyacınız vardır.",
+  "fonctions_titre": "NitaTV neler yapar",
+  "fonctions": [
+    "M3U oynatma listesi bağlantısıyla veya sağlayıcınızın kimlik bilgileriyle giriş",
+    "QR kodu tarayarak oynatma listenizi telefonunuzdan ekleme",
+    "TV rehberiyle canlı TV",
+    "Kaldığınız yerden devam eden filmler ve diziler",
+    "Bir programı hemen ya da rehberden planlayarak kaydetme",
+    "Çevrimdışı izlemek için film ve bölüm indirme",
+    "Chromecast cihazına yayınlama",
+    "Ses parçası ve altyazı seçimi",
+    "Birden çok profil, favoriler ve arama",
+    "Resim içinde resim",
+    "21 dilde kullanılabilir"
+  ],
+  "faq_titre": "Sık sorulan sorular",
+  "faq": [
+    {
+      "q": "NitaTV kanal sağlıyor mu?",
+      "r": "Hayır. NitaTV bir oynatıcıdır: sağlayıcınızın size verdiğini oynatır. Hiçbir kanal içermez ve hiçbir sağlayıcıyı önermez."
+    },
+    {
+      "q": "Neye ihtiyacım var?",
+      "r": "Bir M3U oynatma listesi bağlantısına veya sağlayıcınızın size verdiği kimlik bilgilerine. Bunları TV'de yazabilir ya da QR kodu tarayarak telefonunuzdan gönderebilirsiniz."
+    },
+    {
+      "q": "Hangi cihazlarda?",
+      "r": "Android TV ve Google TV, Android tabletler ve telefonlar. Telefondan veya tabletten bir Chromecast cihazına da yayın yapabilirsiniz."
+    },
+    {
+      "q": "Ücreti ne kadar?",
+      "r": "Bir ay ücretsiz deneme, kredi kartı gerekmez, Google hesabı başına bir kez. Ardından yıllık abonelik; Google Play'den istediğiniz zaman iptal edebilirsiniz."
+    },
+    {
+      "q": "Kimlik bilgilerime ne oluyor?",
+      "r": "Kimlik bilgileriniz cihazınızda, şifreli bir kasada kalır. Telefonunuzdan QR kodla gönderildiğinde uçtan uca şifrelenir: sunucumuz bunları okuyamaz. NitaTV reklam ve izleyici içermez."
+    }
+  ],
+  "pied": {
+    "confidentialite": "Gizlilik",
+    "conditions": "Koşullar",
+    "supprimer": "Hesabımı sil",
+    "abonnement": "Aboneliğimi yönet"
+  },
+  "bande": {
+    "nom": "Ekran görüntüleri",
+    "precedente": "Önceki ekran görüntüleri",
+    "suivante": "Sonraki ekran görüntüleri"
+  },
+  "bandeau": "Bu sayfayı Türkçe görüntüle →",
+  "fermer": "Kapat",
+  "langues": "Dil"
+}

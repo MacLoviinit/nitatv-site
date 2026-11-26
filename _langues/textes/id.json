@@ -1,0 +1,93 @@
+{
+  "titre": "NitaTV – Pemutar IPTV untuk Android TV, tablet, dan ponsel",
+  "description": "NitaTV adalah pemutar IPTV untuk playlist M3U atau penyedia Anda: TV live, panduan acara, rekaman, film, dan serial. Uji coba gratis satu bulan, tanpa kartu kredit.",
+  "og_description": "TV live, panduan acara, rekaman, film, dan serial. Uji coba gratis satu bulan, tanpa kartu kredit.",
+  "sous_titre": "Pemutar IPTV untuk Android TV, tablet, dan ponsel",
+  "intro": "NitaTV memutar siaran dari penyedia yang <strong>Anda</strong> langgani, atau playlist M3U Anda: TV live dengan panduan acara, rekaman, film, dan serial.",
+  "bouton": "Temukan di Google Play",
+  "essai": "Uji coba gratis satu bulan, tanpa kartu kredit.",
+  "captures": {
+    "direct": {
+      "legende": "TV live",
+      "alt": "NitaTV di TV: saluran live, masing-masing dengan acara yang sedang tayang"
+    },
+    "guide": {
+      "legende": "Panduan acara",
+      "alt": "Panduan acara NitaTV di TV"
+    },
+    "films": {
+      "legende": "Film dan serial",
+      "alt": "Film di NitaTV pada TV, dengan posternya"
+    },
+    "film": {
+      "legende": "Halaman film",
+      "alt": "Halaman sebuah film di NitaTV pada TV: sinopsis, bahasa audio dan subtitel, tombol Putar dan Download"
+    },
+    "pistes": {
+      "legende": "Audio dan subtitel",
+      "alt": "Pemutar NitaTV di TV, dengan pilihan trek audio dan subtitel terbuka"
+    },
+    "enregistrement": {
+      "legende": "Jadwalkan rekaman",
+      "alt": "Panduan acara NitaTV di TV: acara yang akan datang, dengan tombol untuk menjadwalkan rekamannya"
+    },
+    "telephone": {
+      "legende": "Di ponsel",
+      "alt": "NitaTV di ponsel: saluran live, halaman sebuah film, dan episode sebuah serial"
+    }
+  },
+  "note_demo": "Screenshot menampilkan sumber demo: semua nama, gambar, dan panduan acara bersifat fiktif.",
+  "credit": "Video demo: “Sintel” © Blender Foundation, CC BY 3.0 (durian.blender.org).",
+  "avertissement": "⚠ NitaTV tidak menyediakan saluran, film, atau konten apa pun, dan tidak menjual atau merekomendasikan penyedia mana pun. Anda memerlukan langganan sendiri pada sebuah penyedia, atau sebuah playlist.",
+  "fonctions_titre": "Fitur NitaTV",
+  "fonctions": [
+    "Masuk dengan link playlist M3U atau dengan kredensial dari penyedia Anda",
+    "Tambahkan playlist Anda dari ponsel dengan memindai kode QR",
+    "TV live dengan panduan acara",
+    "Film dan serial, lanjutkan dari bagian terakhir yang ditonton",
+    "Rekam acara, langsung atau terjadwal dari panduan acara",
+    "Download film dan episode untuk ditonton secara offline",
+    "Transmisikan ke perangkat Chromecast",
+    "Pilih trek audio dan subtitel",
+    "Beberapa profil, favorit, dan pencarian",
+    "Picture-in-picture",
+    "Tersedia dalam 21 bahasa"
+  ],
+  "faq_titre": "Pertanyaan umum",
+  "faq": [
+    {
+      "q": "Apakah NitaTV menyediakan saluran?",
+      "r": "Tidak. NitaTV adalah pemutar: aplikasi ini memutar apa yang diberikan penyedia Anda. NitaTV tidak berisi saluran dan tidak merekomendasikan penyedia mana pun."
+    },
+    {
+      "q": "Apa yang saya perlukan?",
+      "r": "Link playlist M3U, atau kredensial yang diberikan penyedia Anda. Anda dapat mengetiknya di TV, atau mengirimnya dari ponsel dengan memindai kode QR."
+    },
+    {
+      "q": "Di perangkat apa saja?",
+      "r": "Android TV dan Google TV, tablet dan ponsel Android. Dari ponsel atau tablet, Anda juga dapat mentransmisikan ke Chromecast."
+    },
+    {
+      "q": "Berapa biayanya?",
+      "r": "Uji coba gratis satu bulan, tanpa kartu kredit, satu kali per akun Google. Setelah itu, langganan tahunan, yang dapat dibatalkan kapan saja dari Google Play."
+    },
+    {
+      "q": "Apa yang terjadi pada kredensial saya?",
+      "r": "Kredensial Anda tetap tersimpan di perangkat, dalam brankas terenkripsi. Jika dikirim dari ponsel lewat kode QR, kredensial itu dienkripsi end-to-end: server kami tidak dapat membacanya. NitaTV tidak berisi iklan maupun pelacak."
+    }
+  ],
+  "pied": {
+    "confidentialite": "Privasi",
+    "conditions": "Ketentuan",
+    "supprimer": "Hapus akun saya",
+    "abonnement": "Kelola langganan saya"
+  },
+  "bande": {
+    "nom": "Screenshot",
+    "precedente": "Screenshot sebelumnya",
+    "suivante": "Screenshot berikutnya"
+  },
+  "bandeau": "Lihat halaman ini dalam Bahasa Indonesia →",
+  "fermer": "Tutup",
+  "langues": "Bahasa"
+}

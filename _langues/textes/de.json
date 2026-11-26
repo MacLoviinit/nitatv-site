@@ -1,0 +1,93 @@
+{
+  "titre": "NitaTV – IPTV-Player für Android TV, Tablet und Smartphone",
+  "description": "NitaTV ist ein IPTV-Player für Ihre M3U-Playlist oder Ihren Anbieter: Live-TV, Programmführer, Aufnahme, Filme und Serien. Ein Probemonat gratis, ohne Kreditkarte.",
+  "og_description": "Live-TV, Programmführer, Aufnahme, Filme und Serien. Ein Probemonat gratis, ohne Kreditkarte.",
+  "sous_titre": "IPTV-Player für Android TV, Tablet und Smartphone",
+  "intro": "NitaTV spielt die Streams des Anbieters ab, bei dem <strong>Sie</strong> ein Abo haben, oder Ihre M3U-Playlist: Live-TV mit Programmführer, Aufnahme, Filme und Serien.",
+  "bouton": "Jetzt bei Google Play",
+  "essai": "Ein Probemonat gratis, ohne Kreditkarte.",
+  "captures": {
+    "direct": {
+      "legende": "Live-TV",
+      "alt": "NitaTV auf einem Fernseher: die Live-Sender, jeweils mit der laufenden Sendung"
+    },
+    "guide": {
+      "legende": "Der Programmführer",
+      "alt": "Der Programmführer von NitaTV auf einem Fernseher"
+    },
+    "films": {
+      "legende": "Filme und Serien",
+      "alt": "Filme in NitaTV auf einem Fernseher, mit ihren Postern"
+    },
+    "film": {
+      "legende": "Die Seite eines Films",
+      "alt": "Die Seite eines Films in NitaTV auf einem Fernseher: Inhalt, Audio- und Untertitelsprachen, die Schaltflächen „Abspielen“ und „Herunterladen“"
+    },
+    "pistes": {
+      "legende": "Audio und Untertitel",
+      "alt": "Der Player von NitaTV auf einem Fernseher, mit der Auswahl von Audiospur und Untertiteln"
+    },
+    "enregistrement": {
+      "legende": "Aufnahme planen",
+      "alt": "Der Programmführer von NitaTV auf einem Fernseher: eine kommende Sendung mit der Schaltfläche, um ihre Aufnahme zu planen"
+    },
+    "telephone": {
+      "legende": "Auf dem Smartphone",
+      "alt": "NitaTV auf einem Smartphone: die Live-Sender, die Seite eines Films und die Folgen einer Serie"
+    }
+  },
+  "note_demo": "Die Screenshots zeigen eine Demo-Quelle: Alle Namen, Bilder und Programmdaten sind frei erfunden.",
+  "credit": "Demo-Video: „Sintel“ © Blender Foundation, CC BY 3.0 (durian.blender.org).",
+  "avertissement": "⚠ NitaTV stellt keine Sender, Filme oder sonstigen Inhalte bereit und verkauft oder empfiehlt keinen Anbieter. Sie benötigen ein eigenes Abo bei einem Anbieter oder eine Playlist.",
+  "fonctions_titre": "Was NitaTV kann",
+  "fonctions": [
+    "Anmelden per M3U-Playlist-Link oder mit den Zugangsdaten Ihres Anbieters",
+    "Ihre Playlist per QR-Code vom Smartphone hinzufügen",
+    "Live-TV mit Programmführer",
+    "Filme und Serien, fortsetzen, wo Sie aufgehört haben",
+    "Eine Sendung aufnehmen, sofort oder über den Programmführer geplant",
+    "Filme und Folgen herunterladen und offline ansehen",
+    "Auf ein Chromecast-Gerät streamen",
+    "Audiospur und Untertitel wählen",
+    "Mehrere Profile, Favoriten und Suche",
+    "Bild im Bild",
+    "In 21 Sprachen verfügbar"
+  ],
+  "faq_titre": "Häufige Fragen",
+  "faq": [
+    {
+      "q": "Stellt NitaTV Sender bereit?",
+      "r": "Nein. NitaTV ist ein Player: Er spielt ab, was Ihr Anbieter Ihnen liefert. Er enthält keine Sender und empfiehlt keinen Anbieter."
+    },
+    {
+      "q": "Was brauche ich?",
+      "r": "Einen M3U-Playlist-Link oder die Zugangsdaten, die Sie von Ihrem Anbieter erhalten haben. Sie können sie auf dem Fernseher eingeben oder per QR-Code von Ihrem Smartphone senden."
+    },
+    {
+      "q": "Auf welchen Geräten?",
+      "r": "Android TV und Google TV, Android-Tablets und -Smartphones. Vom Smartphone oder Tablet aus können Sie auch auf ein Chromecast-Gerät streamen."
+    },
+    {
+      "q": "Was kostet es?",
+      "r": "Ein Probemonat gratis, ohne Kreditkarte, einmal pro Google-Konto. Danach ein Jahresabo, jederzeit in Google Play kündbar."
+    },
+    {
+      "q": "Was passiert mit meinen Zugangsdaten?",
+      "r": "Ihre Zugangsdaten bleiben auf Ihrem Gerät, in einem verschlüsselten Tresor. Wenn Sie sie per QR-Code von Ihrem Smartphone senden, sind sie Ende-zu-Ende-verschlüsselt: Unser Server kann sie nicht lesen. NitaTV enthält keine Werbung und keine Tracker."
+    }
+  ],
+  "pied": {
+    "confidentialite": "Datenschutz",
+    "conditions": "Nutzungsbedingungen",
+    "supprimer": "Mein Konto löschen",
+    "abonnement": "Mein Abo verwalten"
+  },
+  "bande": {
+    "nom": "Screenshots",
+    "precedente": "Vorherige Screenshots",
+    "suivante": "Nächste Screenshots"
+  },
+  "bandeau": "Diese Seite auf Deutsch ansehen →",
+  "fermer": "Schließen",
+  "langues": "Sprache"
+}

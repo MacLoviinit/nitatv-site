@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="zh-Hans" dir="ltr" data-langue="zh-hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NitaTV – 适用于 Android TV、平板电脑和手机的 IPTV 播放器</title>
+<meta name="description" content="NitaTV 是一款 IPTV 播放器，可播放您的 M3U 播放列表或服务商提供的内容：直播电视、节目指南、录制、电影和剧集。免费试用一个月，无需信用卡。">
+<link rel="canonical" href="https://www.nita.tv/zh-hans/">
+<link rel="alternate" hreflang="fr" href="https://www.nita.tv/">
+<link rel="alternate" hreflang="en" href="https://www.nita.tv/en/">
+<link rel="alternate" hreflang="de" href="https://www.nita.tv/de/">
+<link rel="alternate" hreflang="nl" href="https://www.nita.tv/nl/">
+<link rel="alternate" hreflang="es-ES" href="https://www.nita.tv/es/">
+<link rel="alternate" hreflang="es" href="https://www.nita.tv/es-419/">
+<link rel="alternate" hreflang="it" href="https://www.nita.tv/it/">
+<link rel="alternate" hreflang="pt" href="https://www.nita.tv/pt/">
+<link rel="alternate" hreflang="pt-PT" href="https://www.nita.tv/pt-pt/">
+<link rel="alternate" hreflang="pl" href="https://www.nita.tv/pl/">
+<link rel="alternate" hreflang="ru" href="https://www.nita.tv/ru/">
+<link rel="alternate" hreflang="tr" href="https://www.nita.tv/tr/">
+<link rel="alternate" hreflang="ar" href="https://www.nita.tv/ar/">
+<link rel="alternate" hreflang="zh-Hans" href="https://www.nita.tv/zh-hans/">
+<link rel="alternate" hreflang="zh-Hant" href="https://www.nita.tv/zh-hant/">
+<link rel="alternate" hreflang="ja" href="https://www.nita.tv/ja/">
+<link rel="alternate" hreflang="ko" href="https://www.nita.tv/ko/">
+<link rel="alternate" hreflang="hi" href="https://www.nita.tv/hi/">
+<link rel="alternate" hreflang="id" href="https://www.nita.tv/id/">
+<link rel="alternate" hreflang="vi" href="https://www.nita.tv/vi/">
+<link rel="alternate" hreflang="th" href="https://www.nita.tv/th/">
+<link rel="alternate" hreflang="x-default" href="https://www.nita.tv/en/">
+<meta property="og:title" content="NitaTV – 适用于 Android TV、平板电脑和手机的 IPTV 播放器">
+<meta property="og:description" content="直播电视、节目指南、录制、电影和剧集。免费试用一个月，无需信用卡。">
+<meta property="og:image" content="https://www.nita.tv/images/direct.jpg">
+<meta property="og:url" content="https://www.nita.tv/zh-hans/">
+<meta property="og:type" content="website">
+<style>
+  :root { --fond:#101320; --carte:#171b2c; --texte:#e9ebf2; --doux:#a3a8b8; --accent:#00c1ff; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--fond); color:var(--texte); font:17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width:960px; margin:0 auto; padding:48px 16px 32px; }
+  header { text-align:center; }
+  h1 { font-size:clamp(2.2rem, 7vw, 3.4rem); margin:0; font-weight:600; letter-spacing:-.02em; line-height:1.15; }
+  h1 .marque span { color:var(--accent); }
+  h1 small { display:block; font-size:.45em; font-weight:500; color:var(--doux); letter-spacing:0; margin-top:8px; }
+  .trait { width:120px; height:3px; background:var(--accent); margin:16px auto 24px; border-radius:2px; }
+  .bouton { display:inline-block; background:var(--accent); color:#06121c; font-weight:600; text-decoration:none;
+            padding:12px 24px; border-radius:999px; margin:8px 0; }
+  .essai { color:var(--doux); margin:4px 0 0; }
+  h2 { font-size:1.5rem; margin:48px 0 12px; font-weight:600; }
+  h3 { font-size:1.05rem; margin:20px 0 4px; }
+  p, li { color:var(--doux); }
+  ul { padding-inline-start:1.2em; }
+  .avertissement { background:var(--carte); border-inline-start:3px solid var(--accent); padding:12px 16px; border-radius:8px; }
+  /* La bande de captures : défile au doigt (scroll-snap, sans programme) ; trois visibles à l'ordinateur. */
+  .bande { position:relative; margin:32px 0 0; }
+  .defile { display:flex; gap:12px; overflow-x:auto; scroll-snap-type:x mandatory; list-style:none; margin:0; padding:0 0 8px;
+            overscroll-behavior-x:contain; scrollbar-width:thin; scrollbar-color:var(--carte) transparent; }
+  .defile li { flex:0 0 calc((100% - 24px) / 3); scroll-snap-align:start; }
+  .defile figure { margin:0; }
+  .defile img { width:100%; height:auto; border-radius:10px; display:block; background:var(--carte); }
+  .defile figcaption { font-size:.85rem; color:var(--doux); margin-top:4px; text-align:center; }
+  .fleche { position:absolute; top:calc(50% - 30px); transform:translateY(-50%); width:40px; height:40px; border-radius:50%;
+            border:1px solid rgba(255,255,255,.18); background:rgba(16,19,32,.85); color:var(--texte); cursor:pointer;
+            display:flex; align-items:center; justify-content:center; padding:0; }
+  .fleche[hidden] { display:none; }
+  .fleche:disabled { opacity:.3; cursor:default; }
+  .fleche:not(:disabled):hover { border-color:var(--accent); color:var(--accent); }
+  .fleche svg { width:20px; height:20px; }
+  [dir="rtl"] .fleche svg { transform:scaleX(-1); }
+  .prec { inset-inline-start:-14px; }
+  .suiv { inset-inline-end:-14px; }
+  .note { font-size:.85rem; text-align:center; margin:8px 0 0; }
+  .note + .note { margin-top:0; }
+  /* Le bandeau qui PROPOSE la langue de l'appareil (jamais une redirection). */
+  .bandeau { display:flex; align-items:center; justify-content:center; gap:12px; background:var(--carte);
+             border-bottom:1px solid rgba(255,255,255,.08); padding:8px 16px; font-size:.95rem; }
+  .bandeau a { text-decoration:none; font-weight:500; }
+  .bandeau button { background:none; border:0; color:var(--doux); font-size:1.3rem; line-height:1; cursor:pointer; padding:4px 8px; }
+  .bandeau button:hover { color:var(--texte); }
+  footer { margin-top:56px; font-size:.9rem; text-align:center; color:var(--doux); }
+  .langues { margin-top:20px; }
+  .langues ul { list-style:none; padding:0; margin:0; display:flex; flex-wrap:wrap; justify-content:center; gap:4px 14px; }
+  .langues [aria-current] { color:var(--texte); font-weight:600; }
+  a { color:var(--accent); }
+  @media (max-width:700px) {
+    .defile li { flex-basis:85%; }
+  }
+  /* Au doigt (téléphone, tablette : pointeur « grossier ») la bande se glisse ; les flèches sont pour la souris. */
+  @media (pointer:coarse) {
+    .fleche { display:none; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1><span class="marque">Nita<span>TV</span></span><small>适用于 Android TV、平板电脑和手机的 IPTV 播放器</small></h1>
+    <div class="trait"></div>
+    <p>NitaTV 播放的是<strong>您自己</strong>订阅的服务商提供的视频流，或您的 M3U 播放列表：附节目指南的直播电视、录制、电影和剧集。</p>
+    <p><a class="bouton" href="https://play.google.com/store/apps/details?id=tv.nita.app">前往 Google Play 下载</a></p>
+    <p class="essai">免费试用一个月，无需信用卡。</p>
+  </header>
+
+  <section class="bande" aria-label="截图">
+    <button type="button" class="fleche prec" aria-label="上一组截图" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <ul class="defile" tabindex="0">
+      <li><figure><img src="../images/direct.jpg" width="960" height="540" alt="电视上的 NitaTV：直播频道，每个频道都显示当前节目" decoding="async"><figcaption>直播电视</figcaption></figure></li>
+      <li><figure><img src="../images/guide.jpg" width="960" height="540" alt="电视上的 NitaTV 节目指南" decoding="async"><figcaption>节目指南</figcaption></figure></li>
+      <li><figure><img src="../images/films.jpg" width="960" height="540" alt="电视上 NitaTV 中的电影及其海报" decoding="async"><figcaption>电影和剧集</figcaption></figure></li>
+      <li><figure><img src="../images/film.jpg" width="960" height="540" alt="电视上 NitaTV 的电影详情页：剧情简介、音频和字幕语言，以及“播放”和“下载”按钮" loading="lazy" decoding="async"><figcaption>电影详情页</figcaption></figure></li>
+      <li><figure><img src="../images/pistes.jpg" width="960" height="540" alt="电视上的 NitaTV 播放器，已打开音轨和字幕选择" loading="lazy" decoding="async"><figcaption>音轨和字幕</figcaption></figure></li>
+      <li><figure><img src="../images/enregistrement.jpg" width="960" height="540" alt="电视上的 NitaTV 节目指南：一个即将播出的节目，以及预约录制的按钮" loading="lazy" decoding="async"><figcaption>预约录制</figcaption></figure></li>
+      <li><figure><img src="../images/telephone.jpg" width="960" height="540" alt="手机上的 NitaTV：直播频道、电影详情页和剧集的各集" loading="lazy" decoding="async"><figcaption>手机版</figcaption></figure></li>
+    </ul>
+    <button type="button" class="fleche suiv" aria-label="下一组截图" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  </section>
+  <p class="note">截图中使用的是演示源：所有名称、图片和节目指南均为虚构。</p>
+  <p class="note">演示视频：“Sintel” © Blender Foundation, CC BY 3.0 (durian.blender.org)。</p>
+
+  <p class="avertissement">⚠ NitaTV 不提供任何频道、电影或其他内容，也不销售或推荐任何服务商。您需要自行向服务商订阅，或拥有一个播放列表。</p>
+
+  <h2>NitaTV 的功能</h2>
+  <ul>
+    <li>通过 M3U 播放列表链接或服务商提供的登录信息登录</li>
+    <li>用手机扫描二维码，即可添加您的播放列表</li>
+    <li>直播电视，附节目指南</li>
+    <li>电影和剧集，从上次中断处继续播放</li>
+    <li>录制节目，可立即录制，也可在节目指南中预约</li>
+    <li>下载电影和单集，离线观看</li>
+    <li>投放到 Chromecast 设备</li>
+    <li>选择音轨和字幕</li>
+    <li>多个个人资料、收藏和搜索</li>
+    <li>画中画</li>
+    <li>支持 21 种语言</li>
+  </ul>
+
+  <h2>常见问题</h2>
+  <h3>NitaTV 提供频道吗？</h3>
+  <p>不提供。NitaTV 是一款播放器：它播放的是服务商提供给您的内容。它不含任何频道，也不推荐任何服务商。</p>
+  <h3>我需要准备什么？</h3>
+  <p>一个 M3U 播放列表链接，或服务商提供给您的登录信息。您可以在电视上输入，也可以用手机扫描二维码发送。</p>
+  <h3>支持哪些设备？</h3>
+  <p>Android TV 和 Google TV，以及 Android 平板电脑和手机。您还可以从手机或平板电脑投放到 Chromecast。</p>
+  <h3>费用是多少？</h3>
+  <p>免费试用一个月，无需信用卡，每个 Google 账号限一次。之后为年度订阅，可随时在 Google Play 取消。</p>
+  <h3>我的登录信息会如何处理？</h3>
+  <p>您的登录信息仅保存在您设备上的加密保险库中。若通过手机扫描二维码发送，信息会经过端到端加密：我们的服务器无法读取。NitaTV 不含广告，也没有跟踪器。</p>
+
+  <footer>
+    <a href="../confidentialite.html">隐私权</a> · <a href="../conditions.html">条款</a> · <a href="../supprimer.html">删除我的账号</a> · <a href="https://play.google.com/store/account/subscriptions?sku=nitatv_abonnement&amp;package=tv.nita.app">管理我的订阅</a> · <a href="mailto:contact@nita.tv">contact@nita.tv</a>
+    <nav class="langues" aria-label="语言">
+      <ul>
+        <li><a href="../" hreflang="fr" lang="fr" data-langue="fr">Français</a></li>
+        <li><a href="../en/" hreflang="en" lang="en" data-langue="en">English</a></li>
+        <li><a href="../de/" hreflang="de" lang="de" data-langue="de">Deutsch</a></li>
+        <li><a href="../nl/" hreflang="nl" lang="nl" data-langue="nl">Nederlands</a></li>
+        <li><a href="../es/" hreflang="es-ES" lang="es-ES" data-langue="es">Español (España)</a></li>
+        <li><a href="../es-419/" hreflang="es" lang="es-419" data-langue="es-419">Español (Latinoamérica)</a></li>
+        <li><a href="../it/" hreflang="it" lang="it" data-langue="it">Italiano</a></li>
+        <li><a href="../pt/" hreflang="pt" lang="pt-BR" data-langue="pt">Português (Brasil)</a></li>
+        <li><a href="../pt-pt/" hreflang="pt-PT" lang="pt-PT" data-langue="pt-pt">Português (Portugal)</a></li>
+        <li><a href="../pl/" hreflang="pl" lang="pl" data-langue="pl">Polski</a></li>
+        <li><a href="../ru/" hreflang="ru" lang="ru" data-langue="ru">Русский</a></li>
+        <li><a href="../tr/" hreflang="tr" lang="tr" data-langue="tr">Türkçe</a></li>
+        <li><a href="../ar/" hreflang="ar" lang="ar" data-langue="ar">العربية</a></li>
+        <li><span lang="zh-Hans" aria-current="page">中文（简体）</span></li>
+        <li><a href="../zh-hant/" hreflang="zh-Hant" lang="zh-Hant" data-langue="zh-hant">中文（繁體）</a></li>
+        <li><a href="../ja/" hreflang="ja" lang="ja" data-langue="ja">日本語</a></li>
+        <li><a href="../ko/" hreflang="ko" lang="ko" data-langue="ko">한국어</a></li>
+        <li><a href="../hi/" hreflang="hi" lang="hi" data-langue="hi">हिन्दी</a></li>
+        <li><a href="../id/" hreflang="id" lang="id" data-langue="id">Bahasa Indonesia</a></li>
+        <li><a href="../vi/" hreflang="vi" lang="vi" data-langue="vi">Tiếng Việt</a></li>
+        <li><a href="../th/" hreflang="th" lang="th" data-langue="th">ไทย</a></li>
+      </ul>
+    </nav>
+  </footer>
+</main>
+<script src="../accueil.js" defer></script>
+</body>
+</html>

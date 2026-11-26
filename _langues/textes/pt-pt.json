@@ -1,0 +1,93 @@
+{
+  "titre": "NitaTV – Leitor IPTV para Android TV, tablet e telemóvel",
+  "description": "O NitaTV é um leitor IPTV para a sua playlist M3U ou o seu fornecedor: TV em direto, guia TV, gravação, filmes e séries. Um mês experimental gratuito, sem cartão de crédito.",
+  "og_description": "TV em direto, guia TV, gravação, filmes e séries. Um mês experimental gratuito, sem cartão de crédito.",
+  "sous_titre": "Leitor IPTV para Android TV, tablet e telemóvel",
+  "intro": "O NitaTV reproduz as transmissões do fornecedor que <strong>você</strong> subscreveu, ou a sua playlist M3U: TV em direto com o guia TV, gravação, filmes e séries.",
+  "bouton": "Disponível no Google Play",
+  "essai": "Um mês experimental gratuito, sem cartão de crédito.",
+  "captures": {
+    "direct": {
+      "legende": "TV em direto",
+      "alt": "O NitaTV numa televisão: os canais em direto, cada um com o programa em curso"
+    },
+    "guide": {
+      "legende": "O guia TV",
+      "alt": "O guia TV do NitaTV numa televisão"
+    },
+    "films": {
+      "legende": "Filmes e séries",
+      "alt": "Os filmes no NitaTV numa televisão, com os seus cartazes"
+    },
+    "film": {
+      "legende": "A página de um filme",
+      "alt": "A página de um filme no NitaTV numa televisão: a sinopse, os idiomas de áudio e legendas, os botões Reproduzir e Transferir"
+    },
+    "pistes": {
+      "legende": "Áudio e legendas",
+      "alt": "O leitor do NitaTV numa televisão, aberto na escolha da faixa de áudio e das legendas"
+    },
+    "enregistrement": {
+      "legende": "Agendar uma gravação",
+      "alt": "O guia TV do NitaTV numa televisão: um programa que ainda vai começar, com o botão para agendar a gravação"
+    },
+    "telephone": {
+      "legende": "No telemóvel",
+      "alt": "O NitaTV num telemóvel: os canais em direto, a página de um filme e os episódios de uma série"
+    }
+  },
+  "note_demo": "As capturas de ecrã mostram uma fonte de demonstração: todos os nomes, imagens e guias são fictícios.",
+  "credit": "Vídeo de demonstração: «Sintel» © Blender Foundation, CC BY 3.0 (durian.blender.org).",
+  "avertissement": "⚠ O NitaTV não fornece canais, filmes nem qualquer outro conteúdo, e não vende nem recomenda nenhum fornecedor. Precisa da sua própria subscrição num fornecedor, ou de uma playlist.",
+  "fonctions_titre": "O que o NitaTV faz",
+  "fonctions": [
+    "Início de sessão com uma ligação de playlist M3U ou com as credenciais do seu fornecedor",
+    "Adição da sua playlist a partir do telemóvel, lendo um código QR",
+    "TV em direto com guia TV",
+    "Filmes e séries, retomados onde parou",
+    "Gravação de um programa, de imediato ou agendada a partir do guia",
+    "Transferência de filmes e episódios para ver offline",
+    "Transmissão para um dispositivo Chromecast",
+    "Escolha da faixa de áudio e das legendas",
+    "Vários perfis, favoritos e pesquisa",
+    "Imagem na imagem",
+    "Disponível em 21 idiomas"
+  ],
+  "faq_titre": "Perguntas frequentes",
+  "faq": [
+    {
+      "q": "O NitaTV fornece canais?",
+      "r": "Não. O NitaTV é um leitor: reproduz o que o seu fornecedor lhe dá. Não contém canais e não recomenda nenhum fornecedor."
+    },
+    {
+      "q": "De que preciso?",
+      "r": "De uma ligação de playlist M3U, ou das credenciais que o seu fornecedor lhe deu. Pode introduzi-las na televisão, ou enviá-las a partir do telemóvel, lendo um código QR."
+    },
+    {
+      "q": "Em que dispositivos?",
+      "r": "Android TV e Google TV, tablets e telemóveis Android. A partir de um telemóvel ou de um tablet, também pode transmitir para um Chromecast."
+    },
+    {
+      "q": "Quanto custa?",
+      "r": "Um mês experimental gratuito, sem cartão de crédito, um por conta Google. Depois, uma subscrição anual, que pode cancelar a qualquer momento no Google Play."
+    },
+    {
+      "q": "O que acontece às minhas credenciais?",
+      "r": "As suas credenciais ficam no seu dispositivo, num cofre encriptado. Enviadas do telemóvel por código QR, são encriptadas de ponta a ponta: o nosso servidor não as consegue ler. O NitaTV não contém anúncios nem rastreadores."
+    }
+  ],
+  "pied": {
+    "confidentialite": "Privacidade",
+    "conditions": "Termos",
+    "supprimer": "Eliminar a minha conta",
+    "abonnement": "Gerir a minha subscrição"
+  },
+  "bande": {
+    "nom": "Capturas de ecrã",
+    "precedente": "Capturas anteriores",
+    "suivante": "Capturas seguintes"
+  },
+  "bandeau": "Ver esta página em português (Portugal) →",
+  "fermer": "Fechar",
+  "langues": "Idioma"
+}

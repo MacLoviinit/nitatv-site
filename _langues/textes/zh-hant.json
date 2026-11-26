@@ -1,0 +1,93 @@
+{
+  "titre": "NitaTV – 適用於 Android TV、平板電腦和手機的 IPTV 播放器",
+  "description": "NitaTV 是一款 IPTV 播放器，可播放您的 M3U 播放清單或供應商提供的內容：直播電視、節目表、錄影、電影和影集。免費試用一個月，無需信用卡。",
+  "og_description": "直播電視、節目表、錄影、電影和影集。免費試用一個月，無需信用卡。",
+  "sous_titre": "適用於 Android TV、平板電腦和手機的 IPTV 播放器",
+  "intro": "NitaTV 播放的是<strong>您自己</strong>所訂閱供應商的串流，或您的 M3U 播放清單：附節目表的直播電視、錄影、電影和影集。",
+  "bouton": "前往 Google Play 下載",
+  "essai": "免費試用一個月，無需信用卡。",
+  "captures": {
+    "direct": {
+      "legende": "直播電視",
+      "alt": "電視上的 NitaTV：直播頻道，每個頻道都顯示目前播出的節目"
+    },
+    "guide": {
+      "legende": "節目表",
+      "alt": "電視上的 NitaTV 節目表"
+    },
+    "films": {
+      "legende": "電影和影集",
+      "alt": "電視上 NitaTV 的電影及其海報"
+    },
+    "film": {
+      "legende": "電影資訊頁",
+      "alt": "電視上 NitaTV 的電影資訊頁：劇情簡介、音訊和字幕語言，以及「播放」和「下載」按鈕"
+    },
+    "pistes": {
+      "legende": "音軌和字幕",
+      "alt": "電視上的 NitaTV 播放器，已開啟音軌和字幕選單"
+    },
+    "enregistrement": {
+      "legende": "預約錄影",
+      "alt": "電視上的 NitaTV 節目表：一個即將播出的節目，以及預約錄影的按鈕"
+    },
+    "telephone": {
+      "legende": "手機版",
+      "alt": "手機上的 NitaTV：直播頻道、電影資訊頁和影集的各集"
+    }
+  },
+  "note_demo": "螢幕截圖使用的是示範來源：所有名稱、圖片和節目表均為虛構。",
+  "credit": "示範影片：「Sintel」© Blender Foundation, CC BY 3.0 (durian.blender.org)。",
+  "avertissement": "⚠ NitaTV 不提供任何頻道、電影或其他內容，也不販售或推薦任何供應商。您需要自行向供應商訂閱，或擁有一份播放清單。",
+  "fonctions_titre": "NitaTV 的功能",
+  "fonctions": [
+    "使用 M3U 播放清單連結或供應商提供的登入資訊登入",
+    "用手機掃描 QR code，即可新增您的播放清單",
+    "直播電視，附節目表",
+    "電影與影集，可從上次中斷處繼續觀看",
+    "錄製節目，可立即錄製或從節目表預約",
+    "下載電影和單集，離線觀看",
+    "投放到 Chromecast 裝置",
+    "選擇音軌和字幕",
+    "多個個人檔案、我的最愛和搜尋",
+    "子母畫面",
+    "提供 21 種語言"
+  ],
+  "faq_titre": "常見問題",
+  "faq": [
+    {
+      "q": "NitaTV 會提供頻道嗎？",
+      "r": "不會。NitaTV 是一款播放器：它播放的是供應商提供給您的內容。它不含任何頻道，也不推薦任何供應商。"
+    },
+    {
+      "q": "我需要準備什麼？",
+      "r": "一個 M3U 播放清單連結，或供應商提供給您的登入資訊。您可以在電視上輸入，也可以用手機掃描 QR code 傳送。"
+    },
+    {
+      "q": "支援哪些裝置？",
+      "r": "Android TV 和 Google TV，以及 Android 平板電腦和手機。您也可以從手機或平板電腦投放到 Chromecast。"
+    },
+    {
+      "q": "費用是多少？",
+      "r": "免費試用一個月，無需信用卡，每個 Google 帳戶限一次。之後為年度訂閱方案，可隨時在 Google Play 取消。"
+    },
+    {
+      "q": "我的登入資訊會怎麼處理？",
+      "r": "您的登入資訊只會儲存在您裝置上的加密保管庫中。若從手機以 QR code 傳送，資訊會經過端對端加密：我們的伺服器無法讀取。NitaTV 不含廣告，也沒有追蹤器。"
+    }
+  ],
+  "pied": {
+    "confidentialite": "隱私權",
+    "conditions": "條款",
+    "supprimer": "刪除我的帳戶",
+    "abonnement": "管理我的訂閱"
+  },
+  "bande": {
+    "nom": "螢幕截圖",
+    "precedente": "上一組截圖",
+    "suivante": "下一組截圖"
+  },
+  "bandeau": "以繁體中文檢視此頁 →",
+  "fermer": "關閉",
+  "langues": "語言"
+}

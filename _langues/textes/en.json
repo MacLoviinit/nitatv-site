@@ -1,0 +1,93 @@
+{
+  "titre": "NitaTV – IPTV Player for Android TV, tablet and phone",
+  "description": "NitaTV is an IPTV player for your M3U playlist or provider: live TV, program guide, recording, movies and series. A free one-month trial, no credit card needed.",
+  "og_description": "Live TV, program guide, recording, movies and series. A free one-month trial, no credit card needed.",
+  "sous_titre": "IPTV player for Android TV, tablet and phone",
+  "intro": "NitaTV plays the streams of the provider <strong>you</strong> subscribe to, or your M3U playlist: live TV with its program guide, recording, movies and series.",
+  "bouton": "Get it on Google Play",
+  "essai": "A free one-month trial, no credit card needed.",
+  "captures": {
+    "direct": {
+      "legende": "Live TV",
+      "alt": "NitaTV on a TV: the live channels, each with its current program"
+    },
+    "guide": {
+      "legende": "The program guide",
+      "alt": "The NitaTV program guide on a TV"
+    },
+    "films": {
+      "legende": "Movies and series",
+      "alt": "Movies in NitaTV on a TV, with their posters"
+    },
+    "film": {
+      "legende": "A movie's page",
+      "alt": "A movie's page in NitaTV on a TV: its summary, its audio and subtitle languages, the Play and Download buttons"
+    },
+    "pistes": {
+      "legende": "Audio and subtitles",
+      "alt": "The NitaTV player on a TV, open on the choice of audio track and subtitles"
+    },
+    "enregistrement": {
+      "legende": "Schedule a recording",
+      "alt": "The NitaTV program guide on a TV: an upcoming show, with the button to schedule its recording"
+    },
+    "telephone": {
+      "legende": "On a phone",
+      "alt": "NitaTV on a phone: the live channels, a movie's page and a series' episodes"
+    }
+  },
+  "note_demo": "The screenshots show a demo source: every name, picture and guide is fictional.",
+  "credit": "Demo video: “Sintel” © Blender Foundation, CC BY 3.0 (durian.blender.org).",
+  "avertissement": "⚠ NitaTV provides no channels, movies or content of any kind, and does not sell or recommend any provider. You need your own subscription with a provider, or a playlist.",
+  "fonctions_titre": "What NitaTV does",
+  "fonctions": [
+    "Sign in with an M3U playlist link or with your provider's credentials",
+    "Add your playlist from your phone by scanning a QR code",
+    "Live TV with a program guide",
+    "Movies and series, resuming where you left off",
+    "Record a show, right away or scheduled from the guide",
+    "Download movies and episodes to watch offline",
+    "Cast to a Chromecast device",
+    "Choose the audio track and subtitles",
+    "Several profiles, favorites and search",
+    "Picture-in-picture",
+    "Available in 21 languages"
+  ],
+  "faq_titre": "Frequently asked questions",
+  "faq": [
+    {
+      "q": "Does NitaTV provide channels?",
+      "r": "No. NitaTV is a player: it plays what your provider gives you. It contains no channels and recommends no provider."
+    },
+    {
+      "q": "What do I need?",
+      "r": "An M3U playlist link, or the credentials your provider gave you. You can type them on the TV, or send them from your phone by scanning a QR code."
+    },
+    {
+      "q": "Which devices?",
+      "r": "Android TV and Google TV, Android tablets and phones. From a phone or a tablet, you can also cast to a Chromecast."
+    },
+    {
+      "q": "How much does it cost?",
+      "r": "A free one-month trial, no credit card needed, one per Google account. Then a yearly subscription, cancel anytime from Google Play."
+    },
+    {
+      "q": "What happens to my credentials?",
+      "r": "They stay on your device, in an encrypted vault. When sent from your phone by QR code, they are end-to-end encrypted: our server cannot read them. NitaTV contains no ads and no trackers."
+    }
+  ],
+  "pied": {
+    "confidentialite": "Privacy",
+    "conditions": "Terms",
+    "supprimer": "Delete my account",
+    "abonnement": "Manage my subscription"
+  },
+  "bande": {
+    "nom": "Screenshots",
+    "precedente": "Previous screenshots",
+    "suivante": "Next screenshots"
+  },
+  "bandeau": "View this page in English →",
+  "fermer": "Close",
+  "langues": "Language"
+}
